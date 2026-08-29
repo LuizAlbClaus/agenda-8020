@@ -1,0 +1,2 @@
+import Link from "next/link";
+export default function AuthErrorPage() { return <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6"><h1 className="text-3xl font-bold text-slate-900">Não foi possível entrar</h1><p className="mt-3 text-slate-600">O link pode ter expirado. Solicite um novo acesso para continuar.</p><Link href="/login" className="mt-8 inline-flex min-h-12 items-center justify-center rounded-full bg-teal-800 px-5 font-semibold text-white">Voltar ao login</Link></main>; }

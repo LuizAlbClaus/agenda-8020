@@ -1,0 +1,1 @@
+export default function AccessPendingPage() { return <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6"><h1 className="text-3xl font-bold text-slate-900">Estamos liberando seu acesso</h1><p className="mt-3 text-slate-600">Sua compra foi recebida. Assim que o acesso estiver pronto, você poderá entrar pelo link enviado ao seu email.</p></main>; }

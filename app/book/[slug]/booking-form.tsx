@@ -1,0 +1,20 @@
+"use client";
+
+import { useState, useTransition } from "react";
+import { createBooking } from "./actions";
+
+type Service = { id: string; name: string; duration_minutes: number; description?: string | null };
+type Day = { date: string; slots: Array<{ starts_at: string; ends_at: string }> };
+
+export default function BookingForm({ slug, services, days }: { slug: string; services: Service[]; days: Day[] }) {
+  const [serviceId, setServiceId] = useState(services[0]?.id ?? "");
+  const [date, setDate] = useState(days[0]?.date ?? "");
+  const [startsAt, setStartsAt] = useState("");
+  const [name, setName] = useState("");
+  const [contact, setContact] = useState("");
+  const [message, setMessage] = useState("");
+  const [pending, startTransition] = useTransition();
+  const selectedDay = days.find((item) => item.date === date);
+  function submit(event: React.FormEvent) { event.preventDefault(); setMessage(""); startTransition(async () => { const result = await createBooking({ slug, serviceId, startsAt, customerName: name, customerContact: contact }); setMessage(result.ok ? "Agendamento confirmado. Você pode fechar esta página." : result.error ?? "Não conseguimos confirmar agora."); if (result.ok) setStartsAt(""); }); }
+  return <form onSubmit={submit} className="mt-8 grid gap-5 rounded-2xl border border-slate-200 bg-white p-5"><label className="text-sm font-semibold text-slate-800">Escolha um serviço<select value={serviceId} onChange={(event) => setServiceId(event.target.value)} className="mt-2 min-h-12 w-full rounded-xl border border-slate-300 bg-white px-3 text-base font-normal">{services.map((service) => <option key={service.id} value={service.id}>{service.name} · {service.duration_minutes} min</option>)}</select></label><label className="text-sm font-semibold text-slate-800">Dia<select value={date} onChange={(event) => { setDate(event.target.value); setStartsAt(""); }} className="mt-2 min-h-12 w-full rounded-xl border border-slate-300 bg-white px-3 text-base font-normal">{days.map((day) => <option key={day.date} value={day.date}>{new Date(`${day.date}T12:00:00`).toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "2-digit" })}</option>)}</select></label><fieldset><legend className="text-sm font-semibold text-slate-800">Horário</legend><div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">{selectedDay?.slots.map((slot) => <button key={slot.starts_at} type="button" aria-pressed={startsAt === slot.starts_at} onClick={() => setStartsAt(slot.starts_at)} className={`min-h-11 rounded-xl border px-3 text-sm font-semibold ${startsAt === slot.starts_at ? "border-teal-700 bg-teal-50 text-teal-950" : "border-slate-300 text-slate-700"}`}>{new Date(slot.starts_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</button>)}</div></fieldset><label className="text-sm font-semibold text-slate-800">Seu nome<input required value={name} onChange={(event) => setName(event.target.value)} className="mt-2 min-h-12 w-full rounded-xl border border-slate-300 px-4 text-base font-normal" placeholder="Como podemos chamar você?" /></label><label className="text-sm font-semibold text-slate-800">Contato <span className="font-normal text-slate-500">(opcional)</span><input value={contact} onChange={(event) => setContact(event.target.value)} className="mt-2 min-h-12 w-full rounded-xl border border-slate-300 px-4 text-base font-normal" placeholder="WhatsApp ou e-mail" /></label><button type="submit" disabled={pending || !serviceId || !startsAt} className="min-h-12 rounded-full bg-teal-800 px-5 font-semibold text-white disabled:opacity-50">{pending ? "Confirmando…" : "Confirmar agendamento"}</button>{message && <p role="status" className="text-sm leading-6 text-teal-900">{message}</p>}</form>;
+}

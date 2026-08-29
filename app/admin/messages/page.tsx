@@ -1,0 +1,5 @@
+import { listAdminResource } from "@/lib/admin";
+import { AdminNotice, AdminResource, type AdminField } from "../admin-ui";
+import { mutateMessages } from "../actions";
+const fields: AdminField[] = [{ name: "slug", label: "Slug do template" }, { name: "category", label: "Categoria" }, { name: "title", label: "Título da versão" }, { name: "body", label: "Mensagem", type: "textarea" }, { name: "eligible_professions", label: "Tipos de serviço elegíveis", placeholder: "all_services" }];
+export default async function MessagesPage() { const result = await listAdminResource("admin_list_messages"); return <><h1 className="text-2xl font-bold tracking-tight text-slate-950">Mensagens</h1><AdminNotice error={result.error} /><AdminResource title="Templates versionados" description="As mensagens são conteúdo editorial: edite drafts, publique versões novas e ative o template apropriado." rows={result.rows} columns={["template_slug", "message_version_id", "title", "status", "version_number", "active"]} fields={fields} mutate={mutateMessages} operations={["update", "publish", "active"]} /></>; }
