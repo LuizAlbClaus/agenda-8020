@@ -28,6 +28,31 @@ ex-alunas, 60 dias) escolha o melhor benefício; o Agenda não soma trials.
 
 Enquanto a flag estiver desativada, nenhuma chamada externa é feita e a usuária vê uma mensagem honesta de indisponibilidade.
 
+### Resumo operacional opcional
+
+Depois de aplicar a migration `20260829160000_agenda_summary_integration.sql`
+no projeto do Belevy, configurar no ambiente server-only do Agenda:
+
+- `BELEVY_PUBLIC_URL=https://belevy.com.br`;
+- `BELEVY_AGENDA_SUMMARY_ENDPOINT=https://belevy.com.br/api/integrations/agenda/summary`;
+- `BELEVY_SHARED_SECRET` com o mesmo segredo server-to-server do Belevy.
+
+Para o fluxo compartilhado de eventos mínimos, configurar também no Agenda:
+
+- `BELEVY_EVENTS_SHARED_SECRET`;
+- `SUPABASE_SERVICE_ROLE_KEY`, usado somente pelo endpoint server-to-server.
+
+No Belevy:
+
+- `AGENDA_EVENTS_ENDPOINT=https://<dominio-do-agenda>/api/integrations/belevy/events`;
+- `AGENDA_SHARED_SECRET` com o mesmo valor de `BELEVY_EVENTS_SHARED_SECRET`.
+
+O endpoint retorna somente o slug público, próximos horários e contagens
+agregadas. Se a variável estiver ausente, houver timeout ou o Belevy estiver
+vencido, o Agenda continua em modo autônomo sem bloquear a usuária.
+Os eventos são opcionais e best-effort: uma falha no Agenda não desfaz uma
+reserva, alteração de status ou conclusão financeira no Belevy.
+
 ### Contrato necessário para ativar o Belevy
 
 O adapter espera um endpoint HTTPS configurado em `BELEVY_ACTIVATION_ENDPOINT` e

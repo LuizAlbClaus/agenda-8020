@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { canAccessAgenda } from "@/lib/supabase/access";
 import { createClient } from "@/lib/supabase/server";
 import { trackAnalyticsEvent } from "@/lib/analytics";
+import { getBelevyAgendaSummary } from "@/lib/belevy-integration";
 
 export async function activateBelevyBenefit() {
   let supabase;
@@ -35,6 +36,19 @@ export async function activateBelevyBenefit() {
     activated += 1;
   }
   if (activated === 0) return { ok: false as const, error: "Este benefício não está disponível para ativação." };
+  const email = typeof claims?.claims?.email === "string" ? claims.claims.email : undefined;
+  if (email) {
+    const belevy = await getBelevyAgendaSummary(email);
+    if (belevy.status === "connected") {
+      const { error: connectionError } = await supabase.rpc("save_belevy_connection", {
+        p_slug: belevy.slug,
+        p_expires_at: belevy.expiresAt,
+      });
+      if (connectionError) {
+        console.error("Belevy connection could not be persisted", { code: connectionError.code ?? "unknown" });
+      }
+    }
+  }
   await trackAnalyticsEvent("benefit_activated", { benefit: "belevy" });
   revalidatePath("/belevy"); revalidatePath("/settings/benefits"); revalidatePath("/today");
   return { ok: true as const, activated };

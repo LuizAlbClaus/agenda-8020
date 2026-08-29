@@ -109,19 +109,9 @@ end; $$;
 revoke all on function public.save_checkin_v2(public.user_stage,public.bottleneck,text[],text[],integer,boolean,boolean,boolean) from public,anon;
 grant execute on function public.save_checkin_v2(public.user_stage,public.bottleneck,text[],text[],integer,boolean,boolean,boolean) to authenticated;
 
--- Existing generic editorial records become eligible for every supported service type.
-update public.action_versions
-set eligible_professions=array['all_services','nail_design','hair_stylist','brows_lashes','esthetician','makeup_artist','beauty_other','health_wellness','local_service','teacher','professional','other']::text[]
-where eligible_professions @> array['nail_design']::text[];
-update public.message_versions
-set eligible_professions=array['all_services','nail_design','hair_stylist','brows_lashes','esthetician','makeup_artist','beauty_other','health_wellness','local_service','teacher','professional','other']::text[]
-where eligible_professions @> array['nail_design']::text[];
-
-update public.action_versions av
-set short_description=replace(replace(av.short_description,'Soft Gel','seu serviço'),'unhas','seu serviço'),
-why_now_template=replace(replace(av.why_now_template,'Soft Gel','seu serviço'),'unhas','seu serviço'),
-message_template=replace(replace(av.message_template,'Soft Gel','seu serviço'),'suas unhas','seu serviço')
-where av.message_template is not null and (av.short_description ilike '%Soft Gel%' or av.why_now_template ilike '%Soft Gel%' or av.message_template ilike '%Soft Gel%' or av.message_template ilike '%unhas%');
+-- Editorial rows are immutable after publication. Their cross-niche copy and
+-- eligibility are handled by a new action/message version, not by mutating
+-- published records inside this schema migration.
 
 comment on table public.business_profiles is 'Perfil horizontal de prestador de serviço: nicho, serviço, atendimento, prova e contexto comercial.';
 comment on column public.business_profiles.profession is 'Código legado/operacional do tipo de serviço; nail_design permanece aceito para compatibilidade.';

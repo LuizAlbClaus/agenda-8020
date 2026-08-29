@@ -93,6 +93,12 @@ O SQL deve impor ownership por RLS, validação por RPC/Server Action autorizada
 
 O onboarding atual de estágio/gargalo/canais continua como `growth_context` para quem usa o produto Agenda 80/20. Uma recomendação pode apontar para configurar serviço/disponibilidade, mas jamais cria ou confirma appointment sozinha.
 
+### Integração opcional com o Belevy
+
+O Agenda 80/20 continua utilizável sem o Belevy. No modo autônomo, mantém o coach, as ações, os registros, os check-ins, o progresso e o fluxo básico de agendamento já existente. O Belevy é a agenda operacional oficial quando conectado; o Agenda consome somente um resumo mínimo e nunca altera appointments externos.
+
+Quando o Belevy não estiver conectado, vencido ou indisponível, o acesso e o progresso do Agenda permanecem ativos. O Belevy acrescenta automações e operação — clientes, confirmações, cancelamentos, lembretes, financeiro, calendário externo e CRM — sem ser pré-requisito para o método.
+
 ## 6. Compatibilidade e migração
 
 Estratégia additive-first em fases:
@@ -113,6 +119,7 @@ Estratégia additive-first em fases:
 - **Conteúdo:** catálogo localizado, tags de nicho/especialidade e versões imutáveis; o motor não contém copy de Soft Gel.
 - **Privacidade:** separar dados do provider, customer e analytics; minimização, exportação, exclusão/anonymização e retenção explícitas.
 - **Eventos:** `appointment_created`, `appointment_confirmed`, `appointment_cancelled`, `appointment_completed`, `appointment_no_show`, `availability_published`; payloads sem email/nome quando não necessários.
+- **Integração Belevy:** Route Handlers server-to-server com segredo, resumo somente leitura, redirecionamento do booking enquanto o vínculo estiver vigente e eventos mínimos idempotentes; sem PII de customers e com o link e as mudanças operacionais permanecendo no Belevy.
 
 ## 8. Critérios de aceite
 
@@ -128,6 +135,8 @@ Estratégia additive-first em fases:
 - [ ] Coach legado continua gerando no máximo uma recomendação elegível e não cria reserva automaticamente.
 - [ ] Migração é repetível, auditável, mensurável e possui rollback por flag antes da remoção dos campos legados.
 - [ ] Termos/privacidade descrevem provider, customer, service e appointment e não prometem resultados de agenda/renda.
+- [ ] O Agenda funciona com Belevy ausente, vencido ou indisponível, sem bloquear o coach ou apagar histórico.
+- [ ] Quando conectado, o Belevy é a fonte canônica de appointments, o booking público aponta para ele e o Agenda não oferece mutações externas.
 
 ## 9. Ordem de execução futura
 
@@ -147,6 +156,7 @@ Estratégia additive-first em fases:
 - Gestão manual de appointments e transições de status pelo provider.
 - Múltiplos providers/resources por workspace e seleção pública de provider.
 - Notificações de confirmação e lembrete.
+- Integração de resumo, vínculo de booking e eventos mínimos com o Belevy, sempre com fallback explícito para modo autônomo.
 
 1. ADR e catálogo de códigos; testes de contrato e dados de seed.
 2. Schema de workspace/catalog e RLS.

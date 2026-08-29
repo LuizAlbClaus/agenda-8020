@@ -6,6 +6,12 @@ O domínio e o workflow horizontal estão documentados em [`docs/phase-9-multi-n
 
 Fundação técnica da Fase 0: Next.js App Router, TypeScript strict, Tailwind e Supabase Auth com SSR.
 
+## Auditoria e comunicação
+
+- [Auditoria estratégica SaaS](docs/saas-audit-2026-08.md)
+- [Brief de comunicação e aquisição](docs/product-communication-brief.md)
+- [Auditoria técnica orientada ao produto](docs/technical-saas-audit-2026-08.md)
+
 ## Ambientes
 
 Mantenha configurações e projetos Supabase separados para `development`, `staging` e `production`. Cada ambiente deve fornecer suas próprias variáveis a partir de `.env.example`; nenhum segredo é versionado. Nunca aponte testes de commerce para o banco de produção.

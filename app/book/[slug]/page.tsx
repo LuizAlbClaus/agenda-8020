@@ -1,10 +1,17 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { publicUrlForSlug } from "@/lib/belevy-integration";
 import BookingForm from "./booking-form";
 
 export default async function PublicBookingPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const supabase = await createClient();
+  const { data: belevyRedirect } = await supabase.rpc("get_belevy_booking_redirect", { p_agenda_slug: slug });
+  const redirectData = belevyRedirect as { status?: string; slug?: string } | null;
+  if (redirectData?.status === "connected" && redirectData.slug) {
+    const belevyUrl = publicUrlForSlug(redirectData.slug);
+    if (belevyUrl) redirect(belevyUrl);
+  }
   const { data, error } = await supabase.rpc("get_public_booking_context", { p_slug: slug });
   if (error || !data || data.error) notFound();
   const context = data as { workspace: { name: string; timezone: string; slug: string }; services: Array<{ id: string; name: string; duration_minutes: number; description?: string | null }>; days: Array<{ date: string; slots: Array<{ starts_at: string; ends_at: string }> }> };

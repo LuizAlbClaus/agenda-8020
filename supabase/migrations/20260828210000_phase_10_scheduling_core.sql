@@ -205,7 +205,84 @@ declare v_workspace public.workspaces%rowtype;
 begin
   select * into v_workspace from public.workspaces where slug=lower(trim(p_slug)) and active;
   if not found or p_to<p_from or p_to>p_from+31 then return jsonb_build_object('error','booking_unavailable'); end if;
-  return jsonb_build_object('workspace',jsonb_build_object('name',v_workspace.name,'timezone',v_workspace.timezone,'slug',v_workspace.slug),'services',(select coalesce(jsonb_agg(jsonb_build_object('id',s.id,'name',s.name,'duration_minutes',s.duration_minutes,'description',s.description) order by s.created_at),'[]') from public.services s where s.workspace_id=v_workspace.id and s.active),'days',(select coalesce(jsonb_agg(jsonb_build_object('date',d::date,'slots',(select coalesce(jsonb_agg(jsonb_build_object('starts_at',slot_start,'ends_at',slot_start+(s.duration_minutes+s.buffer_minutes)*interval '1 minute') order by slot_start),'[]') from (select ((d::date+ar.starts_at)::timestamp at time zone v_workspace.timezone) + (n*interval '30 minutes') slot_start from public.availability_rules ar cross join lateral generate_series(0,40) n where ar.provider_id=p.id and ar.weekday=extract(dow from d)::int and ar.active and ((d::date+ar.starts_at)::timestamp at time zone v_workspace.timezone)+n*interval '30 minutes'+(s.duration_minutes+s.buffer_minutes)*interval '1 minute' <= ((d::date+ar.ends_at)::timestamp at time zone v_workspace.timezone) and not exists(select 1 from public.appointments a where a.provider_id=p.id and a.status in ('held','confirmed') and tstzrange(a.starts_at,a.ends_at,'[)') && tstzrange(((d::date+ar.starts_at)::timestamp at time zone v_workspace.timezone)+n*interval '30 minutes',((d::date+ar.starts_at)::timestamp at time zone v_workspace.timezone)+n*interval '30 minutes'+(s.duration_minutes+s.buffer_minutes)*interval '1 minute','[)')) slot_candidates where slot_start>now()) from generate_series(p_from,p_to,'1 day') d where exists(select 1 from public.availability_rules ar where ar.provider_id=p.id and ar.weekday=extract(dow from d)::int and ar.active) order by d),'[]') from public.providers p join public.services s on s.workspace_id=p.workspace_id where p.workspace_id=v_workspace.id and p.active order by p.created_at limit 1));
+  return jsonb_build_object(
+    'workspace', jsonb_build_object(
+      'name', v_workspace.name,
+      'timezone', v_workspace.timezone,
+      'slug', v_workspace.slug
+    ),
+    'services', (
+      select coalesce(jsonb_agg(jsonb_build_object(
+        'id', s.id,
+        'name', s.name,
+        'duration_minutes', s.duration_minutes,
+        'description', s.description
+      ) order by s.created_at), '[]'::jsonb)
+        from public.services s
+       where s.workspace_id = v_workspace.id
+         and s.active
+    ),
+    'days', coalesce((
+      with selected_service as (
+        select p.id as provider_id, s.duration_minutes, s.buffer_minutes
+          from public.providers p
+          join public.service_providers sp on sp.provider_id = p.id
+          join public.services s on s.id = sp.service_id
+         where p.workspace_id = v_workspace.id
+           and p.active
+           and s.active
+         order by p.created_at, s.created_at
+         limit 1
+      )
+      select jsonb_agg(jsonb_build_object(
+        'date', day_value::date,
+        'slots', (
+          select coalesce(jsonb_agg(jsonb_build_object(
+            'starts_at', slot_start,
+            'ends_at', slot_start + (selected_service.duration_minutes + selected_service.buffer_minutes) * interval '1 minute'
+          ) order by slot_start), '[]'::jsonb)
+            from (
+              select ((day_value::date + availability.starts_at)::timestamp at time zone v_workspace.timezone)
+                + (series.n * interval '30 minutes') as slot_start
+                from selected_service
+                join public.availability_rules availability on availability.provider_id = selected_service.provider_id
+                cross join lateral generate_series(0, 40) as series(n)
+               where availability.weekday = extract(dow from day_value)::int
+                 and availability.active
+                 and ((day_value::date + availability.starts_at)::timestamp at time zone v_workspace.timezone)
+                   + series.n * interval '30 minutes'
+                   + (selected_service.duration_minutes + selected_service.buffer_minutes) * interval '1 minute'
+                   <= ((day_value::date + availability.ends_at)::timestamp at time zone v_workspace.timezone)
+                 and not exists (
+                   select 1
+                     from public.appointments appointment
+                    where appointment.provider_id = selected_service.provider_id
+                      and appointment.status in ('held', 'confirmed')
+                      and tstzrange(appointment.starts_at, appointment.ends_at, '[)') && tstzrange(
+                        ((day_value::date + availability.starts_at)::timestamp at time zone v_workspace.timezone)
+                          + series.n * interval '30 minutes',
+                        ((day_value::date + availability.starts_at)::timestamp at time zone v_workspace.timezone)
+                          + series.n * interval '30 minutes'
+                          + (selected_service.duration_minutes + selected_service.buffer_minutes) * interval '1 minute',
+                        '[)'
+                      )
+                 )
+            ) candidates
+           where slot_start > now()
+        )
+      ) order by day_value)
+        from generate_series(p_from::timestamp, p_to::timestamp, interval '1 day') as days(day_value)
+       where exists (
+         select 1
+           from public.availability_rules availability
+           join public.providers provider on provider.id = availability.provider_id
+          where provider.workspace_id = v_workspace.id
+            and provider.active
+            and availability.weekday = extract(dow from day_value)::int
+            and availability.active
+       )
+    ), '[]'::jsonb)
+  );
 end; $$;
 revoke all on function public.get_public_booking_context(text,date,date) from public; grant execute on function public.get_public_booking_context(text,date,date) to anon,authenticated;
 
