@@ -15,6 +15,7 @@ export async function activateBelevyBenefit() {
   if (!(await canAccessAgenda(userId))) return { ok: false as const, error: "Seu acesso ao Agenda 80/20 não está ativo." };
 
   let activated = 0;
+  let accessEmailSent: boolean | null = null;
   // A bump is stored as a paid extension beside the included promo. Process
   // the small, fixed bundle in one user action; every activation remains
   // individually idempotent in both applications.
@@ -23,7 +24,9 @@ export async function activateBelevyBenefit() {
     if (benefitError) return { ok: false as const, error: "Não conseguimos consultar seu benefício agora. Tente novamente." };
     const record = (Array.isArray(benefit) ? benefit[0] : benefit) as Record<string, unknown> | null;
     if (record?.activation_enabled !== true) {
-      return activated > 0 ? { ok: true as const } : { ok: false as const, error: "A ativação ainda não está disponível. Avisaremos quando o Belevy estiver pronto." };
+      return activated > 0
+        ? { ok: true as const, activated, accessEmailSent }
+        : { ok: false as const, error: "A ativação ainda não está disponível. Avisaremos quando o Belevy estiver pronto." };
     }
     if (record?.status !== "available") break;
     const { data: result, error } = await supabase.functions.invoke("activate-belevy-benefit", {
@@ -32,6 +35,9 @@ export async function activateBelevyBenefit() {
     if (error || !result || typeof result !== "object" || (("ok" in result && result.ok !== true) && ("activated" in result && result.activated !== true)) || ("status" in result && result.status !== "active" && result.status !== "success")) {
       console.error("Belevy activation failed", { code: error?.name ?? "invalid_response" });
       return { ok: false as const, error: "Não conseguimos ativar seu benefício agora. Tente novamente em alguns instantes." };
+    }
+    if ("access_email_sent" in result && typeof result.access_email_sent === "boolean") {
+      accessEmailSent = result.access_email_sent;
     }
     activated += 1;
   }
@@ -51,5 +57,5 @@ export async function activateBelevyBenefit() {
   }
   await trackAnalyticsEvent("benefit_activated", { benefit: "belevy" });
   revalidatePath("/belevy"); revalidatePath("/settings/benefits"); revalidatePath("/today");
-  return { ok: true as const, activated };
+  return { ok: true as const, activated, accessEmailSent };
 }

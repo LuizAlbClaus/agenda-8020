@@ -52,6 +52,8 @@ agregadas. Se a variável estiver ausente, houver timeout ou o Belevy estiver
 vencido, o Agenda continua em modo autônomo sem bloquear a usuária.
 Os eventos são opcionais e best-effort: uma falha no Agenda não desfaz uma
 reserva, alteração de status ou conclusão financeira no Belevy.
+O Belevy envia um `event_id` determinístico por atendimento e estado,
+permitindo que retries sejam deduplicados no endpoint do Agenda.
 
 ### Contrato necessário para ativar o Belevy
 
@@ -60,16 +62,19 @@ um segredo compartilhado em `BELEVY_SHARED_SECRET`. O endpoint deve:
 
 - aceitar `POST` com `Content-Type: application/json`;
 - autenticar o valor enviado no header `Authorization` com o segredo compartilhado;
-- receber `{ email, name, benefit_id, duration_days }`;
+- receber `{ email, name, benefit_id, duration_days, benefit_kind, source }`;
 - retornar qualquer status `2xx` quando a ativação for aceita, inclusive `204`;
-- opcionalmente retornar JSON com `external_reference`, `reference_id` ou `id`;
+- opcionalmente retornar JSON com `external_reference`, `reference_id`, `id`, `access_email_sent` e `access_method`;
+- gerar e enviar um magic link de primeiro acesso quando a conta for nova ou já existir;
 - não registrar o segredo, o payload completo ou dados de clientes em logs.
 
 O endpoint deve ser idempotente para a mesma ativação. A função já mantém a
 máquina de estados local e considera a ativação local concluída somente depois
 de uma resposta `2xx`; respostas não-2xx, timeout de 10 segundos e respostas
-JSON inválidas marcam a ativação como falha. Não há callback externo exigido
-pelo contrato atual.
+JSON inválidas marcam a ativação como falha. Entitlements que falharam dentro
+da janela de elegibilidade reaparecem como disponíveis para retry; o mesmo
+`benefit_id` continua sendo a chave idempotente no Belevy. Não há callback
+externo exigido pelo contrato atual.
 
 Checklist antes de habilitar:
 

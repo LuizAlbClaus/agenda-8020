@@ -213,6 +213,7 @@ Deno.serve(async (request) => {
   }
 
   let externalReference: string | null = null;
+  let accessEmailSent: boolean | null = null;
   try {
     let parsedEndpoint: URL;
     try { parsedEndpoint = new URL(endpoint); } catch { throw new Error("external_endpoint_invalid"); }
@@ -240,6 +241,9 @@ Deno.serve(async (request) => {
       let payload: unknown;
       try { payload = JSON.parse(rawBody); } catch { throw new Error("external_malformed_response"); }
       if (!isObject(payload)) throw new Error("external_malformed_response");
+      if (typeof payload.access_email_sent === "boolean") {
+        accessEmailSent = payload.access_email_sent;
+      }
       // A successful provider response may omit an external identifier. Keep
       // it nullable; validate only an identifier that was actually supplied.
       const suppliedReference = payload.external_reference ?? payload.reference_id ?? payload.id;
@@ -261,5 +265,5 @@ Deno.serve(async (request) => {
     return response({ error: "Não foi possível concluir a ativação.", error_code: "BELEVY_ACTIVATION_FAILED" }, 502, requestId);
   }
   log(requestId, "completed", started, entityId);
-  return response({ activated: true, activation_id: entityId }, 200, requestId);
+  return response({ activated: true, activation_id: entityId, access_email_sent: accessEmailSent }, 200, requestId);
 });
