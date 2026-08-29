@@ -177,7 +177,17 @@ Deno.serve(async (request) => {
   const externalBenefitId = isObject(activation) && typeof activation.external_benefit_id === "string"
     ? activation.external_benefit_id
     : null;
-  if (!externalBenefitId || !Number.isInteger(durationDays) || durationDays < 1 || durationDays > 3650) {
+  const benefitCode = isObject(activation) && typeof activation.benefit_code === "string"
+    ? activation.benefit_code
+    : null;
+  // Both the Agenda promo and its paid extension are 30 days. The type must
+  // travel explicitly: duration alone must never decide the commercial rule.
+  const benefitKind = benefitCode === "belevy_promo"
+    ? "promotional"
+    : benefitCode === "belevy_paid_extension"
+    ? "paid_extension"
+    : null;
+  if (!externalBenefitId || !benefitKind || !Number.isInteger(durationDays) || durationDays < 1 || durationDays > 3650) {
     log(requestId, "failed", started, user.id, "BELEVY_ACTIVATION_FAILED");
     return response({ error: "Não foi possível ativar o benefício agora.", error_code: "BELEVY_ACTIVATION_FAILED" }, 502, requestId);
   }
@@ -213,7 +223,14 @@ Deno.serve(async (request) => {
       method: "POST",
       signal: controller.signal,
       headers: { "content-type": "application/json", authorization: sharedSecret },
-      body: JSON.stringify({ email: user.email, name, benefit_id: externalBenefitId, duration_days: durationDays, source: "agenda" }),
+      body: JSON.stringify({
+        email: user.email,
+        name,
+        benefit_id: externalBenefitId,
+        duration_days: durationDays,
+        benefit_kind: benefitKind,
+        source: "agenda",
+      }),
     }).finally(() => clearTimeout(timeout));
     if (!external.ok) throw new Error("external_http_failure");
     // The provider may return 204 or an empty body. Any 2xx is successful;
