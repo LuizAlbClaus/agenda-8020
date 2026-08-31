@@ -47,7 +47,7 @@ export default async function MessagesPage() {
           Templates de Mensagens
         </h1>
         <p className="mt-1 max-w-3xl text-sm leading-relaxed text-slate-600">
-          As mensagens são conteúdo editorial prontas para envio via WhatsApp. Edite rascunhos, visualize a prévia e publique versões imutáveis. A ativação do template é gerenciada separadamente pelo controle de status.
+          As mensagens são conteúdos editoriais prontos para envio via WhatsApp. Edite rascunhos, visualize a prévia e publique versões imutáveis. A ativação do template é gerenciada separadamente pelo controle de status.
         </p>
       </div>
 

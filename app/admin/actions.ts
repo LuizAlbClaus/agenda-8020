@@ -5,86 +5,218 @@ import { listAdminResource } from "@/lib/admin";
 
 type Mutation = { operation: string; id?: string; values?: AdminRow };
 
-function jsonArray(value: unknown, fallback: string[] = []) {
-  if (Array.isArray(value)) return value;
+function jsonArray(value: unknown, fallback: string[] = []): string[] {
+  if (Array.isArray(value)) return value.map(String);
   if (typeof value !== "string" || !value.trim()) return fallback;
   try {
     const parsed = JSON.parse(value);
-    return Array.isArray(parsed) ? parsed : value.split("\n").map((item) => item.trim()).filter(Boolean);
+    if (Array.isArray(parsed)) return parsed.map(String);
+    return value.split("\n").map((item) => item.trim()).filter(Boolean);
   } catch {
     return value.split("\n").map((item) => item.trim()).filter(Boolean);
   }
 }
 
-function jsonObject(value: unknown) {
-  if (value && typeof value === "object") return value;
+function parseJsonObject(value: unknown): { ok: true; data: Record<string, unknown> } | { ok: false; error: string } {
+  if (value && typeof value === "object" && !Array.isArray(value)) {
+    return { ok: true, data: value as Record<string, unknown> };
+  }
   if (typeof value === "string" && value.trim()) {
     try {
-      return JSON.parse(value);
+      const parsed = JSON.parse(value);
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+        return { ok: true, data: parsed as Record<string, unknown> };
+      }
+      return { ok: false, error: "O JSON deve ser um objeto {...}." };
     } catch {
-      return {};
+      return { ok: false, error: "Sintaxe JSON inválida." };
     }
   }
-  return {};
-}
-
-function buildActionDraftPayload(values: AdminRow) {
-  const payload: AdminRow = {};
-  if (values.title !== undefined) payload.title = String(values.title).trim();
-  if (values.short_description !== undefined) payload.short_description = String(values.short_description);
-  if (values.why_now_template !== undefined) payload.why_now_template = String(values.why_now_template);
-  if (values.when_to_use !== undefined) payload.when_to_use = String(values.when_to_use);
-  if (values.when_not_to_use !== undefined) payload.when_not_to_use = String(values.when_not_to_use);
-  if (values.steps !== undefined) payload.steps = jsonArray(values.steps, ["Executar a ação"]);
-  if (values.eligible_professions !== undefined) payload.eligible_professions = jsonArray(values.eligible_professions, ["all_services"]);
-  if (values.eligible_stages !== undefined) payload.eligible_stages = jsonArray(values.eligible_stages);
-  if (values.eligible_bottlenecks !== undefined) payload.eligible_bottlenecks = jsonArray(values.eligible_bottlenecks);
-  if (values.required_channels !== undefined) payload.required_channels = jsonArray(values.required_channels);
-  if (values.requirements !== undefined) payload.requirements = jsonObject(values.requirements);
-  if (values.duration_minutes !== undefined && values.duration_minutes !== "") payload.duration_minutes = Number(values.duration_minutes);
-  if (values.difficulty !== undefined) payload.difficulty = String(values.difficulty);
-  if (values.exposure_mode !== undefined) payload.exposure_mode = String(values.exposure_mode);
-  if (values.max_exposure !== undefined && values.max_exposure !== "") payload.max_exposure = Number(values.max_exposure);
-  if (values.cooldown_hours !== undefined && values.cooldown_hours !== "") payload.cooldown_hours = Number(values.cooldown_hours);
-  if (values.maturation_hours !== undefined && values.maturation_hours !== "") payload.maturation_hours = Number(values.maturation_hours);
-  if (values.finalization_hours !== undefined && values.finalization_hours !== "") payload.finalization_hours = Number(values.finalization_hours);
-  if (values.editorial_prior !== undefined && values.editorial_prior !== "") payload.editorial_prior = Number(values.editorial_prior);
-  if (values.ethical_guardrail !== undefined) payload.ethical_guardrail = String(values.ethical_guardrail);
-  if (values.message_template !== undefined) payload.message_template = String(values.message_template);
-  if (values.slug !== undefined) payload.slug = String(values.slug);
-  if (values.action_type !== undefined) payload.action_type = String(values.action_type);
-  if (values.category !== undefined) payload.category = String(values.category);
-  if (values.measurement_class !== undefined) payload.measurement_class = String(values.measurement_class);
-  return payload;
+  return { ok: false, error: "Conteúdo JSON ausente ou vazio." };
 }
 
 export async function mutateActions(input: Mutation): Promise<AdminResult> {
   const values = input.values ?? {};
+
   if (input.operation === "create") {
-    const payload = buildActionDraftPayload(values);
+    if (!values.slug || !String(values.slug).trim()) {
+      return { ok: false, error: "O slug do protocolo é obrigatório para criação." };
+    }
+    if (!values.title || !String(values.title).trim()) {
+      return { ok: false, error: "O título da ação é obrigatório para criação." };
+    }
+
+    const steps = jsonArray(values.steps);
+    if (steps.length < 1 || steps.length > 3) {
+      return { ok: false, error: "Informe entre 1 e 3 passos para a execução da ação." };
+    }
+
+    // Number validations
+    let cooldownHours: number | undefined;
+    if (values.cooldown_days !== undefined && values.cooldown_days !== "") {
+      const cd = Number(values.cooldown_days);
+      if (isNaN(cd) || cd < 0) {
+        return { ok: false, error: "Cooldown (dias) deve ser um número maior ou igual a zero." };
+      }
+      cooldownHours = cd * 24;
+    }
+
+    let maturityHours: number | undefined;
+    if (values.maturity_hours !== undefined && values.maturity_hours !== "") {
+      const mh = Number(values.maturity_hours);
+      if (isNaN(mh) || mh < 0) {
+        return { ok: false, error: "Maturação (horas) deve ser um número maior ou igual a zero." };
+      }
+      maturityHours = mh;
+    }
+
+    let priorityVal: number | undefined;
+    const rawPriority =
+      values.priority !== undefined && values.priority !== ""
+        ? values.priority
+        : values.prior !== undefined && values.prior !== ""
+          ? values.prior
+          : undefined;
+    if (rawPriority !== undefined) {
+      const p = Number(rawPriority);
+      if (isNaN(p) || p < 0 || p > 1) {
+        return { ok: false, error: "Prioridade editorial deve ser um número entre 0 e 1." };
+      }
+      priorityVal = p;
+    }
+
+    // Build schema-native payload incrementally without fabricating defaults
+    const payload: AdminRow = {
+      slug: String(values.slug).trim(),
+      title: String(values.title).trim(),
+      steps,
+    };
+
+    if (values.short_description !== undefined && values.short_description !== "") {
+      payload.short_description = String(values.short_description);
+    }
+    if (values.eligibility !== undefined || values.requires_context_signal !== undefined) {
+      const reqObj: Record<string, unknown> = {};
+      if (values.eligibility !== undefined) {
+        reqObj.editorial_input =
+          typeof values.eligibility === "object"
+            ? JSON.stringify(values.eligibility)
+            : String(values.eligibility);
+      }
+      if (values.requires_context_signal !== undefined) {
+        reqObj.requires_context_signal = Boolean(values.requires_context_signal);
+      }
+      payload.requirements = reqObj;
+    }
+    if (cooldownHours !== undefined) {
+      payload.cooldown_hours = cooldownHours;
+    }
+    if (maturityHours !== undefined) {
+      payload.maturation_hours = maturityHours;
+    }
+    if (priorityVal !== undefined) {
+      payload.editorial_prior = priorityVal;
+    }
+    if (values.guardrail !== undefined && values.guardrail !== "") {
+      payload.ethical_guardrail = String(values.guardrail);
+    }
+    if (values.action_type !== undefined && values.action_type !== "") {
+      payload.action_type = String(values.action_type);
+    }
+    if (values.category !== undefined && values.category !== "") {
+      payload.category = String(values.category);
+    }
+    if (values.measurement_class !== undefined && values.measurement_class !== "") {
+      payload.measurement_class = String(values.measurement_class);
+    }
+
     return runAdminMutation(
       "admin_create_action_draft",
       { p_id: input.id ? input.id : null, p_input: payload },
       "/admin/actions"
     );
   }
+
   if (input.operation === "update") {
-    const payload = buildActionDraftPayload(values);
+    if (!input.id) {
+      return { ok: false, error: "ID da versão de ação ausente para atualização." };
+    }
+
+    // Validate numbers if provided
+    if (values.cooldown_days !== undefined && values.cooldown_days !== "") {
+      const cd = Number(values.cooldown_days);
+      if (isNaN(cd) || cd < 0) {
+        return { ok: false, error: "Cooldown (dias) deve ser um número maior ou igual a zero." };
+      }
+    }
+    if (values.maturity_hours !== undefined && values.maturity_hours !== "") {
+      const mh = Number(values.maturity_hours);
+      if (isNaN(mh) || mh < 0) {
+        return { ok: false, error: "Maturação (horas) deve ser um número maior ou igual a zero." };
+      }
+    }
+    const rawPriority =
+      values.priority !== undefined && values.priority !== ""
+        ? values.priority
+        : values.prior !== undefined && values.prior !== ""
+          ? values.prior
+          : undefined;
+    if (rawPriority !== undefined) {
+      const p = Number(rawPriority);
+      if (isNaN(p) || p < 0 || p > 1) {
+        return { ok: false, error: "Prioridade editorial deve ser um número entre 0 e 1." };
+      }
+    }
+
+    // Send strictly the exact aliases consumed by admin_update_action_draft(p_id, p_input)
+    const payload: AdminRow = {};
+    if (values.title !== undefined && values.title !== "") {
+      payload.title = String(values.title).trim();
+    }
+    if (values.short_description !== undefined) {
+      payload.short_description = String(values.short_description);
+    }
+    if (values.eligibility !== undefined) {
+      payload.eligibility =
+        typeof values.eligibility === "object"
+          ? JSON.stringify(values.eligibility)
+          : String(values.eligibility);
+    }
+    if (values.requires_context_signal !== undefined) {
+      payload.requires_context_signal = Boolean(values.requires_context_signal);
+    }
+    if (values.cooldown_days !== undefined && values.cooldown_days !== "") {
+      payload.cooldown_days = Number(values.cooldown_days);
+    }
+    if (values.maturity_hours !== undefined && values.maturity_hours !== "") {
+      payload.maturity_hours = Number(values.maturity_hours);
+    }
+    if (rawPriority !== undefined) {
+      payload.priority = Number(rawPriority);
+    }
+    if (values.guardrail !== undefined) {
+      payload.guardrail = String(values.guardrail);
+    }
+
     return runAdminMutation(
       "admin_update_action_draft",
-      { p_id: input.id ?? null, p_input: payload },
+      { p_id: input.id, p_input: payload },
       "/admin/actions"
     );
   }
+
   if (input.operation === "publish") {
+    if (!input.id) return { ok: false, error: "ID da versão ausente para publicação." };
     return runAdminMutation(
       "admin_publish_action_draft",
-      { p_id: input.id ?? null, p_input: {} },
+      { p_id: input.id, p_input: {} },
       "/admin/actions"
     );
   }
+
   if (input.operation === "active") {
     const protocolId = String(values.protocol_id ?? input.id ?? "");
+    if (!protocolId) return { ok: false, error: "ID do protocolo ausente." };
     const nextActive = !Boolean(values.active ?? values.is_active);
     return runAdminMutation(
       "admin_set_protocol_active",
@@ -92,6 +224,7 @@ export async function mutateActions(input: Mutation): Promise<AdminResult> {
       "/admin/actions"
     );
   }
+
   return { ok: false, error: "Operação desconhecida." };
 }
 
@@ -145,46 +278,37 @@ export async function mutateMessages(input: Mutation): Promise<AdminResult> {
 
 export async function mutatePolicies(input: Mutation): Promise<AdminResult> {
   const values = input.values ?? {};
-  let params: unknown = {};
-  if (values.params) {
-    params = jsonObject(values.params);
-  } else {
-    params = {
-      score_weights: {
-        fit: Number(values.fit_weight ?? 35),
-        channel: Number(values.channel_weight ?? 20),
-        prior: Number(values.prior_weight ?? 15),
-        evidence: 15,
-        exploration: 10,
-        viability: 5,
-      },
-      prior_weight: Number(values.prior_weight ?? 8),
-      recency_half_life_days: Number(values.half_life_days ?? 60),
-      exploration_rate: Number(values.exploration_rate ?? 0),
-    };
-  }
 
-  if (input.operation === "create") {
-    return runAdminMutation(
-      "admin_create_policy_draft",
-      { p_id: null, p_input: { params } },
-      "/admin/policies"
-    );
-  }
-  if (input.operation === "update") {
+  if (input.operation === "create" || input.operation === "update") {
+    const parsed = parseJsonObject(values.params);
+    if (!parsed.ok) {
+      return { ok: false, error: `Parâmetros da política inválidos: ${parsed.error}` };
+    }
+
+    if (input.operation === "create") {
+      return runAdminMutation(
+        "admin_create_policy_draft",
+        { p_id: null, p_input: { params: parsed.data } },
+        "/admin/policies"
+      );
+    }
+
     return runAdminMutation(
       "admin_update_policy_draft",
-      { p_id: input.id ?? null, p_input: { params } },
+      { p_id: input.id ?? null, p_input: { params: parsed.data } },
       "/admin/policies"
     );
   }
+
   if (input.operation === "activate") {
+    if (!input.id) return { ok: false, error: "ID da política ausente." };
     return runAdminMutation(
       "admin_activate_policy",
-      { p_id: input.id ?? null, p_input: {} },
+      { p_id: input.id, p_input: {} },
       "/admin/policies"
     );
   }
+
   return { ok: false, error: "Operação desconhecida." };
 }
 

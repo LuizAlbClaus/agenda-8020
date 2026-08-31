@@ -500,13 +500,32 @@ export function AdminResource({
             sanitizedValues[field.name] = row[field.name];
           }
         }
-        // Specific alias mapping
+        // Specific alias mapping for actions, messages, policies, flags
         if (row.flag_key && sanitizedValues.flag_key === undefined) sanitizedValues.flag_key = row.flag_key;
         if (row.is_enabled !== undefined && sanitizedValues.is_enabled === undefined) sanitizedValues.is_enabled = row.is_enabled;
         if (row.description !== undefined && sanitizedValues.description === undefined) sanitizedValues.description = row.description;
         if (row.slug && sanitizedValues.slug === undefined) sanitizedValues.slug = row.slug;
         if (row.protocol_slug && sanitizedValues.slug === undefined) sanitizedValues.slug = row.protocol_slug;
         if (row.template_slug && sanitizedValues.slug === undefined) sanitizedValues.slug = row.template_slug;
+        if (row.requires_context_signal !== undefined && sanitizedValues.requires_context_signal === undefined) sanitizedValues.requires_context_signal = Boolean(row.requires_context_signal);
+        if (row.cooldown_days !== undefined && sanitizedValues.cooldown_days === undefined) sanitizedValues.cooldown_days = row.cooldown_days;
+        else if (row.cooldown_hours !== undefined && sanitizedValues.cooldown_days === undefined) sanitizedValues.cooldown_days = Number(row.cooldown_hours) / 24;
+        if (row.maturity_hours !== undefined && sanitizedValues.maturity_hours === undefined) sanitizedValues.maturity_hours = row.maturity_hours;
+        else if (row.maturation_hours !== undefined && sanitizedValues.maturity_hours === undefined) sanitizedValues.maturity_hours = row.maturation_hours;
+        if (row.priority !== undefined && sanitizedValues.priority === undefined) sanitizedValues.priority = row.priority;
+        else if (row.prior !== undefined && sanitizedValues.priority === undefined) sanitizedValues.priority = row.prior;
+        else if (row.editorial_prior !== undefined && sanitizedValues.priority === undefined) sanitizedValues.priority = row.editorial_prior;
+        if (row.guardrail !== undefined && sanitizedValues.guardrail === undefined) sanitizedValues.guardrail = row.guardrail;
+        else if (row.ethical_guardrail !== undefined && sanitizedValues.guardrail === undefined) sanitizedValues.guardrail = row.ethical_guardrail;
+        if (row.eligibility !== undefined && sanitizedValues.eligibility === undefined) {
+          sanitizedValues.eligibility = typeof row.eligibility === "object" ? JSON.stringify(row.eligibility, null, 2) : String(row.eligibility);
+        }
+        if (row.params !== undefined && sanitizedValues.params === undefined) {
+          sanitizedValues.params = typeof row.params === "object" ? JSON.stringify(row.params, null, 2) : String(row.params);
+        }
+        if (row.steps !== undefined && sanitizedValues.steps === undefined) {
+          sanitizedValues.steps = Array.isArray(row.steps) ? row.steps.join("\n") : String(row.steps);
+        }
       }
       setValues(sanitizedValues);
       setFormOpen(true);

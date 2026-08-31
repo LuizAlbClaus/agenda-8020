@@ -4,66 +4,21 @@ import { mutatePolicies } from "../actions";
 
 const fields: AdminField[] = [
   {
-    name: "fit_weight",
-    label: "Peso de Fit (Diagnóstico)",
-    type: "number",
-    placeholder: "35",
-    description: "Importância do alinhamento entre estágio/gargalo e o protocolo.",
-  },
-  {
-    name: "channel_weight",
-    label: "Peso de Canais",
-    type: "number",
-    placeholder: "20",
-    description: "Importância dos canais ativos da pessoa usuária (ex.: WhatsApp/Instagram).",
-  },
-  {
-    name: "prior_weight",
-    label: "Peso de Prior Editorial",
-    type: "number",
-    placeholder: "15",
-    description: "Desempate baseado na recomendação curada do método.",
-  },
-  {
-    name: "half_life_days",
-    label: "Recência / Half-Life (Dias)",
-    type: "number",
-    placeholder: "60",
-    description: "Meia-vida para decaimento de histórico de execução.",
-  },
-  {
-    name: "exploration_rate",
-    label: "Taxa de Exploração (0 a 1)",
-    type: "number",
-    placeholder: "0.1",
-    description: "Percentual de chance de sugerir ações exploratórias elegíveis.",
-  },
-  {
     name: "params",
-    label: "Parâmetros Avançados (JSON Completo)",
+    label: "Parâmetros do Algoritmo (JSON Canônico)",
     type: "textarea",
     placeholder:
-      '{\n  "score_weights": { "fit": 35, "channel": 20, "prior": 15, "evidence": 15, "exploration": 10, "viability": 5 },\n  "prior_weight": 8,\n  "recency_half_life_days": 60,\n  "exploration_rate": 0\n}',
+      '{\n  "score_weights": {\n    "fit": 35,\n    "channel": 20,\n    "prior": 15,\n    "evidence": 15,\n    "exploration": 10,\n    "viability": 5\n  },\n  "prior_weight": 8,\n  "recency_half_life_days": 60,\n  "exploration_rate": 0.1\n}',
     description:
-      "Se preenchido, os campos numéricos acima serão combinados nesta estrutura JSON enviada ao motor de recomendação.",
+      "Objeto JSON completo contendo pesos (score_weights), prior_weight, recency_half_life_days e exploration_rate. Não são aplicados defaults inventados.",
   },
 ];
 
 const fieldGroups: AdminFieldGroup[] = [
   {
-    title: "1. Pesos do Motor de Recomendação",
-    description: "Defina os pesos relativos aplicados no cálculo de pontuação das ações candidatas.",
-    fields: fields.slice(0, 3),
-  },
-  {
-    title: "2. Janelas Temporais e Exploração",
-    description: "Controle a frequência de repetição e o percentual de descoberta de novos protocolos.",
-    fields: fields.slice(3, 5),
-  },
-  {
-    title: "3. Estrutura JSON Canônica",
-    description: "Configuração de parâmetros do algoritmo para ajuste fino.",
-    fields: fields.slice(5, 6),
+    title: "1. Estrutura de Parâmetros Canônica (JSON)",
+    description: "Configuração íntegra e auditável dos pesos, meias-vidas e taxas de exploração do algoritmo.",
+    fields: fields,
   },
 ];
 
@@ -80,7 +35,7 @@ export default async function PoliciesPage() {
           Políticas de Recomendação
         </h1>
         <p className="mt-1 max-w-3xl text-sm leading-relaxed text-slate-600">
-          Ajuste os pesos, meias-vidas e taxas de exploração do algoritmo que seleciona a ação prioritária do dia. Cada alteração cria uma versão imutável.
+          Rascunhos podem ser revisados; ao ativar uma versão, ela passa a orientar novas recomendações e deixa de ser editável.
         </p>
       </div>
 
@@ -97,7 +52,7 @@ export default async function PoliciesPage() {
         operations={["update", "activate"]}
         createButtonLabel="Criar novo rascunho"
         editorTitle="rascunho de política"
-        editorDescription="Defina os novos parâmetros do algoritmo para cálculo das recomendações."
+        editorDescription="Defina o objeto JSON com os parâmetros do algoritmo para cálculo das recomendações."
         warningBanner="Ao ativar uma versão de política, ela assume o cálculo de novas recomendações."
       />
     </div>

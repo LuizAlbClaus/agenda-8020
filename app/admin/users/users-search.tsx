@@ -59,7 +59,7 @@ export default function UsersSearch({
               inputMode="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              placeholder="Digite o e-mail completo ou parcial cadastrado…"
+              placeholder="Digite o e-mail completo cadastrado…"
               className="min-h-[48px] w-full rounded-xl border border-slate-300 bg-white pl-10 pr-4 text-sm text-slate-900 outline-none transition focus:border-teal-700 focus:ring-2 focus:ring-teal-700/20"
             />
           </div>
