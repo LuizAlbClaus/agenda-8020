@@ -1,18 +1,93 @@
 @import "tailwindcss";
 
-:root { --background: #fbfaf8; --foreground: #263238; }
+@theme {
+  /* ==========================================================================
+     Agenda 80/20 — OKLCH Design Tokens (Tailwind CSS v4)
+     ========================================================================== */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Cores de Superfície e Fundos */
+  --color-canvas: oklch(0.985 0.005 250);
+  --color-surface-card: oklch(1 0 0);
+  --color-surface-muted: oklch(0.97 0.008 250);
+  --color-surface-hover: oklch(0.95 0.01 250);
+
+  /* Ação & Momentum (Laranja Coral) */
+  --color-action-primary: oklch(0.64 0.21 38);
+  --color-action-hover: oklch(0.56 0.20 38);
+  --color-action-subtle: oklch(0.94 0.05 38);
+
+  /* Receita & Sucesso (Verde Esmeralda) */
+  --color-revenue-primary: oklch(0.68 0.18 152);
+  --color-revenue-hover: oklch(0.60 0.17 152);
+  --color-revenue-subtle: oklch(0.95 0.04 152);
+
+  /* Oportunidade & Horários Vagos (Âmbar Calmo) */
+  --color-opportunity-primary: oklch(0.75 0.16 75);
+  --color-opportunity-hover: oklch(0.68 0.15 75);
+  --color-opportunity-subtle: oklch(0.96 0.04 75);
+
+  /* Perigo & Alerta (Rubi) */
+  --color-danger-primary: oklch(0.62 0.22 25);
+  --color-danger-subtle: oklch(0.95 0.05 25);
+
+  /* Tipografia & Bordas (Neutros com Tinting Frio) */
+  --color-ink-solid: oklch(0.16 0.015 250);
+  --color-ink-muted: oklch(0.42 0.02 250);
+  --color-border-subtle: oklch(0.91 0.01 250);
+  --color-border-strong: oklch(0.82 0.015 250);
+
+  /* Tipografia e Raios de Borda */
+  --font-sans: var(--font-geist-sans), "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --radius-sm: 8px;
+  --radius-button: 12px;
+  --radius-card: 14px;
+  --radius-pill: 9999px;
+
+  /* Sombras Nítidas (Anti-Ghost Card com Blur <= 8px) */
+  --shadow-card-resting: 0 1px 3px oklch(0.16 0.015 250 / 0.06), 0 1px 2px oklch(0.16 0.015 250 / 0.04);
+  --shadow-card-elevated: 0 4px 8px oklch(0.16 0.015 250 / 0.08), 0 2px 4px oklch(0.16 0.015 250 / 0.04);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+@layer base {
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    box-sizing: border-box;
+    border-color: var(--color-border-subtle);
+  }
 
-*:focus-visible { outline: 3px solid #0f766e; outline-offset: 3px; }
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink-solid);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  ::selection {
+    background: var(--color-action-subtle);
+    color: var(--color-ink-solid);
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--color-action-primary);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, ::after, ::before {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

@@ -1,61 +1,245 @@
 import Link from "next/link";
+import {
+  ArrowRight,
+  CalendarDays,
+  Check,
+  Clock3,
+  MessageCircleMore,
+} from "lucide-react";
+import { BrandMark } from "@/components/ui/brand-mark";
 
 const steps = [
-  ["1", "Conte seu momento", "Serviço, gargalo, canais e o tempo que você tem hoje."],
-  ["2", "Veja o próximo movimento", "Uma ação simples e compatível com a sua realidade."],
-  ["3", "Receba horários", "Um caminho público para a pessoa escolher o serviço e marcar."],
+  {
+    number: "1",
+    title: "Conte seu momento",
+    description: "Serviço, gargalo, canais e a disponibilidade real que cabe no seu dia.",
+  },
+  {
+    number: "2",
+    title: "Veja o próximo movimento",
+    description: "Uma decisão clara e compatível com o que você consegue fazer agora.",
+  },
+  {
+    number: "3",
+    title: "Receba horários",
+    description: "Compartilhe seu caminho público de agendamento para quem demonstrar interesse.",
+  },
 ] as const;
 
 const benefits = [
-  "Pare de tentar fazer tudo para movimentar seu serviço.",
-  "Use o tempo que você realmente tem disponível.",
+  "Saiba o que fazer agora sem montar um plano de marketing inteiro.",
+  "Use o tempo que você realmente tem disponível no seu dia.",
   "Dê uma próxima etapa clara para quem demonstrar interesse.",
   "Acompanhe ações, sinais e agendamentos sem depender de improviso.",
 ] as const;
 
 export default function Home() {
   return (
-    <main className="mx-auto w-full max-w-6xl px-6 py-6 sm:px-10 sm:py-10">
-      <header className="flex items-center justify-between">
-        <Link href="/" className="text-lg font-bold tracking-tight text-teal-800">Agenda 80/20</Link>
-        <Link href="/login" className="rounded-full border border-teal-800 px-4 py-2 text-sm font-semibold text-teal-800 hover:bg-teal-50">Entrar</Link>
-      </header>
-      <section className="grid gap-12 py-16 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:py-24">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-teal-700">Para quem vive de atendimento e agendamento</p>
-          <h1 className="mt-5 max-w-3xl text-4xl font-bold leading-tight tracking-tight text-slate-900 sm:text-6xl">Pare de tentar fazer tudo para movimentar seu serviço.</h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">Conte como está seu serviço, seu tempo e seus canais. O Agenda 80/20 organiza uma próxima ação possível e ajuda você a receber agendamentos por um link simples.</p>
-          <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center"><Link href="/login" className="inline-flex min-h-12 items-center justify-center rounded-full bg-teal-800 px-6 font-semibold text-white hover:bg-teal-900">Montar meu primeiro plano</Link><span className="text-sm text-slate-500">Sem promessa de agenda cheia. Com um próximo passo claro.</span></div>
-        </div>
-        <div className="rounded-3xl border border-teal-200 bg-teal-50 p-6 shadow-sm sm:p-8">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-teal-700">Seu foco agora</p>
-          <p className="mt-4 text-2xl font-bold leading-tight text-teal-950">Uma ação possível para o momento real do seu serviço.</p>
-          <div className="mt-6 grid gap-3">
-            {steps.map(([number, title, description]) => <div key={number} className="flex gap-3 rounded-2xl bg-white/80 p-4"><span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-teal-800 text-sm font-bold text-white">{number}</span><div><p className="font-semibold text-slate-900">{title}</p><p className="mt-1 text-sm leading-6 text-slate-600">{description}</p></div></div>)}
+    <main className="min-h-screen bg-[var(--color-canvas)] text-[var(--color-ink-solid)]">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-8 lg:px-10">
+        {/* Navigation Bar */}
+        <header className="flex items-center justify-between py-5 sm:py-7">
+          <Link
+            href="/"
+            className="flex items-center rounded-[var(--radius-button)] focus-visible:outline-none"
+            aria-label="Agenda 80/20 — Página Inicial"
+          >
+            <BrandMark />
+          </Link>
+          <Link
+            href="/login"
+            className="inline-flex min-h-[48px] items-center rounded-[var(--radius-button)] px-4 py-2 text-sm font-semibold text-[var(--color-ink-solid)] transition-colors hover:text-[var(--color-action-primary)] focus-visible:outline-none"
+          >
+            Entrar
+            <ArrowRight className="ml-2 size-4" aria-hidden="true" />
+          </Link>
+        </header>
+
+        {/* Hero Section */}
+        <section className="grid gap-10 pb-16 pt-8 sm:pb-24 sm:pt-16 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16">
+          <div className="max-w-3xl">
+            <p className="text-sm font-semibold text-[var(--color-action-primary)]">
+              Feito para quem vive de atendimento.
+            </p>
+            <h1 className="mt-4 text-3xl font-bold leading-[1.08] tracking-[-0.035em] text-balance sm:text-5xl lg:text-6xl">
+              Pare de tentar fazer tudo para movimentar seu serviço.
+            </h1>
+            <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--color-ink-muted)] text-pretty sm:text-lg sm:leading-8">
+              Conte como está seu serviço, seu tempo e seus canais. O Agenda 80/20 organiza uma próxima ação possível e ajuda você a receber agendamentos por um link simples.
+            </p>
+            <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
+              <Link
+                href="/login"
+                className="inline-flex min-h-[48px] items-center justify-center rounded-[var(--radius-button)] bg-[var(--color-action-primary)] px-6 text-sm font-bold text-white shadow-sm transition-colors hover:bg-[var(--color-action-hover)] focus-visible:outline-none"
+              >
+                Montar meu primeiro plano
+                <ArrowRight className="ml-2 size-4" aria-hidden="true" />
+              </Link>
+              <p className="text-xs leading-5 text-[var(--color-ink-muted)] sm:max-w-xs sm:text-sm">
+                Sem promessas mágicas. Só um próximo passo claro.
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
 
-      <section className="border-t border-slate-200 py-14 sm:py-20">
-        <div className="max-w-2xl"><p className="text-sm font-semibold uppercase tracking-[0.16em] text-teal-700">Como começa</p><h2 className="mt-3 text-3xl font-bold leading-tight text-slate-900 sm:text-4xl">Você não precisa montar um plano de marketing inteiro.</h2><p className="mt-4 leading-7 text-slate-600">O produto começa com perguntas simples e transforma seu contexto em uma única próxima ação. Depois, você registra o que aconteceu e ajusta o caminho.</p></div>
-        <div className="mt-8 grid gap-4 md:grid-cols-3">{steps.map(([number, title, description]) => <div key={number} className="rounded-2xl border border-slate-200 bg-white p-5"><p className="text-sm font-bold text-teal-700">{number}</p><h3 className="mt-5 font-semibold text-slate-900">{title}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{description}</p></div>)}</div>
-      </section>
+          {/* Canonical Product Preview Artifact */}
+          <section
+            aria-label="Exemplo de plano diário do produto"
+            className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-card)] shadow-[var(--shadow-card-elevated)]"
+          >
+            <div className="flex items-center justify-between border-b border-[var(--color-border-subtle)] px-5 py-4 sm:px-6">
+              <div className="flex items-center gap-3">
+                <span
+                  className="size-2.5 rounded-full bg-[var(--color-revenue-primary)]"
+                  aria-hidden="true"
+                />
+                <span className="text-sm font-semibold text-[var(--color-ink-solid)]">
+                  Seu plano de hoje
+                </span>
+              </div>
+              <span className="text-xs font-medium text-[var(--color-ink-muted)] sm:text-sm">
+                2 minutos
+              </span>
+            </div>
+            <div className="p-5 sm:p-6">
+              <p className="text-xs font-bold uppercase tracking-wider text-[var(--color-action-primary)]">
+                Seu foco agora
+              </p>
+              <h2 className="mt-3 text-xl font-bold leading-snug tracking-[-0.025em] text-balance sm:text-2xl">
+                Retome a conversa com uma pessoa que pediu informações.
+              </h2>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--color-ink-muted)] sm:text-base">
+                Você já tem uma oportunidade concreta aberta. Não precisa pensar em uma campanha inteira hoje.
+              </p>
 
-      <section className="grid gap-10 border-t border-slate-200 py-14 sm:py-20 lg:grid-cols-2 lg:items-start">
-        <div><p className="text-sm font-semibold uppercase tracking-[0.16em] text-teal-700">O que muda</p><h2 className="mt-3 text-3xl font-bold leading-tight text-slate-900 sm:text-4xl">Menos improviso. Mais clareza para agir.</h2></div>
-        <ul className="grid gap-4">{benefits.map((benefit) => <li key={benefit} className="flex gap-3 text-lg leading-7 text-slate-700"><span className="mt-1 text-teal-700" aria-hidden="true">✓</span><span>{benefit}</span></li>)}</ul>
-      </section>
+              <div className="mt-6 rounded-[var(--radius-sm)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-muted)] p-4">
+                <div className="flex items-start gap-3">
+                  <span
+                    className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-[var(--color-action-subtle)] text-[var(--color-action-primary)]"
+                    aria-hidden="true"
+                  >
+                    <MessageCircleMore className="size-4" />
+                  </span>
+                  <p className="text-sm leading-6 text-[var(--color-ink-solid)]">
+                    “Oi! Vi que você tinha interesse no serviço. Quer que eu te envie os horários que ainda tenho esta semana?”
+                  </p>
+                </div>
+              </div>
 
-      <section className="rounded-3xl bg-slate-900 px-6 py-10 text-white sm:px-10 sm:py-14">
-        <p className="text-sm font-semibold uppercase tracking-[0.16em] text-teal-300">Para começar sem travar</p><h2 className="mt-3 max-w-2xl text-3xl font-bold leading-tight sm:text-4xl">Você não precisa dominar uma ferramenta grande.</h2><p className="mt-4 max-w-2xl leading-7 text-slate-300">Você informa o que oferece, onde conversa com pessoas e quanto tempo tem. O Agenda 80/20 ajuda a escolher o próximo movimento; você revisa e decide o que faz sentido para a sua realidade.</p><Link href="/login" className="mt-8 inline-flex min-h-12 items-center justify-center rounded-full bg-teal-400 px-6 font-semibold text-slate-950 hover:bg-teal-300">Montar meu primeiro plano</Link>
-      </section>
+              <div className="mt-6 flex flex-wrap items-center justify-between gap-3 pt-2">
+                <div className="flex items-center gap-2 text-xs font-medium text-[var(--color-ink-muted)] sm:text-sm">
+                  <Clock3 className="size-4" aria-hidden="true" />
+                  <span>Cabe no seu intervalo</span>
+                </div>
+                <span className="inline-flex min-h-[36px] items-center rounded-[var(--radius-pill)] bg-[var(--color-action-primary)] px-4 text-xs font-bold text-white">
+                  Abrir ação
+                </span>
+              </div>
+            </div>
+          </section>
+        </section>
 
-      <section className="grid gap-8 border-t border-slate-200 py-14 sm:py-20 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
-        <div><p className="text-sm font-semibold uppercase tracking-[0.16em] text-teal-700">Belevy opcional</p><h2 className="mt-3 text-3xl font-bold leading-tight text-slate-900">O método continua sendo seu, com ou sem outra ferramenta.</h2></div>
-        <div><p className="leading-7 text-slate-600">Você pode usar o Agenda 80/20 de forma independente para organizar sua rotina, executar ações e acompanhar seu progresso. Se quiser automatizar horários, clientes, confirmações, lembretes e operação, o Belevy pode ser ativado como uma camada adicional.</p><p className="mt-4 text-sm font-semibold text-teal-800">O Belevy amplia o Agenda 80/20; não é obrigatório para começar.</p></div>
-      </section>
+        {/* 3 Steps Section */}
+        <section className="border-t border-[var(--color-border-subtle)] py-14 sm:py-20">
+          <div className="grid gap-8 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16">
+            <div>
+              <p className="text-sm font-semibold text-[var(--color-revenue-primary)]">
+                Um plano que respeita sua rotina
+              </p>
+              <h2 className="mt-3 text-2xl font-bold leading-tight tracking-[-0.03em] text-balance sm:text-4xl">
+                Menos improviso. Mais clareza para agir.
+              </h2>
+            </div>
+            <ol className="divide-y divide-[var(--color-border-subtle)] border-y border-[var(--color-border-subtle)]">
+              {steps.map((step) => (
+                <li
+                  key={step.number}
+                  className="grid grid-cols-[2.5rem_1fr] gap-3 py-5 sm:grid-cols-[3rem_1fr_1.25fr] sm:gap-5"
+                >
+                  <span
+                    className="text-lg font-bold text-[var(--color-action-primary)]"
+                    aria-hidden="true"
+                  >
+                    {step.number}
+                  </span>
+                  <h3 className="text-base font-bold leading-6 text-[var(--color-ink-solid)]">
+                    {step.title}
+                  </h3>
+                  <p className="col-start-2 text-sm leading-6 text-[var(--color-ink-muted)] sm:col-start-auto">
+                    {step.description}
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
 
-      <footer className="flex flex-col gap-3 border-t border-slate-200 py-8 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between"><span>O Agenda 80/20 apoia sua decisão, mas não promete clientes, renda ou agenda cheia.</span><span className="flex gap-4"><Link href="/privacy" className="underline">Privacidade</Link><Link href="/terms" className="underline">Termos</Link></span></footer>
+        {/* Benefits Section */}
+        <section className="grid gap-8 border-t border-[var(--color-border-subtle)] py-14 sm:py-20 lg:grid-cols-2 lg:items-end">
+          <div>
+            <p className="text-sm font-semibold text-[var(--color-action-primary)]">
+              Para usar entre atendimentos
+            </p>
+            <h2 className="mt-3 max-w-xl text-2xl font-bold leading-tight tracking-[-0.03em] text-balance sm:text-4xl">
+              Uma interface feita para decidir, não para sobrecarregar.
+            </h2>
+          </div>
+          <ul className="grid gap-4 text-sm leading-relaxed text-[var(--color-ink-muted)] sm:text-base">
+            {benefits.map((benefit, index) => (
+              <li key={index} className="flex items-start gap-3">
+                <Check
+                  className="mt-0.5 size-5 shrink-0 text-[var(--color-revenue-primary)]"
+                  aria-hidden="true"
+                />
+                <span className="text-[var(--color-ink-solid)]">{benefit}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* Objection Breaker Section */}
+        <section className="mb-12 grid gap-8 rounded-[var(--radius-card)] bg-[var(--color-ink-solid)] px-6 py-8 text-white sm:mb-16 sm:p-10 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div>
+            <div className="flex items-center gap-2 text-xs font-semibold text-[var(--color-opportunity-primary)] sm:text-sm">
+              <CalendarDays className="size-4" aria-hidden="true" />
+              <span>Comece com o que já existe</span>
+            </div>
+            <h2 className="mt-4 max-w-2xl text-2xl font-bold leading-tight tracking-[-0.03em] text-balance sm:text-3xl lg:text-4xl">
+              Você não precisa dominar uma ferramenta grande para começar.
+            </h2>
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-white/80 sm:text-base">
+              O produto começa com perguntas simples sobre seu serviço e leva você a uma única próxima ação. As recomendações são apoio à decisão; você continua revisando e escolhendo o que faz sentido para sua realidade.
+            </p>
+          </div>
+          <Link
+            href="/login"
+            className="inline-flex min-h-[48px] items-center justify-center rounded-[var(--radius-button)] bg-[var(--color-action-primary)] px-6 text-sm font-bold text-white shadow-sm transition-colors hover:bg-[var(--color-action-hover)] focus-visible:outline-none"
+          >
+            Montar meu primeiro plano
+            <ArrowRight className="ml-2 size-4" aria-hidden="true" />
+          </Link>
+        </section>
+
+        {/* Footer */}
+        <footer className="flex flex-col gap-4 border-t border-[var(--color-border-subtle)] py-8 text-xs text-[var(--color-ink-muted)] sm:flex-row sm:items-center sm:justify-between sm:text-sm">
+          <span>
+            O Agenda 80/20 apoia sua decisão; não promete clientes, renda ou agenda cheia.
+          </span>
+          <div className="flex items-center gap-5">
+            <Link
+              href="/privacy"
+              className="underline underline-offset-4 transition-colors hover:text-[var(--color-ink-solid)] focus-visible:outline-none"
+            >
+              Privacidade
+            </Link>
+            <Link
+              href="/terms"
+              className="underline underline-offset-4 transition-colors hover:text-[var(--color-ink-solid)] focus-visible:outline-none"
+            >
+              Termos
+            </Link>
+          </div>
+        </footer>
+      </div>
     </main>
   );
 }
