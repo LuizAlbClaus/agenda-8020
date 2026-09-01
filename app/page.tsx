@@ -7,6 +7,7 @@ import {
   MessageCircleMore,
 } from "lucide-react";
 import { BrandMark } from "@/components/ui/brand-mark";
+import { PricingSection } from "@/components/pricing-section";
 
 const steps = [
   {
@@ -33,7 +34,11 @@ const benefits = [
   "Acompanhe ações, sinais e agendamentos sem depender de improviso.",
 ] as const;
 
-export default function Home() {
+export default async function Home(props: {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const searchParams = props.searchParams ? await props.searchParams : undefined;
+
   return (
     <main className="min-h-screen bg-[var(--color-canvas)] text-[var(--color-ink-solid)]">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-8 lg:px-10">
@@ -69,10 +74,10 @@ export default function Home() {
             </p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
               <Link
-                href="/login"
+                href="#planos"
                 className="inline-flex min-h-[48px] items-center justify-center rounded-[var(--radius-button)] bg-[var(--color-action-primary)] px-6 text-sm font-bold text-white shadow-sm transition-colors hover:bg-[var(--color-action-hover)] focus-visible:outline-none"
               >
-                Montar meu primeiro plano
+                Ver planos e começar
                 <ArrowRight className="ml-2 size-4" aria-hidden="true" />
               </Link>
               <p className="text-xs leading-5 text-[var(--color-ink-muted)] sm:max-w-xs sm:text-sm">
@@ -211,13 +216,16 @@ export default function Home() {
             </p>
           </div>
           <Link
-            href="/login"
+            href="#planos"
             className="inline-flex min-h-[48px] items-center justify-center rounded-[var(--radius-button)] bg-[var(--color-action-primary)] px-6 text-sm font-bold text-white shadow-sm transition-colors hover:bg-[var(--color-action-hover)] focus-visible:outline-none"
           >
-            Montar meu primeiro plano
+            Escolher meu plano
             <ArrowRight className="ml-2 size-4" aria-hidden="true" />
           </Link>
         </section>
+
+        {/* Pricing & FAQ Section */}
+        <PricingSection searchParams={searchParams} />
 
         {/* Footer */}
         <footer className="flex flex-col gap-4 border-t border-[var(--color-border-subtle)] py-8 text-xs text-[var(--color-ink-muted)] sm:flex-row sm:items-center sm:justify-between sm:text-sm">
