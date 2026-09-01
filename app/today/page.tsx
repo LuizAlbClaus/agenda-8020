@@ -1,11 +1,18 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowRight, CalendarDays, Clock3, SlidersHorizontal, Settings as SettingsIcon, Sparkles } from "lucide-react";
+import { ArrowRight, CalendarDays, Clock3, SlidersHorizontal, Settings as SettingsIcon, Sparkles, Brain } from "lucide-react";
 
 import { BrandMark } from "@/components/ui/brand-mark";
 import { createClient } from "@/lib/supabase/server";
 import { canAccessAgenda } from "@/lib/supabase/access";
 import NextActionButton from "./next-action-button";
+import { TodayInteractiveHub } from "./today-interactive-hub";
+import { fetchCopilotTemplates, fetchDueRetentions } from "@/app/action/copilot-actions";
+import {
+  fetchDailyLearningPill,
+  fetchDiagnosticQuestions,
+  fetchActiveValueDiagnostic,
+} from "@/app/diagnostic/actions";
 
 export default async function TodayPage() {
   let supabase;
@@ -20,9 +27,31 @@ export default async function TodayPage() {
   if (!userId) redirect("/login");
   if (!(await canAccessAgenda(userId))) redirect("/access-blocked");
 
-  const [{ data: plan, error }, { data: benefitData }] = await Promise.all([
+  const [{ data: plan, error }, { data: benefitData }, { data: member }] = await Promise.all([
     supabase!.rpc("get_today_plan"),
     supabase!.rpc("get_belevy_benefit"),
+    supabase!
+      .from("workspace_members")
+      .select("workspace_id")
+      .eq("user_id", userId)
+      .limit(1)
+      .maybeSingle(),
+  ]);
+
+  const workspaceId = member?.workspace_id;
+
+  const [
+    copilotTemplates,
+    dueRetentions,
+    dailyPill,
+    diagnosticQuestions,
+    activeDiagnostic,
+  ] = await Promise.all([
+    fetchCopilotTemplates(),
+    fetchDueRetentions(3),
+    workspaceId ? fetchDailyLearningPill(workspaceId) : Promise.resolve(null),
+    fetchDiagnosticQuestions(),
+    workspaceId ? fetchActiveValueDiagnostic(workspaceId) : Promise.resolve(null),
   ]);
 
   if (error) {
@@ -79,7 +108,7 @@ export default async function TodayPage() {
       : "Ainda estamos conhecendo o que faz mais sentido para o seu momento.";
 
   return (
-    <main className="min-h-screen bg-[var(--color-canvas)] pb-16">
+    <main className="min-h-screen bg-[var(--color-canvas)] pb-28 sm:pb-32">
       <div className="mx-auto w-full max-w-xl px-5 py-5 sm:px-8 sm:py-7">
         {/* Navigation Header */}
         <header className="flex items-center justify-between pb-3 border-b border-[var(--color-border-subtle)]">
@@ -91,6 +120,13 @@ export default async function TodayPage() {
             >
               <CalendarDays className="size-4 shrink-0" aria-hidden="true" />
               <span>Agenda</span>
+            </Link>
+            <Link
+              href="/diagnostic"
+              className="inline-flex min-h-[48px] items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-semibold text-[var(--color-ink-muted)] transition-colors hover:text-[var(--color-ink-solid)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-action-primary)] rounded-[var(--radius-button)]"
+            >
+              <Brain className="size-4 shrink-0" aria-hidden="true" />
+              <span>Diagnóstico</span>
             </Link>
             <Link
               href="/onboarding?reason=edit"
@@ -291,6 +327,18 @@ export default async function TodayPage() {
               </span>
             </Link>
           </section>
+        )}
+
+        {/* Interactive Hub: Retenção Biológica, Diagnóstico de Valor, Pílula de Café & Copiloto */}
+        {workspaceId && (
+          <TodayInteractiveHub
+            workspaceId={workspaceId}
+            dueRetentions={dueRetentions}
+            copilotTemplates={copilotTemplates}
+            dailyPill={dailyPill}
+            diagnosticQuestions={diagnosticQuestions}
+            activeDiagnostic={activeDiagnostic}
+          />
         )}
 
         {/* Progress Navigation Link */}

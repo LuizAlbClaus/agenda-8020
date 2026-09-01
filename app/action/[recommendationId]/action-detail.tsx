@@ -13,6 +13,7 @@ import {
   Info,
   Users,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import {
   completeRecommendation,
   markNotCompleted,
@@ -74,6 +75,7 @@ export default function ActionDetail({ detail }: { detail: Detail }) {
   const [showExposure, setShowExposure] = useState(false);
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
+  const [scriptMode, setScriptMode] = useState<"text" | "audio">("text");
 
 
   const [started, setStarted] = useState(detail.status === "started");
@@ -267,38 +269,77 @@ export default function ActionDetail({ detail }: { detail: Detail }) {
               <h2 id="template-heading" className="text-sm font-bold uppercase tracking-wider text-[var(--color-ink-solid)]">
                 Sugestão de mensagem
               </h2>
-              <span className="text-xs text-[var(--color-ink-muted)]">
-                Personalize se preferir
-              </span>
+              <div className="inline-flex p-0.5 rounded-[var(--radius-pill)] bg-[var(--color-surface-muted)] border border-[var(--color-border-subtle)]">
+                <button
+                  type="button"
+                  onClick={() => setScriptMode("text")}
+                  className={cn(
+                    "px-3 py-1 rounded-[var(--radius-pill)] text-xs font-bold transition-all cursor-pointer",
+                    scriptMode === "text"
+                      ? "bg-white text-[var(--color-action-primary)] shadow-xs"
+                      : "text-[var(--color-ink-muted)] hover:text-[var(--color-ink-solid)]"
+                  )}
+                >
+                  Texto
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setScriptMode("audio")}
+                  className={cn(
+                    "px-3 py-1 rounded-[var(--radius-pill)] text-xs font-bold transition-all cursor-pointer",
+                    scriptMode === "audio"
+                      ? "bg-white text-[var(--color-action-primary)] shadow-xs"
+                      : "text-[var(--color-ink-muted)] hover:text-[var(--color-ink-solid)]"
+                  )}
+                >
+                  Áudio
+                </button>
+              </div>
             </div>
 
-            <div className="mt-4 rounded-[var(--radius-sm)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-muted)] p-4">
-              <p className="whitespace-pre-line text-sm sm:text-base leading-relaxed text-[var(--color-ink-solid)] font-sans">
-                {detail.message_template}
-              </p>
-            </div>
+            {scriptMode === "text" ? (
+              <>
+                <div className="mt-4 rounded-[var(--radius-sm)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-muted)] p-4">
+                  <p className="whitespace-pre-line text-sm sm:text-base leading-relaxed text-[var(--color-ink-solid)] font-sans select-all">
+                    {detail.message_template}
+                  </p>
+                </div>
 
-            <div className="mt-4 flex flex-col sm:flex-row items-center gap-3">
-              <button
-                type="button"
-                onClick={handleCopy}
-                className="inline-flex min-h-[48px] w-full sm:w-auto flex-1 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-[var(--color-border-strong)] bg-white px-5 text-sm font-bold text-[var(--color-ink-solid)] shadow-xs transition-colors hover:bg-[var(--color-surface-muted)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-action-primary)]"
-              >
-                {copied ? (
-                  <>
-                    <Check className="size-4 text-[var(--color-revenue-primary)]" aria-hidden="true" />
-                    <span className="text-[var(--color-revenue-primary)]">Mensagem copiada!</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="size-4 text-[var(--color-ink-muted)]" aria-hidden="true" />
-                    <span>Copiar mensagem</span>
-                  </>
-                )}
-              </button>
-            </div>
-            <p aria-live="polite" className="mt-2 text-xs text-[var(--color-ink-muted)]">
-              Copie o texto acima e envie diretamente para o contato ou canal de sua preferência.
+                <div className="mt-4 flex flex-col sm:flex-row items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={handleCopy}
+                    className="inline-flex min-h-[48px] w-full sm:w-auto flex-1 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-[var(--color-border-strong)] bg-white px-5 text-sm font-bold text-[var(--color-ink-solid)] shadow-xs transition-colors hover:bg-[var(--color-surface-muted)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-action-primary)] cursor-pointer"
+                  >
+                    {copied ? (
+                      <>
+                        <Check className="size-4 text-[var(--color-revenue-primary)]" aria-hidden="true" />
+                        <span className="text-[var(--color-revenue-primary)]">Mensagem copiada!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="size-4 text-[var(--color-ink-muted)]" aria-hidden="true" />
+                        <span>Copiar mensagem</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="mt-4 space-y-3">
+                <div className="rounded-[var(--radius-sm)] bg-[var(--color-action-subtle)] p-3 border border-[var(--color-action-primary)]/20 text-xs text-[var(--color-action-primary)] font-semibold leading-relaxed">
+                  🎙️ Roteiro de Áudio (~25s): Fale com voz calorosa, calma e segura. Segure o microfone no WhatsApp e fale com um sorrisinho leve na voz.
+                </div>
+                <div className="rounded-[var(--radius-sm)] border border-[var(--color-border-strong)] bg-white p-4">
+                  <p className="whitespace-pre-line text-sm sm:text-base leading-relaxed text-[var(--color-ink-solid)] font-medium">
+                    {detail.message_template}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            <p aria-live="polite" className="mt-3 text-xs text-[var(--color-ink-muted)]">
+              Dica: Se a cliente responder achando caro ou pedindo desconto, use o SOS Copiloto para responder sem perder a autoridade.
             </p>
           </section>
         )}

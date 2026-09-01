@@ -14,6 +14,10 @@ const EVENT_NAMES = new Set([
   "data_export_requested",
   "account_deletion_requested",
   "support_email_correction_requested",
+  "copilot_template_used",
+  "value_diagnostic_completed",
+  "value_action_completed",
+  "micro_learning_consumed",
 ]);
 
 type AnalyticsValue = string | number | boolean;
