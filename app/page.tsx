@@ -228,11 +228,14 @@ export default async function Home(props: {
         <PricingSection searchParams={searchParams} />
 
         {/* Footer */}
-        <footer className="flex flex-col gap-4 border-t border-[var(--color-border-subtle)] py-8 text-xs text-[var(--color-ink-muted)] sm:flex-row sm:items-center sm:justify-between sm:text-sm">
-          <span>
-            O Agenda 80/20 apoia sua decisão; não promete clientes, renda ou agenda cheia.
-          </span>
-          <div className="flex items-center gap-5">
+        <footer className="flex flex-col gap-6 border-t border-[var(--color-border-subtle)] py-8 text-xs text-[var(--color-ink-muted)] sm:flex-row sm:items-center sm:justify-between sm:text-sm">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+            <BrandMark size="sm" />
+            <span className="text-xs text-[var(--color-ink-muted)]">
+              Apoio à decisão e agendamento para autônomos. Não promete renda ou agenda cheia.
+            </span>
+          </div>
+          <div className="flex items-center gap-5 shrink-0">
             <Link
               href="/privacy"
               className="underline underline-offset-4 transition-colors hover:text-[var(--color-ink-solid)] focus-visible:outline-none"

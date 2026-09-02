@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Mail, Sparkles } from "lucide-react";
-import { BrandMark } from "@/components/ui/brand-mark";
+import { ArrowRight, Mail, Sparkles, ShieldCheck } from "lucide-react";
+import { BrandIcon, BrandMark } from "@/components/ui/brand-mark";
 
 export default function CheckoutSuccessPage() {
   return (
@@ -19,9 +19,13 @@ export default function CheckoutSuccessPage() {
       {/* Main Card Container */}
       <div className="mx-auto my-8 w-full max-w-lg">
         <div className="rounded-[var(--radius-card)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-card)] p-6 shadow-[var(--shadow-card-elevated)] sm:p-8">
-          {/* Celebratory Icon */}
-          <div className="flex size-14 items-center justify-center rounded-full bg-[var(--color-revenue-subtle)] text-[var(--color-revenue-primary)]">
-            <CheckCircle2 className="size-8" aria-hidden="true" />
+          {/* Celebratory Brand Header */}
+          <div className="flex items-center justify-between">
+            <BrandIcon size="lg" className="shadow-xs" priority />
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-revenue-subtle)] px-3 py-1 text-xs font-bold text-[var(--color-revenue-primary)]">
+              <ShieldCheck className="size-4" aria-hidden="true" />
+              Acesso Oficial Verificado
+            </span>
           </div>
 
           <div className="mt-5">
