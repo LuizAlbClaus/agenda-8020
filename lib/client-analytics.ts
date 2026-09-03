@@ -7,11 +7,17 @@
 
 type FunnelEvent =
   | "landing_page_view"
+  | "landing_variant_viewed"
   | "hero_cta_clicked"
   | "pricing_viewed"
   | "checkout_redirect_clicked"
   | "downsell_modal_opened"
-  | "downsell_checkout_clicked";
+  | "downsell_checkout_clicked"
+  | "demo_situation_changed"
+  | "demo_script_copied"
+  | "mechanism_viewed"
+  | "faq_item_toggled"
+  | "closing_cta_clicked";
 
 export function trackFunnelEvent(event: FunnelEvent, params?: Record<string, unknown>) {
   if (typeof window === "undefined") return;

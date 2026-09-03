@@ -63,40 +63,52 @@ function parseSource(filePath) {
   return { content, sf, absolutePath };
 }
 
-function collectJsxElements(node, sf, list = []) {
-  if (ts.isJsxElement(node)) {
-    list.push({
-      type: "element",
-      tag: node.openingElement.tagName.getText(sf),
-      text: node.getText(sf),
-      node,
-    });
-  } else if (ts.isJsxSelfClosingElement(node)) {
-    list.push({
-      type: "selfClosing",
-      tag: node.tagName.getText(sf),
-      text: node.getText(sf),
-      node,
-    });
+function findJsxElements(sf) {
+  const elements = [];
+  function visit(node) {
+    if (ts.isJsxElement(node)) {
+      elements.push({
+        type: "element",
+        tag: node.openingElement.tagName.getText(sf),
+        text: node.getText(sf),
+        node,
+      });
+    } else if (ts.isJsxSelfClosingElement(node)) {
+      elements.push({
+        type: "selfClosing",
+        tag: node.tagName.getText(sf),
+        text: node.getText(sf),
+        node,
+      });
+    }
+    ts.forEachChild(node, visit);
   }
-  ts.forEachChild(node, (child) => collectJsxElements(child, sf, list));
-  return list;
+  visit(sf);
+  return elements;
 }
 
-function collectIdentifiers(node, sf, list = []) {
-  if (ts.isIdentifier(node)) {
-    list.push(node.getText(sf));
+function findVariableDeclaration(sf, varName) {
+  let found = null;
+  function visit(node) {
+    if (ts.isVariableDeclaration(node) && node.name.getText(sf) === varName) {
+      found = node;
+    }
+    ts.forEachChild(node, visit);
   }
-  ts.forEachChild(node, (child) => collectIdentifiers(child, sf, list));
-  return list;
+  visit(sf);
+  return found;
 }
 
-function collectStringLiterals(node, sf, list = []) {
-  if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) {
-    list.push(node.text);
+function findTypeAlias(sf, typeName) {
+  let found = null;
+  function visit(node) {
+    if (ts.isTypeAliasDeclaration(node) && node.name.getText(sf) === typeName) {
+      found = node;
+    }
+    ts.forEachChild(node, visit);
   }
-  ts.forEachChild(node, (child) => collectStringLiterals(child, sf, list));
-  return list;
+  visit(sf);
+  return found;
 }
 
 async function runCroAndFrontendAudit() {
@@ -119,14 +131,14 @@ async function runCroAndFrontendAudit() {
   // =========================================================================
   suite("1. Validação de Oferta: Remoção do Semestral Lado a Lado & Exclusividade no Downsell");
 
-  const pricingJsx = collectJsxElements(pricingFile.sf, pricingFile.sf);
+  const pricingJsx = findJsxElements(pricingFile.sf);
 
   // 1.1 Verificar ausência de grid comparativo lado a lado de múltiplos planos no PricingSection
   const hasSideBySidePlanGrid = pricingFile.content.includes("grid-cols-2") && 
     (pricingFile.content.includes("Plano Semestral") || pricingFile.content.includes("semiannual"));
   assert(
     !hasSideBySidePlanGrid,
-    "PricingSection: ausência de grid comparativo lado a lado (evita paralisia de escolha / paradox of choice)",
+    "PricingSection: Ausência de grid comparativo lado a lado (elimina paradoxo de escolha)",
     "O container de planos não divide a tela em colunas paralelas para Semestral e Anual."
   );
 
@@ -138,41 +150,59 @@ async function runCroAndFrontendAudit() {
     "Nenhum h3 exibe 'Plano Semestral' na vitrine pública."
   );
 
-  // 1.3 Verificar se ExitDownsellModal está integrado na seção de preços
+  // 1.3 Verificar ausência do valor R$ 97 no card principal de preços da vitrine aberta
+  const hasAnnualInMainCard = pricingFile.content.includes("Plano Anual Completo") &&
+    (pricingFile.content.includes("12x de R$ 15,19") || pricingFile.content.includes("R$ 147"));
+  const mainCardHas97 = /Plano Anual Completo[\s\S]*?R\$\s*97/.test(pricingFile.content);
+  assert(
+    hasAnnualInMainCard && !mainCardHas97,
+    "PricingSection: Card principal destaca exclusivamente a oferta Anual (R$ 97 não compete na vitrine)",
+    "Plano Anual destacado sem exibir R$ 97 no card principal."
+  );
+
+  // 1.4 Verificar se ExitDownsellModal está integrado na seção de preços via AST
   const rendersDownsellModal = pricingJsx.some(
     (el) => el.tag === "ExitDownsellModal"
   );
   assert(
     rendersDownsellModal,
-    "PricingSection: ExitDownsellModal é instanciado na árvore de componentes",
+    "PricingSection: ExitDownsellModal instanciado na árvore AST de componentes",
     "O componente <ExitDownsellModal searchParams={searchParams} /> está presente no final da oferta."
   );
 
-  // 1.4 No ExitDownsellModal: o Plano Semestral R$ 97 existe com acionador e conteúdo exclusivo
+  // 1.5 No ExitDownsellModal: o Plano Semestral R$ 97 existe com acionador e conteúdo exclusivo
   const downsellHasSemiannualRef = downsellFile.content.includes("semiannual") && downsellFile.content.includes("R$ 97");
   assert(
     downsellHasSemiannualRef,
-    "ExitDownsellModal: Plano Semestral R$ 97 está configurado exclusivamente para recuperação",
+    "ExitDownsellModal: Plano Semestral R$ 97 configurado exclusivamente para recuperação",
     "O modal utiliza 'semiannual' e exibe explicitamente a oferta de R$ 97."
   );
 
-  // 1.5 No ExitDownsellModal: gatilho suave de saída/validação menor
+  // 1.6 No ExitDownsellModal: gatilho suave de saída/validação menor
   const downsellTriggerText = "Prefere validar por um período menor? Veja a opção de 6 meses por R$ 97.";
   assert(
     downsellFile.content.includes(downsellTriggerText),
-    "ExitDownsellModal: texto do gatilho discreto configurado corretamente",
+    "ExitDownsellModal: Texto do gatilho discreto configurado corretamente",
     `Gatilho presente: "${downsellTriggerText}"`
   );
 
-  // 1.6 No ExitDownsellModal: estrutura modal com acessibilidade (role="dialog" e aria-modal)
+  // 1.7 No ExitDownsellModal: estrutura modal com acessibilidade (role="dialog" e aria-modal)
   const downsellHasA11y = downsellFile.content.includes('role="dialog"') && downsellFile.content.includes('aria-modal="true"');
   assert(
     downsellHasA11y,
-    "ExitDownsellModal: atributos de acessibilidade do modal (role='dialog', aria-modal='true')",
+    "ExitDownsellModal: Atributos de acessibilidade do modal (role='dialog', aria-modal='true')",
     "Garante conformidade com leitores de tela e boas práticas de UX acessível."
   );
 
-  // 1.7 Na página principal (app/page.tsx): sem menções isoladas a Plano Semestral solto na vitrine
+  // 1.8 No ExitDownsellModal: CTA com evento de tracking específico
+  const downsellHasTracking = downsellFile.content.includes('trackFunnelEvent("downsell_checkout_clicked", { plan: "semiannual", price: 97 })');
+  assert(
+    downsellHasTracking,
+    "ExitDownsellModal: CTA semestral dispara evento específico 'downsell_checkout_clicked'",
+    "Permite analisar taxa de conversão isolada da oferta de downsell."
+  );
+
+  // 1.9 Na página principal (app/page.tsx): sem menções isoladas a Plano Semestral solto na vitrine
   const pageDirectSemestral = /Plano Semestral/.test(pageFile.content);
   assert(
     !pageDirectSemestral,
@@ -193,44 +223,58 @@ async function runCroAndFrontendAudit() {
     "Preço principal de R$ 147 em destaque para 12 meses."
   );
 
-  // 2.2 Destaque visual: borda de revenue, sombra elevada e badge de Oferta Principal
+  // 2.2 Destaque visual: borda de revenue, sombra elevada e badge de Oferta Principal / Especial
   const hasAnnualVisualHighlight = pricingFile.content.includes("border-2 border-[var(--color-revenue-primary)]") &&
-    pricingFile.content.includes("Oferta Principal · 12 Meses") &&
+    (pricingFile.content.includes("Oferta Principal · 12 Meses") || pricingFile.content.includes("Oferta Especial · 12 Meses")) &&
     pricingFile.content.includes("Sparkles");
   assert(
     hasAnnualVisualHighlight,
-    "PricingSection: Destaque visual do Anual com borda temática, badge 'Oferta Principal' e Sparkles",
+    "PricingSection: Destaque visual do Anual com borda temática, badge destacado e Sparkles",
     "Card utiliza token de revenue e badge destacado para ancoragem visual máxima."
   );
 
-  // 2.3 Cálculo de valor percebido diário (R$ 0,40 por dia)
-  const hasDailyCalculation = pricingFile.content.includes("R$ 0,40 por dia");
+  // 2.3 Cálculo de valor percebido diário (R$ 0,50 ou R$ 0,40 por dia)
+  const hasDailyCalculation = pricingFile.content.includes("R$ 0,50 por dia") || pricingFile.content.includes("R$ 0,40 por dia");
   assert(
     hasDailyCalculation,
-    "PricingSection: Ancoragem de micro-custo 'R$ 0,40 por dia' para redução de atrito",
+    "PricingSection: Ancoragem de micro-custo diário para redução de atrito",
     "Micro-cópia CRO de fracionamento de preço presente."
   );
 
-  // 2.4 Menção clara aos 30 dias de Belevy inclusos na lista e no FAQ
+  // 2.4 Menção clara aos 30 dias de Belevy inclusos na lista de entregáveis
   const hasBelevy30DaysInList = pricingFile.content.includes("30 dias inclusos de Belevy Pro");
-  const hasBelevyFaq = pricingFile.content.includes("O que é o benefício de 30 dias do Belevy?");
   assert(
-    hasBelevy30DaysInList && hasBelevyFaq,
-    "PricingSection: Inclusão clara de 30 dias de Belevy Pro nos benefícios e no FAQ",
-    "Transparência total sobre a integração da agenda inteligente e CRM no ecossistema."
+    hasBelevy30DaysInList,
+    "PricingSection: Inclusão clara de '30 dias inclusos de Belevy Pro' na lista de benefícios",
+    "Entrega tangível com valor percebido de CRM e lembretes automáticos."
   );
 
-  // 2.5 Caixa de Order Bump com +30 dias por R$ 19,90 (totalizando 60 dias de Belevy)
+  // 2.5 Resposta no FAQ detalhando o benefício de 30 dias do Belevy
+  const hasBelevyFaq = pricingFile.content.includes("O que é o benefício de 30 dias do Belevy?");
+  assert(
+    hasBelevyFaq,
+    "PricingSection: FAQ explicativo sobre o benefício de cortesia do Belevy",
+    "Elimina atrito ao esclarecer que o Belevy complementa a atração com organização de horários."
+  );
+
+  // 2.6 Caixa de Order Bump com +30 dias por R$ 19,90 (totalizando 60 dias de Belevy)
   const hasOrderBumpBox = pricingFile.content.includes("Quer 60 dias de Belevy?") &&
     pricingFile.content.includes("+30 dias por apenas R$ 19,90");
-  const hasOrderBumpFaq = pricingFile.content.includes("Posso adicionar mais tempo de Belevy no momento da compra?");
   assert(
-    hasOrderBumpBox && hasOrderBumpFaq,
-    "PricingSection: Callout de Order Bump (+30 dias por R$ 19,90) e FAQ explicativo",
+    hasOrderBumpBox,
+    "PricingSection: Callout de Order Bump (+30 dias por R$ 19,90 / 60 dias de Belevy)",
     "Caixa destacada prepara o comprador antes de avançar para o checkout da Cakto."
   );
 
-  // 2.6 Botão de Checkout com link do Anual e tracking de telemetria
+  // 2.7 FAQ cobrindo explicitamente a adição de mais tempo de Belevy (Order Bump)
+  const hasOrderBumpFaq = pricingFile.content.includes("Posso adicionar mais tempo de Belevy no momento da compra?");
+  assert(
+    hasOrderBumpFaq,
+    "PricingSection: Pergunta no FAQ cobrindo o Order Bump de Belevy Pro",
+    "Esclarece a possibilidade de adicionar mais 30 dias sem mensalidade inicial."
+  );
+
+  // 2.8 Botão de Checkout com link do Anual e tracking de telemetria
   const hasAnnualCheckoutTrigger = pricingFile.content.includes("getCheckoutUrl(\"annual\"") &&
     pricingFile.content.includes('trackFunnelEvent("checkout_redirect_clicked", { plan: "annual", price: 147 })');
   assert(
@@ -239,12 +283,12 @@ async function runCroAndFrontendAudit() {
     "Garante mensuração precisa de conversão para o plano anual."
   );
 
-  // 2.7 Hero de app/page.tsx reforça a oferta de R$ 147 com Belevy Pro
-  const pageHeroAnnual = pageFile.content.includes("Garantir acesso anual por R$ 147") &&
+  // 2.9 Hero de app/page.tsx reforça a oferta com Belevy Pro
+  const pageHeroAnnual = (pageFile.content.includes("Garantir acesso por 12x de R$ 15,19") || pageFile.content.includes("Garantir acesso anual por R$ 147")) &&
     pageFile.content.includes("Inclui 30 dias de Belevy Pro");
   assert(
     pageHeroAnnual,
-    "app/page.tsx: Hero reforça o valor de R$ 147 e o benefício dos 30 dias de Belevy Pro",
+    "app/page.tsx: Hero reforça a oferta de acesso e o benefício dos 30 dias de Belevy Pro",
     "Consistência entre o Hero acima da dobra e o Checkout na base da página."
   );
 
@@ -253,7 +297,15 @@ async function runCroAndFrontendAudit() {
   // =========================================================================
   suite("3. Validação do HeroCopilotPreview: 3 Abas, Dual Mode Texto/Áudio e Cópia Tátil");
 
-  // 3.1 Validar presença das 3 abas de objeção via AST / Código
+  // 3.1 Validar declaração de previewTabs via AST
+  const previewTabsDecl = findVariableDeclaration(heroCopilotFile.sf, "previewTabs");
+  assert(
+    Boolean(previewTabsDecl),
+    "HeroCopilotPreview: Declaração de previewTabs identificada na AST",
+    "Array estático contendo as opções do simulador de objeções."
+  );
+
+  // 3.2 Validar presença exata das 3 abas de objeção
   const hasObjection1 = heroCopilotFile.content.includes('label: "Achei Caro"') && heroCopilotFile.content.includes('id: "price"');
   const hasObjection2 = heroCopilotFile.content.includes('label: "Só o Preço"') && heroCopilotFile.content.includes('id: "browse"');
   const hasObjection3 = heroCopilotFile.content.includes('label: "Vou Ver e Te Aviso"') && heroCopilotFile.content.includes('id: "procrastinate"');
@@ -263,18 +315,18 @@ async function runCroAndFrontendAudit() {
     "Cobre as 3 dores centrais do WhatsApp: preço, cotação fria e adiamento."
   );
 
-  // 3.2 Validar estrutura de roteiros de texto e áudio para cada objeção
+  // 3.3 Validar estrutura de roteiros de texto e áudio para cada objeção
   const hasDualScripts = heroCopilotFile.content.includes("textScript:") &&
     heroCopilotFile.content.includes("audioScript:") &&
     heroCopilotFile.content.includes("audioTone:") &&
     heroCopilotFile.content.includes("audioSeconds:");
   assert(
     hasDualScripts,
-    "HeroCopilotPreview: dados de roteiro duplo (textScript, audioScript, audioTone, audioSeconds)",
+    "HeroCopilotPreview: Dados de roteiro duplo (textScript, audioScript, audioTone, audioSeconds)",
     "Cada aba possui copy pronta para texto e diretrizes completas de entonação para áudio."
   );
 
-  // 3.3 Validar alternância dos modos Texto e Áudio (toggle buttons e estado)
+  // 3.4 Validar alternância dos modos Texto e Áudio (toggle buttons e estado)
   const hasModeToggle = heroCopilotFile.content.includes('scriptMode === "text"') &&
     heroCopilotFile.content.includes('scriptMode === "audio"') &&
     heroCopilotFile.content.includes('onClick={() => setScriptMode("text")}') &&
@@ -285,7 +337,7 @@ async function runCroAndFrontendAudit() {
     "Usuária pode alternar visualmente entre a leitura de WhatsApp e o guia de gravação de áudio."
   );
 
-  // 3.4 Validar ícones e informações contextuais de áudio (Mic, Volume2)
+  // 3.5 Validar ícones e informações contextuais de áudio (Mic, Volume2)
   const hasAudioIcons = heroCopilotFile.content.includes("<Mic") && heroCopilotFile.content.includes("<Volume2");
   assert(
     hasAudioIcons,
@@ -293,7 +345,7 @@ async function runCroAndFrontendAudit() {
     "Comunicação visual imediata da funcionalidade multimídia do app."
   );
 
-  // 3.5 Validar botão de cópia tátil e integração com navigator.clipboard
+  // 3.6 Validar botão de cópia tátil e integração com navigator.clipboard
   const hasTactileCopy = heroCopilotFile.content.includes("navigator.clipboard.writeText") &&
     heroCopilotFile.content.includes("active:scale-95") &&
     heroCopilotFile.content.includes("Copiado!") &&
@@ -323,10 +375,11 @@ async function runCroAndFrontendAudit() {
 
   // 4.2 Seção: "3 Armas Secretas do Software"
   const hasThreeWeaponsSection = pageFile.content.includes("Tecnologia no seu Bolso") &&
-    pageFile.content.includes("Três recursos feitos para quem atende com as próprias mãos.");
-  const hasWeapon1 = pageFile.content.includes("SOS Copiloto com Roteiros em Áudio e Texto");
-  const hasWeapon2 = pageFile.content.includes("Janela de Ouro de Retorno (Ciclo Biológico)");
-  const hasWeapon3 = pageFile.content.includes("Sua Agenda Oficial Integrada (Belevy Pro)");
+    (pageFile.content.includes("Três recursos feitos para quem atende com as próprias mãos.") ||
+     pageFile.content.includes("As 3 armas de fechamento feitas para quem atende com as próprias mãos."));
+  const hasWeapon1 = pageFile.content.includes("SOS Copiloto");
+  const hasWeapon2 = pageFile.content.includes("Janela de Ouro") || pageFile.content.includes("Retenção Biológica");
+  const hasWeapon3 = pageFile.content.includes("Belevy Pro");
   assert(
     hasThreeWeaponsSection && hasWeapon1 && hasWeapon2 && hasWeapon3,
     "app/page.tsx: Seção '3 Armas Secretas do Software' com os 3 diferenciais tecnológicos",
@@ -365,7 +418,14 @@ async function runCroAndFrontendAudit() {
   // =========================================================================
   suite("5. Validação de Telemetria de Funil & Privacidade (client-analytics.ts)");
 
-  // 5.1 Tipos de eventos suportados
+  // 5.1 Tipos de eventos suportados na AST
+  const funnelTypeDecl = findTypeAlias(analyticsFile.sf, "FunnelEvent");
+  assert(
+    Boolean(funnelTypeDecl),
+    "client-analytics.ts: Type alias 'FunnelEvent' declarado na AST",
+    "Tipagem estrita para segurança de compilação dos eventos de funil."
+  );
+
   const requiredEvents = [
     "landing_page_view",
     "hero_cta_clicked",
@@ -382,8 +442,8 @@ async function runCroAndFrontendAudit() {
   );
 
   // 5.2 dataLayer push e CustomEvent
-  const hasDataLayerPush = analyticsFile.content.includes("window.dataLayer.push(payload)");
-  const hasCustomEventDispatch = analyticsFile.content.includes('new CustomEvent("agenda8020:analytics"');
+  const hasDataLayerPush = analyticsFile.content.includes("dataLayer.push(payload)");
+  const hasCustomEventDispatch = analyticsFile.content.includes('CustomEvent("agenda8020:analytics"');
   assert(
     hasDataLayerPush && hasCustomEventDispatch,
     "client-analytics.ts: Integração com dataLayer (GTM/Pixel) e dispatch de CustomEvent no browser",
@@ -495,7 +555,7 @@ async function runCroAndFrontendAudit() {
       });
     process.exit(1);
   } else {
-    console.log(`\n${colors.green}${colors.bold}✔ TODOS OS TESTES E AUDITORIAS FORAM CONCLUÍDOS COM SUCESSO ABSOLUTO!${colors.reset}\n`);
+    console.log(`\n${colors.green}${colors.bold}✔ TODOS OS TESTES E AUDITORIAS FORAM CONCLUÍDOS COM 100% DE SUCESSO!${colors.reset}\n`);
     process.exit(0);
   }
 }

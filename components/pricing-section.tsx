@@ -25,7 +25,7 @@ const faqs = [
   },
   {
     q: "É uma assinatura com cobrança recorrente no cartão?",
-    a: "Não. É um pagamento único com 12 meses de acesso garantido (365 dias). Não há renovação automática surpresa nem cobranças mensais ocultas.",
+    a: "Não. Você tem a flexibilidade de parcelar em até 12x de R$ 15,19 no cartão de crédito, ou pagar apenas R$ 147 à vista (via PIX ou cartão) com desconto especial. É um pagamento único referente a 12 meses inteiros de acesso (365 dias), sem renovação automática surpresa nem mensalidades ocultas.",
   },
   {
     q: "Quanto tempo preciso dedicar por dia?",
@@ -65,16 +65,16 @@ export function PricingSection({ searchParams }: PricingSectionProps) {
       {/* Section Header */}
       <div className="mx-auto max-w-3xl text-center">
         <Badge variant="action" className="px-3 py-1 text-xs">
-          Acesso Oficial Transparente
+          Investimento Inteligente · Alto Retorno
         </Badge>
         <h2
           id="pricing-heading"
           className="mt-4 text-3xl font-bold leading-tight tracking-[-0.035em] text-balance text-[var(--color-ink-solid)] sm:text-4xl lg:text-5xl"
         >
-          Um investimento acessível para nunca mais improvisar.
+          Menos de R$ 0,50 por dia para ter um copiloto de vendas no seu bolso.
         </h2>
         <p className="mt-4 text-base leading-relaxed text-[var(--color-ink-muted)] text-pretty sm:text-lg">
-          Pagamento único por 12 meses de acesso completo. Sem mensalidades surpresa e com liberação imediata no seu e-mail.
+          Apenas 1 procedimento agendado a mais no ano inteiro já paga o seu acesso com sobra. Escolha entre parcelar suavemente ou garantir o desconto à vista.
         </p>
       </div>
 
@@ -84,7 +84,7 @@ export function PricingSection({ searchParams }: PricingSectionProps) {
           <div className="absolute -top-3.5 right-6 sm:right-8">
             <span className="inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] bg-[var(--color-revenue-primary)] px-3 py-1 text-xs font-bold text-white shadow-sm">
               <Sparkles className="size-3.5" aria-hidden="true" />
-              Oferta Principal · 12 Meses
+              Oferta Especial · 12 Meses
             </span>
           </div>
 
@@ -95,7 +95,7 @@ export function PricingSection({ searchParams }: PricingSectionProps) {
                   Plano Anual Completo
                 </h3>
                 <p className="mt-1 text-xs text-[var(--color-ink-muted)]">
-                  365 dias de tranquilidade, priorização e clientes
+                  365 dias de tranquilidade, clientes e autoridade
                 </p>
               </div>
               <Badge variant="revenue" className="text-xs">
@@ -103,46 +103,56 @@ export function PricingSection({ searchParams }: PricingSectionProps) {
               </Badge>
             </div>
 
-            <div className="mt-6 flex items-baseline gap-2">
-              <span className="text-5xl font-extrabold tracking-tight text-[var(--color-ink-solid)] sm:text-6xl">
-                R$ 147
-              </span>
-              <span className="text-sm font-semibold text-[var(--color-ink-muted)]">
-                /ano (pagamento único)
-              </span>
+            <div className="mt-6">
+              <div className="flex items-baseline gap-2">
+                <span className="text-4xl font-extrabold tracking-tight text-[var(--color-ink-solid)] sm:text-5xl lg:text-6xl">
+                  12x de R$ 15,19
+                </span>
+                <span className="text-xs sm:text-sm font-semibold text-[var(--color-ink-muted)]">
+                  no cartão
+                </span>
+              </div>
+              <div className="mt-2.5 flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center rounded-[var(--radius-pill)] bg-[var(--color-revenue-subtle)] px-2.5 py-0.5 text-xs font-bold text-[var(--color-revenue-primary)]">
+                  Desconto especial à vista
+                </span>
+                <span className="text-sm font-bold text-[var(--color-ink-solid)]">
+                  ou R$ 147 à vista (PIX ou cartão)
+                </span>
+              </div>
+              <p className="mt-2 text-xs font-semibold text-[var(--color-revenue-primary)]">
+                Equivalente a menos de R$ 0,50 por dia. 1 procedimento extra já paga o ano todo!
+              </p>
             </div>
-            <p className="mt-1.5 text-xs text-[var(--color-revenue-primary)] font-semibold">
-              Equivalente a apenas R$ 0,40 por dia para destravar seus atendimentos.
-            </p>
 
             <ul className="mt-8 space-y-3.5 border-t border-[var(--color-border-subtle)] pt-6 text-sm text-[var(--color-ink-solid)]">
               <li className="flex items-start gap-3">
                 <Check className="mt-0.5 size-4 shrink-0 text-[var(--color-revenue-primary)]" />
-                <span><strong>365 dias de acesso ilimitado</strong> ao Agenda 80/20</span>
+                <span><strong>365 dias de acesso irrestrito</strong> ao Agenda 80/20</span>
               </li>
               <li className="flex items-start gap-3">
                 <Check className="mt-0.5 size-4 shrink-0 text-[var(--color-revenue-primary)]" />
-                <span><strong>SOS Copiloto de Vendas:</strong> quebre objeções de preço e "vou ver" no WhatsApp</span>
+                <span><strong>SOS Copiloto de Fechamento:</strong> respostas magnéticas em áudio e texto para WhatsApp</span>
               </li>
               <li className="flex items-start gap-3">
                 <Check className="mt-0.5 size-4 shrink-0 text-[var(--color-revenue-primary)]" />
-                <span><strong>Roteiros em Áudio e Texto:</strong> saiba exatamente o tom de voz para responder</span>
+                <span><strong>Teleprompter com Guia de Tom de Voz:</strong> saiba exatamente como soar firme e profissional</span>
               </li>
               <li className="flex items-start gap-3">
                 <Check className="mt-0.5 size-4 shrink-0 text-[var(--color-revenue-primary)]" />
-                <span><strong>1 Ação Focada Diária (80/20):</strong> avance com clareza em 2 a 5 minutos</span>
+                <span><strong>Radar de Retenção Biológica:</strong> saiba o dia exato (21-28 dias) de convidar a cliente antes que ela vá na concorrência</span>
               </li>
               <li className="flex items-start gap-3">
                 <Check className="mt-0.5 size-4 shrink-0 text-[var(--color-revenue-primary)]" />
-                <span><strong>Janela de Ouro de Retorno:</strong> saiba a hora exata de convidar clientes a voltarem</span>
+                <span><strong>Bússola Diária 80/20:</strong> 1 micro-ação de 3 minutos no intervalo para trazer horários reais</span>
               </li>
               <li className="flex items-start gap-3">
                 <Check className="mt-0.5 size-4 shrink-0 text-[var(--color-revenue-primary)]" />
-                <span><strong>Diagnóstico de Valor em 45s:</strong> pare de dar descontos que corroem seu lucro</span>
+                <span><strong>Diagnóstico Anti-Desconto em 45s:</strong> blinde seu preço e nunca mais sangre dinheiro</span>
               </li>
               <li className="flex items-start gap-3">
                 <Check className="mt-0.5 size-4 shrink-0 text-[var(--color-revenue-primary)]" />
-                <span><strong>30 dias inclusos de Belevy Pro:</strong> sua agenda oficial com lembretes automáticos</span>
+                <span><strong>30 dias inclusos de Belevy Pro:</strong> sua agenda oficial com lembretes automáticos anti-falta</span>
               </li>
             </ul>
 
@@ -159,9 +169,9 @@ export function PricingSection({ searchParams }: PricingSectionProps) {
             <Link
               href={annualUrl}
               onClick={handleAnnualCheckout}
-              className="inline-flex min-h-[48px] w-full items-center justify-center rounded-[var(--radius-button)] bg-[var(--color-action-primary)] px-6 text-base font-bold text-white shadow-sm transition-all hover:bg-[var(--color-action-hover)] focus-visible:outline-none"
+              className="inline-flex min-h-[50px] w-full items-center justify-center rounded-[var(--radius-button)] bg-[var(--color-action-primary)] px-6 text-base font-bold text-white shadow-sm transition-all hover:bg-[var(--color-action-hover)] focus-visible:outline-none"
             >
-              <span>Garantir meu acesso anual por R$ 147</span>
+              <span>Garantir por 12x de R$ 15,19 (ou R$ 147 à vista)</span>
               <ArrowRight className="ml-2 size-4" aria-hidden="true" />
             </Link>
             <p className="mt-2.5 text-center text-xs text-[var(--color-ink-muted)]">
@@ -170,7 +180,7 @@ export function PricingSection({ searchParams }: PricingSectionProps) {
           </div>
         </div>
 
-        {/* Modal de Downsell sutil (R$ 97) para quem prefere período menor */}
+        {/* Modal de Downsell sutil para quem prefere período menor */}
         <ExitDownsellModal searchParams={searchParams} />
       </div>
 

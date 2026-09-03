@@ -6,6 +6,10 @@ export interface CheckoutPlanConfig {
   durationLabel: string;
   badgeLabel?: string;
   priceFormatted: string;
+  installmentCount?: number;
+  installmentPriceFormatted?: string;
+  cashPriceFormatted?: string;
+  dailyEquivalentLabel?: string;
   billingFrequency: string;
   periodDays: number;
   belevyBenefitDays: number;
@@ -16,22 +20,27 @@ export interface CheckoutPlanConfig {
 export const CHECKOUT_PLANS: Record<PlanType, CheckoutPlanConfig> = {
   annual: {
     id: "annual",
-    name: "Plano Anual",
+    name: "Plano Anual Completo",
     durationLabel: "12 meses",
     badgeLabel: "Melhor Custo-Benefício",
-    priceFormatted: "R$ 147",
-    billingFrequency: "/ano (pagamento único)",
+    priceFormatted: "12x de R$ 15,19",
+    installmentCount: 12,
+    installmentPriceFormatted: "R$ 15,19",
+    cashPriceFormatted: "R$ 147",
+    dailyEquivalentLabel: "Menos de R$ 0,50 por dia",
+    billingFrequency: "ou R$ 147 à vista com desconto",
     periodDays: 365,
     belevyBenefitDays: 30,
     highlighted: true,
     features: [
-      "365 dias de acesso contínuo ao Agenda 80/20",
-      "1 recomendação diária acionável (2 a 5 min)",
-      "Mensagens prontas para WhatsApp e canais",
-      "Link público de agendamento ilimitado",
-      "Histórico de ações e sinais de clientes",
-      "30 dias de cortesia no Belevy (CRM e lembretes)",
-      "Acesso imediato via link mágico por e-mail",
+      "365 dias de acesso irrestrito ao Agenda 80/20",
+      "SOS Copiloto de Fechamento: respostas em áudio e texto para WhatsApp",
+      "Teleprompter de voz com ritmo e entonação para soar especialista",
+      "Radar de Retenção Biológica: convite na janela exata dos 21-28 dias",
+      "Bússola Diária 80/20: 1 micro-ação em 3 minutos para trazer clientes",
+      "Diagnóstico de Valor: blindagem contra quem pede desconto",
+      "30 dias de Belevy Pro inclusos com lembretes anti-falta automáticos",
+      "Acesso imediato no celular sem senhas para decorar",
     ],
   },
   semiannual: {
