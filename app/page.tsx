@@ -1,38 +1,19 @@
 import Link from "next/link";
 import {
   ArrowRight,
-  CalendarDays,
+  Calendar,
   Check,
   Clock3,
-  MessageCircleMore,
+  MessageCircle,
+  ShieldAlert,
+  Sparkles,
+  UserCheck,
+  X,
+  Zap,
 } from "lucide-react";
 import { BrandMark } from "@/components/ui/brand-mark";
 import { PricingSection } from "@/components/pricing-section";
-
-const steps = [
-  {
-    number: "1",
-    title: "Conte seu momento",
-    description: "Serviço, gargalo, canais e a disponibilidade real que cabe no seu dia.",
-  },
-  {
-    number: "2",
-    title: "Veja o próximo movimento",
-    description: "Uma decisão clara e compatível com o que você consegue fazer agora.",
-  },
-  {
-    number: "3",
-    title: "Receba horários",
-    description: "Compartilhe seu caminho público de agendamento para quem demonstrar interesse.",
-  },
-] as const;
-
-const benefits = [
-  "Saiba o que fazer agora sem montar um plano de marketing inteiro.",
-  "Use o tempo que você realmente tem disponível no seu dia.",
-  "Dê uma próxima etapa clara para quem demonstrar interesse.",
-  "Acompanhe ações, sinais e agendamentos sem depender de improviso.",
-] as const;
+import { HeroCopilotPreview } from "@/components/hero-copilot-preview";
 
 export default async function Home(props: {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -42,8 +23,8 @@ export default async function Home(props: {
   return (
     <main className="min-h-screen bg-[var(--color-canvas)] text-[var(--color-ink-solid)]">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-8 lg:px-10">
-        {/* Navigation Bar */}
-        <header className="flex items-center justify-between py-5 sm:py-7">
+        {/* Top Header */}
+        <header className="flex items-center justify-between py-5 sm:py-7 border-b border-[var(--color-border-subtle)]">
           <Link
             href="/"
             className="flex items-center rounded-[var(--radius-button)] focus-visible:outline-none"
@@ -51,180 +32,263 @@ export default async function Home(props: {
           >
             <BrandMark />
           </Link>
-          <Link
-            href="/login"
-            className="inline-flex min-h-[48px] items-center rounded-[var(--radius-button)] px-4 py-2 text-sm font-semibold text-[var(--color-ink-solid)] transition-colors hover:text-[var(--color-action-primary)] focus-visible:outline-none"
-          >
-            Entrar
-            <ArrowRight className="ml-2 size-4" aria-hidden="true" />
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/login"
+              className="inline-flex min-h-[44px] items-center rounded-[var(--radius-button)] px-4 py-2 text-sm font-semibold text-[var(--color-ink-solid)] transition-colors hover:text-[var(--color-action-primary)] focus-visible:outline-none"
+            >
+              Entrar
+              <ArrowRight className="ml-2 size-4" aria-hidden="true" />
+            </Link>
+          </div>
         </header>
 
         {/* Hero Section */}
-        <section className="grid gap-10 pb-16 pt-8 sm:pb-24 sm:pt-16 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16">
+        <section className="grid gap-10 pb-16 pt-8 sm:pb-20 sm:pt-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-14">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold text-[var(--color-action-primary)]">
-              Feito para quem vive de atendimento.
-            </p>
+            <span className="inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] bg-[var(--color-action-subtle)] px-3 py-1 text-xs font-bold text-[var(--color-action-primary)]">
+              <Zap className="size-3.5" />
+              Aplicativo Prático de Clientes & Agendamento
+            </span>
             <h1 className="mt-4 text-3xl font-bold leading-[1.08] tracking-[-0.035em] text-balance sm:text-5xl lg:text-6xl">
-              Pare de tentar fazer tudo para movimentar seu serviço.
+              Pare de tentar fazer tudo para conseguir clientes para o seu serviço.
             </h1>
-            <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--color-ink-muted)] text-pretty sm:text-lg sm:leading-8">
-              Conte como está seu serviço, seu tempo e seus canais. O Agenda 80/20 organiza uma próxima ação possível e ajuda você a receber agendamentos por um link simples.
+            <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--color-ink-muted)] text-pretty sm:text-lg sm:leading-8">
+              O <strong>Agenda 80/20</strong> é o aplicativo prático que diz exatamente o que fazer hoje, com roteiros prontos em <strong>áudio e texto para WhatsApp</strong> que quebram objeções de preço sem você precisar dar desconto.
             </p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
               <Link
                 href="#planos"
-                className="inline-flex min-h-[48px] items-center justify-center rounded-[var(--radius-button)] bg-[var(--color-action-primary)] px-6 text-sm font-bold text-white shadow-sm transition-colors hover:bg-[var(--color-action-hover)] focus-visible:outline-none"
+                className="inline-flex min-h-[50px] items-center justify-center rounded-[var(--radius-button)] bg-[var(--color-action-primary)] px-7 text-sm font-bold text-white shadow-sm transition-all hover:bg-[var(--color-action-hover)] focus-visible:outline-none"
               >
-                Ver planos e começar
+                <span>Garantir acesso anual por R$ 147</span>
                 <ArrowRight className="ml-2 size-4" aria-hidden="true" />
               </Link>
-              <p className="text-xs leading-5 text-[var(--color-ink-muted)] sm:max-w-xs sm:text-sm">
-                Sem promessas mágicas. Só um próximo passo claro.
-              </p>
+              <div className="flex items-center gap-2 text-xs text-[var(--color-ink-muted)] sm:text-sm">
+                <span className="size-2 rounded-full bg-[var(--color-revenue-primary)]" />
+                <span>Inclui 30 dias de Belevy Pro</span>
+              </div>
             </div>
           </div>
 
-          {/* Canonical Product Preview Artifact */}
-          <section
-            aria-label="Exemplo de plano diário do produto"
-            className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-card)] shadow-[var(--shadow-card-elevated)]"
-          >
-            <div className="flex items-center justify-between border-b border-[var(--color-border-subtle)] px-5 py-4 sm:px-6">
-              <div className="flex items-center gap-3">
-                <span
-                  className="size-2.5 rounded-full bg-[var(--color-revenue-primary)]"
-                  aria-hidden="true"
-                />
-                <span className="text-sm font-semibold text-[var(--color-ink-solid)]">
-                  Seu plano de hoje
-                </span>
-              </div>
-              <span className="text-xs font-medium text-[var(--color-ink-muted)] sm:text-sm">
-                2 minutos
-              </span>
-            </div>
-            <div className="p-5 sm:p-6">
-              <p className="text-xs font-bold uppercase tracking-wider text-[var(--color-action-primary)]">
-                Seu foco agora
-              </p>
-              <h2 className="mt-3 text-xl font-bold leading-snug tracking-[-0.025em] text-balance sm:text-2xl">
-                Retome a conversa com uma pessoa que pediu informações.
-              </h2>
-              <p className="mt-3 text-sm leading-relaxed text-[var(--color-ink-muted)] sm:text-base">
-                Você já tem uma oportunidade concreta aberta. Não precisa pensar em uma campanha inteira hoje.
-              </p>
-
-              <div className="mt-6 rounded-[var(--radius-sm)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-muted)] p-4">
-                <div className="flex items-start gap-3">
-                  <span
-                    className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-[var(--color-action-subtle)] text-[var(--color-action-primary)]"
-                    aria-hidden="true"
-                  >
-                    <MessageCircleMore className="size-4" />
-                  </span>
-                  <p className="text-sm leading-6 text-[var(--color-ink-solid)]">
-                    “Oi! Vi que você tinha interesse no serviço. Quer que eu te envie os horários que ainda tenho esta semana?”
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-6 flex flex-wrap items-center justify-between gap-3 pt-2">
-                <div className="flex items-center gap-2 text-xs font-medium text-[var(--color-ink-muted)] sm:text-sm">
-                  <Clock3 className="size-4" aria-hidden="true" />
-                  <span>Cabe no seu intervalo</span>
-                </div>
-                <span className="inline-flex min-h-[36px] items-center rounded-[var(--radius-pill)] bg-[var(--color-action-primary)] px-4 text-xs font-bold text-white">
-                  Abrir ação
-                </span>
-              </div>
-            </div>
-          </section>
+          {/* Interactive Showcase Artifact */}
+          <div className="w-full">
+            <HeroCopilotPreview />
+          </div>
         </section>
 
-        {/* 3 Steps Section */}
+        {/* Section: Quem é você hoje? (Personas e Momentos) */}
         <section className="border-t border-[var(--color-border-subtle)] py-14 sm:py-20">
-          <div className="grid gap-8 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16">
-            <div>
-              <p className="text-sm font-semibold text-[var(--color-revenue-primary)]">
-                Um plano que respeita sua rotina
+          <div className="mx-auto max-w-3xl text-center">
+            <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-revenue-primary)]">
+              Princípio 80/20 Aplicado
+            </span>
+            <h2 className="mt-3 text-2xl font-bold tracking-tight text-[var(--color-ink-solid)] sm:text-4xl">
+              O método se ajusta ao seu momento real.
+            </h2>
+            <p className="mt-3 text-sm sm:text-base text-[var(--color-ink-muted)] leading-relaxed">
+              Você não precisa executar um plano de marketing inteiro. Precisa dos poucos movimentos que geram resultado para o seu estágio agora.
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-6 sm:grid-cols-3">
+            {/* Card 1: Zero Clientes */}
+            <div className="rounded-[var(--radius-card)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-card)] p-6 shadow-[var(--shadow-card-resting)] flex flex-col justify-between">
+              <div>
+                <span className="inline-flex items-center rounded-[var(--radius-pill)] bg-[var(--color-action-subtle)] px-2.5 py-0.5 text-xs font-bold text-[var(--color-action-primary)]">
+                  Estou no Zero
+                </span>
+                <h3 className="mt-3 text-lg font-bold text-[var(--color-ink-solid)]">
+                  Começando sem clientes nem seguidores
+                </h3>
+                <p className="mt-2 text-xs sm:text-sm text-[var(--color-ink-muted)] leading-relaxed">
+                  O app orienta o convite das primeiras modelos de treino, organização do portfólio inicial e abertura de horários no seu bairro sem pressão.
+                </p>
+              </div>
+              <p className="mt-5 text-xs font-semibold text-[var(--color-action-primary)] border-t border-[var(--color-border-subtle)] pt-3">
+                Resultado: Primeiras fotos e clientes reais.
               </p>
-              <h2 className="mt-3 text-2xl font-bold leading-tight tracking-[-0.03em] text-balance sm:text-4xl">
-                Menos improviso. Mais clareza para agir.
+            </div>
+
+            {/* Card 2: Poucas Clientes / Horários Vazios */}
+            <div className="rounded-[var(--radius-card)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-card)] p-6 shadow-[var(--shadow-card-resting)] flex flex-col justify-between">
+              <div>
+                <span className="inline-flex items-center rounded-[var(--radius-pill)] bg-[var(--color-revenue-subtle)] px-2.5 py-0.5 text-xs font-bold text-[var(--color-revenue-primary)]">
+                  Horários Vazios
+                </span>
+                <h3 className="mt-3 text-lg font-bold text-[var(--color-ink-solid)]">
+                  Já atendo, mas sobram vagas na semana
+                </h3>
+                <p className="mt-2 text-xs sm:text-sm text-[var(--color-ink-muted)] leading-relaxed">
+                  O app ativa a <strong>Janela de Ouro de Retorno</strong> no tempo biológico ideal e orienta a divulgação de 2 vagas reais sem queimar seu preço.
+                </p>
+              </div>
+              <p className="mt-5 text-xs font-semibold text-[var(--color-revenue-primary)] border-t border-[var(--color-border-subtle)] pt-3">
+                Resultado: Menos buracos na grade semanal.
+              </p>
+            </div>
+
+            {/* Card 3: Perguntam preço e somem */}
+            <div className="rounded-[var(--radius-card)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-card)] p-6 shadow-[var(--shadow-card-resting)] flex flex-col justify-between">
+              <div>
+                <span className="inline-flex items-center rounded-[var(--radius-pill)] bg-[var(--color-opportunity-subtle)] px-2.5 py-0.5 text-xs font-bold text-[var(--color-opportunity-primary)]">
+                  Baixa Conversão
+                </span>
+                <h3 className="mt-3 text-lg font-bold text-[var(--color-ink-solid)]">
+                  Pessoas pedem o valor e desaparecem
+                </h3>
+                <p className="mt-2 text-xs sm:text-sm text-[var(--color-ink-muted)] leading-relaxed">
+                  Abra o <strong>SOS Copiloto</strong> no celular e veja a resposta exata em áudio ou texto para responder com segurança e postura de especialista.
+                </p>
+              </div>
+              <p className="mt-5 text-xs font-semibold text-[var(--color-opportunity-primary)] border-t border-[var(--color-border-subtle)] pt-3">
+                Resultado: Conversas viram agendamentos reais.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Section: 3 Armas Secretas do Software */}
+        <section className="border-t border-[var(--color-border-subtle)] py-14 sm:py-20">
+          <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-action-primary)]">
+                Tecnologia no seu Bolso
+              </span>
+              <h2 className="mt-3 text-2xl font-bold tracking-tight text-[var(--color-ink-solid)] sm:text-4xl">
+                Três recursos feitos para quem atende com as próprias mãos.
               </h2>
+              <p className="mt-4 text-sm sm:text-base text-[var(--color-ink-muted)] leading-relaxed">
+                Esqueça planilhas complicadas ou telas cheias de gráficos. O Agenda 80/20 foi desenhado para ser operado com 1 polegar em intervalos de 2 a 5 minutos.
+              </p>
             </div>
-            <ol className="divide-y divide-[var(--color-border-subtle)] border-y border-[var(--color-border-subtle)]">
-              {steps.map((step) => (
-                <li
-                  key={step.number}
-                  className="grid grid-cols-[2.5rem_1fr] gap-3 py-5 sm:grid-cols-[3rem_1fr_1.25fr] sm:gap-5"
-                >
-                  <span
-                    className="text-lg font-bold text-[var(--color-action-primary)]"
-                    aria-hidden="true"
-                  >
-                    {step.number}
-                  </span>
-                  <h3 className="text-base font-bold leading-6 text-[var(--color-ink-solid)]">
-                    {step.title}
+
+            <div className="space-y-4">
+              <div className="rounded-[var(--radius-card)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-card)] p-5 flex items-start gap-4 shadow-xs">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-action-subtle)] text-[var(--color-action-primary)] font-bold">
+                  <ShieldAlert className="size-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-[var(--color-ink-solid)]">
+                    SOS Copiloto com Roteiros em Áudio e Texto
                   </h3>
-                  <p className="col-start-2 text-sm leading-6 text-[var(--color-ink-muted)] sm:col-start-auto">
-                    {step.description}
+                  <p className="mt-1 text-xs sm:text-sm text-[var(--color-ink-muted)] leading-relaxed">
+                    A cliente disse que "achou caro" ou que "vai ver com o marido"? Escolha a objeção e tenha o texto pronto ou o roteiro com tom de voz orientado para mandar no WhatsApp em 20 segundos.
                   </p>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </section>
+                </div>
+              </div>
 
-        {/* Benefits Section */}
-        <section className="grid gap-8 border-t border-[var(--color-border-subtle)] py-14 sm:py-20 lg:grid-cols-2 lg:items-end">
-          <div>
-            <p className="text-sm font-semibold text-[var(--color-action-primary)]">
-              Para usar entre atendimentos
-            </p>
-            <h2 className="mt-3 max-w-xl text-2xl font-bold leading-tight tracking-[-0.03em] text-balance sm:text-4xl">
-              Uma interface feita para decidir, não para sobrecarregar.
-            </h2>
-          </div>
-          <ul className="grid gap-4 text-sm leading-relaxed text-[var(--color-ink-muted)] sm:text-base">
-            {benefits.map((benefit, index) => (
-              <li key={index} className="flex items-start gap-3">
-                <Check
-                  className="mt-0.5 size-5 shrink-0 text-[var(--color-revenue-primary)]"
-                  aria-hidden="true"
-                />
-                <span className="text-[var(--color-ink-solid)]">{benefit}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
+              <div className="rounded-[var(--radius-card)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-card)] p-5 flex items-start gap-4 shadow-xs">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-revenue-subtle)] text-[var(--color-revenue-primary)] font-bold">
+                  <Clock3 className="size-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-[var(--color-ink-solid)]">
+                    Janela de Ouro de Retorno (Ciclo Biológico)
+                  </h3>
+                  <p className="mt-1 text-xs sm:text-sm text-[var(--color-ink-muted)] leading-relaxed">
+                    O aplicativo acompanha o tempo exato de manutenção (21 a 28 dias) e avisa o dia perfeito para convidar cada cliente antes que ela vá na concorrente.
+                  </p>
+                </div>
+              </div>
 
-        {/* Objection Breaker Section */}
-        <section className="mb-12 grid gap-8 rounded-[var(--radius-card)] bg-[var(--color-ink-solid)] px-6 py-8 text-white sm:mb-16 sm:p-10 lg:grid-cols-[1fr_auto] lg:items-end">
-          <div>
-            <div className="flex items-center gap-2 text-xs font-semibold text-[var(--color-opportunity-primary)] sm:text-sm">
-              <CalendarDays className="size-4" aria-hidden="true" />
-              <span>Comece com o que já existe</span>
+              <div className="rounded-[var(--radius-card)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-card)] p-5 flex items-start gap-4 shadow-xs">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-opportunity-subtle)] text-[var(--color-opportunity-primary)] font-bold">
+                  <Calendar className="size-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-[var(--color-ink-solid)]">
+                    Sua Agenda Oficial Integrada (Belevy Pro)
+                  </h3>
+                  <p className="mt-1 text-xs sm:text-sm text-[var(--color-ink-muted)] leading-relaxed">
+                    Você ganha 30 dias de Belevy inclusos para centralizar seus horários e mandar confirmações automáticas por WhatsApp para acabar com as faltas.
+                  </p>
+                </div>
+              </div>
             </div>
-            <h2 className="mt-4 max-w-2xl text-2xl font-bold leading-tight tracking-[-0.03em] text-balance sm:text-3xl lg:text-4xl">
-              Você não precisa dominar uma ferramenta grande para começar.
-            </h2>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-white/80 sm:text-base">
-              O produto começa com perguntas simples sobre seu serviço e leva você a uma única próxima ação. As recomendações são apoio à decisão; você continua revisando e escolhendo o que faz sentido para sua realidade.
-            </p>
           </div>
-          <Link
-            href="#planos"
-            className="inline-flex min-h-[48px] items-center justify-center rounded-[var(--radius-button)] bg-[var(--color-action-primary)] px-6 text-sm font-bold text-white shadow-sm transition-colors hover:bg-[var(--color-action-hover)] focus-visible:outline-none"
-          >
-            Escolher meu plano
-            <ArrowRight className="ml-2 size-4" aria-hidden="true" />
-          </Link>
         </section>
 
-        {/* Pricing & FAQ Section */}
+        {/* Section: Tabela Comparativa (Por que software vence) */}
+        <section className="border-t border-[var(--color-border-subtle)] py-14 sm:py-20">
+          <div className="mx-auto max-w-3xl text-center">
+            <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-revenue-primary)]">
+              Comparativo Real
+            </span>
+            <h2 className="mt-3 text-2xl font-bold tracking-tight text-[var(--color-ink-solid)] sm:text-4xl">
+              Por que você precisa de software e não de outro curso?
+            </h2>
+            <p className="mt-3 text-sm sm:text-base text-[var(--color-ink-muted)] leading-relaxed">
+              Você já sabe executar seu serviço. O que falta é apoio à decisão e execução rápida no dia a dia.
+            </p>
+          </div>
+
+          <div className="mt-10 overflow-x-auto">
+            <table className="w-full min-w-[600px] border-collapse rounded-[var(--radius-card)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-card)] shadow-xs">
+              <thead>
+                <tr className="border-b border-[var(--color-border-subtle)] bg-[var(--color-surface-muted)] text-left text-xs font-bold uppercase tracking-wider text-[var(--color-ink-solid)]">
+                  <th className="p-4">Critério</th>
+                  <th className="p-4 text-[var(--color-ink-muted)]">Cursos & PDFs</th>
+                  <th className="p-4 text-[var(--color-ink-muted)]">ChatGPT Genérico</th>
+                  <th className="p-4 text-[var(--color-action-primary)] bg-[var(--color-action-subtle)]">Agenda 80/20</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[var(--color-border-subtle)] text-xs sm:text-sm">
+                <tr>
+                  <td className="p-4 font-bold">Tempo para aplicar</td>
+                  <td className="p-4 text-[var(--color-ink-muted)]">Horas assistindo vídeo</td>
+                  <td className="p-4 text-[var(--color-ink-muted)]">Precisa pensar em prompts</td>
+                  <td className="p-4 font-bold text-[var(--color-action-primary)] bg-[var(--color-action-subtle)]/50">2 a 5 minutos no intervalo</td>
+                </tr>
+                <tr>
+                  <td className="p-4 font-bold">Respostas para WhatsApp</td>
+                  <td className="p-4 text-[var(--color-ink-muted)]">Exemplos genéricos</td>
+                  <td className="p-4 text-[var(--color-ink-muted)]">Textos longos e robóticos</td>
+                  <td className="p-4 font-bold text-[var(--color-action-primary)] bg-[var(--color-action-subtle)]/50">Áudio e texto no tom de voz real</td>
+                </tr>
+                <tr>
+                  <td className="p-4 font-bold">Direção do que fazer</td>
+                  <td className="p-4 text-[var(--color-ink-muted)]">Overdose de teoria</td>
+                  <td className="p-4 text-[var(--color-ink-muted)]">Lista de 50 ideias soltas</td>
+                  <td className="p-4 font-bold text-[var(--color-action-primary)] bg-[var(--color-action-subtle)]/50">1 próxima ação focada por dia</td>
+                </tr>
+                <tr>
+                  <td className="p-4 font-bold">Organização de clientes</td>
+                  <td className="p-4 text-[var(--color-ink-muted)]">Nenhuma</td>
+                  <td className="p-4 text-[var(--color-ink-muted)]">Nenhuma</td>
+                  <td className="p-4 font-bold text-[var(--color-action-primary)] bg-[var(--color-action-subtle)]/50">Integrado com Agenda Belevy Pro</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* Section: Autoridade da Especialista Flávia Claus */}
+        <section className="border-t border-[var(--color-border-subtle)] py-14 sm:py-20">
+          <div className="mx-auto max-w-4xl rounded-[var(--radius-card)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-card)] p-6 sm:p-10 shadow-[var(--shadow-card-resting)]">
+            <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8">
+              <div className="size-24 sm:size-28 shrink-0 rounded-full bg-[var(--color-action-subtle)] border-2 border-[var(--color-action-primary)] flex items-center justify-center text-[var(--color-action-primary)] font-bold text-2xl">
+                <UserCheck className="size-12" />
+              </div>
+              <div>
+                <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-action-primary)]">
+                  Método Validado em Bancada
+                </span>
+                <h3 className="mt-1 text-xl sm:text-2xl font-bold text-[var(--color-ink-solid)]">
+                  Criado por Flávia Claus
+                </h3>
+                <p className="mt-2 text-xs sm:text-sm text-[var(--color-ink-muted)] leading-relaxed">
+                  Criadora do método <strong>Soft Gel Express</strong> e mentora de profissionais de estética e beleza. O Agenda 80/20 nasceu da necessidade real observada em centenas de alunas que dominavam a técnica perfeita do serviço, mas travavam na hora de divulgar, responder orçamentos no WhatsApp e organizar a própria agenda.
+                </p>
+                <p className="mt-3 text-xs font-semibold text-[var(--color-ink-solid)]">
+                  “Você não precisa ser blogueira nem gastar rios de dinheiro com anúncio. Só precisa saber conversar com quem já tem interesse.”
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Pricing Section (Unificada e Otimizada) */}
         <PricingSection searchParams={searchParams} />
 
         {/* Footer */}

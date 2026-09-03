@@ -13,7 +13,10 @@ const eventSchema = z.object({
   status: z.string().trim().min(1).max(48),
   occurred_at: z.string().datetime({ offset: true }).optional(),
   source: z.literal("belevy"),
-});
+}).refine(
+  (data) => new Date(data.ends_at).getTime() > new Date(data.starts_at).getTime(),
+  { message: "ends_at deve ser posterior a starts_at", path: ["ends_at"] }
+);
 
 type EventInput = z.infer<typeof eventSchema>;
 type AdminClient = ReturnType<typeof createAdminClient>;

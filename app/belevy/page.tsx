@@ -57,17 +57,17 @@ export default async function BelevyPage(_props: { manual?: boolean } = {}) {
             <span>Voltar para Hoje</span>
           </Link>
           <span className="inline-flex items-center rounded-[var(--radius-pill)] bg-[var(--color-revenue-subtle)] px-3 py-1 text-xs font-bold text-[var(--color-revenue-primary)]">
-            Benefício Parceiro
+            Agenda Oficial Integrada
           </span>
         </header>
 
         {/* Page Title */}
         <div className="mt-6">
           <h1 className="text-2xl sm:text-3xl font-bold leading-tight tracking-[-0.03em] text-[var(--color-ink-solid)] text-balance">
-            Benefício Belevy Pro
+            Sua Agenda Oficial no Belevy Pro
           </h1>
           <p className="mt-2 text-sm sm:text-base leading-relaxed text-[var(--color-ink-muted)] text-pretty">
-            O Agenda 80/20 foca na estratégia de crescimento. O Belevy é a ferramenta parceira para quem deseja operação completa de agenda, clientes e confirmações automáticas por WhatsApp.
+            O Agenda 80/20 atrai suas clientes e destrava conversas. O Belevy é a sua infraestrutura oficial para organizar horários, clientes e confirmações automáticas por WhatsApp para que ninguém falte.
           </p>
         </div>
 
@@ -99,7 +99,7 @@ export default async function BelevyPage(_props: { manual?: boolean } = {}) {
             href="/today"
             className="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-[var(--radius-button)] border border-[var(--color-border-strong)] bg-white px-5 text-sm font-bold text-[var(--color-ink-solid)] transition-colors hover:bg-[var(--color-surface-muted)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-action-primary)]"
           >
-            <span>Continuar no modo autônomo</span>
+            <span>Voltar para o painel Hoje</span>
             <ArrowRight className="size-4" aria-hidden="true" />
           </Link>
         </div>

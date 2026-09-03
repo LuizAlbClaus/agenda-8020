@@ -297,9 +297,9 @@ export default async function TodayPage() {
           )}
         </section>
 
-        {/* Belevy Benefit Card (Optional Integration) */}
+        {/* Belevy Benefit Card (Integrated Infrastructure) */}
         {benefit?.status && benefit.status !== "expired" && (
-          <section aria-label="Benefício parceiro" className="mt-5">
+          <section aria-label="Sua agenda oficial integrada" className="mt-5">
             <Link
               href="/belevy"
               className="block rounded-[var(--radius-card)] border border-[var(--color-revenue-primary)]/20 bg-[var(--color-revenue-subtle)] p-5 transition-all hover:border-[var(--color-revenue-primary)] shadow-xs"
@@ -307,22 +307,22 @@ export default async function TodayPage() {
               <div className="flex items-center justify-between">
                 <span className="inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] bg-white px-2.5 py-0.5 text-xs font-bold text-[var(--color-revenue-primary)] shadow-xs">
                   <Sparkles className="size-3" aria-hidden="true" />
-                  Benefício Parceiro
+                  Sua Agenda Oficial
                 </span>
                 <span className="text-xs font-semibold text-[var(--color-revenue-primary)]">
-                  Opcional
+                  {benefit.total_days ?? benefit.duration_days ?? 30} dias inclusos
                 </span>
               </div>
               <p className="mt-2 text-base font-bold text-[var(--color-ink-solid)]">
                 {showBenefitHandoff
-                  ? "Seu serviço está começando a se movimentar."
-                  : `Você tem ${benefit.total_days ?? benefit.duration_days ?? 30} dias cortesia de Belevy Pro.`}
+                  ? "Novas oportunidades surgiram! Ative sua agenda oficial."
+                  : `Organize seus atendimentos com o Belevy Pro.`}
               </p>
               <p className="mt-1 text-xs sm:text-sm leading-relaxed text-[var(--color-ink-muted)]">
-                Centralize agenda oficial, clientes e confirmações automáticas por WhatsApp.
+                Centralize seus horários e envie confirmações automáticas por WhatsApp para que suas clientes não faltem.
               </p>
               <span className="mt-3 inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-[var(--color-revenue-primary)]">
-                <span>Conhecer ou ativar benefício</span>
+                <span>Ativar e sincronizar agenda</span>
                 <ArrowRight className="size-3.5" aria-hidden="true" />
               </span>
             </Link>
