@@ -1,57 +1,74 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
-import { trackFunnelEvent } from "@/lib/client-analytics";
+import {
+  ArrowRight,
+  Calendar,
+  Check,
+  Lock,
+  ShieldCheck,
+} from "lucide-react";
+import { EditorialUnderline } from "./editorial-highlight";
 import type { LandingVariant } from "./types";
 
 interface LandingClosingProps {
-  variant: LandingVariant;
+  variant?: LandingVariant;
 }
 
-export function LandingClosing({ variant }: LandingClosingProps) {
-  const handleClick = () => {
-    trackFunnelEvent("closing_cta_clicked", { variant });
-  };
-
+export function LandingClosing({ variant = "cold" }: LandingClosingProps) {
   return (
-    <section
-      aria-labelledby="closing-heading"
-      className="border-t border-[var(--color-border-subtle)] py-16 sm:py-24"
-    >
-      <div className="mx-auto max-w-4xl rounded-[var(--radius-card)] border-2 border-[var(--color-action-primary)]/30 bg-[var(--color-surface-card)] p-8 sm:p-14 text-center shadow-[var(--shadow-card-elevated)]">
-        <span className="inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] bg-[var(--color-action-subtle)] px-3 py-1 text-xs font-bold text-[var(--color-action-primary)]">
-          <Sparkles className="size-3.5" />
-          Foco Total · 1 Ação de Cada Vez
-        </span>
+    <section className="relative bg-[#082420] text-white pt-14 pb-16 px-4 rounded-t-[48px] -mt-4 text-center overflow-hidden">
+      {/* Top Gold Seal */}
+      <div className="flex justify-center mb-6">
+        <div className="size-14 rounded-full border-2 border-[#D4A373] bg-[#0E3D36] flex items-center justify-center text-[#D4A373] shadow-lg">
+          <Check className="size-7 stroke-[2.5]" />
+        </div>
+      </div>
 
-        <p className="mt-4 text-base sm:text-lg font-bold text-[var(--color-ink-muted)]">
-          Você não precisa sair daqui com mais 20 coisas para fazer.
+      {/* Pre-headline */}
+      <div className="max-w-md mx-auto mb-4">
+        <p className="text-sm sm:text-base text-white/90 leading-relaxed font-medium">
+          Você <span className="text-[#D4A373] font-bold">não precisa</span> sair daqui
+          com mais 20 coisas para fazer.
         </p>
+      </div>
 
-        <h2
-          id="closing-heading"
-          className="mt-2 text-2xl font-extrabold tracking-tight text-balance text-[var(--color-ink-solid)] sm:text-4xl lg:text-5xl"
-        >
-          Precisa sair sabendo qual é a próxima.
+      {/* Main Editorial Headline */}
+      <div className="max-w-md mx-auto mb-8">
+        <h2 className="text-3xl sm:text-5xl font-serif font-bold text-white tracking-tight leading-[1.15]">
+          Precisa sair sabendo qual é{" "}
+          <span className="text-[#D4A373]">
+            <EditorialUnderline color="gold">a próxima.</EditorialUnderline>
+          </span>
         </h2>
+      </div>
 
-        <p className="mt-4 max-w-xl mx-auto text-sm sm:text-base text-[var(--color-ink-muted)] leading-relaxed text-pretty">
-          Chega de paralisia por excesso de ideias. Abra o aplicativo, descubra o movimento prioritário para o seu momento e dê o próximo passo com segurança.
-        </p>
+      {/* Sand/Gold CTA Button */}
+      <div className="max-w-xs mx-auto mb-10">
+        <Link
+          href="#oferta"
+          className="flex items-center justify-center gap-2 w-full bg-[#C9A66B] hover:bg-[#BD985B] text-[#082420] font-extrabold text-sm sm:text-base py-4 px-6 rounded-2xl shadow-xl transition-all active:scale-98"
+        >
+          <span>Montar meu primeiro plano</span>
+          <ArrowRight className="size-4" />
+        </Link>
+      </div>
 
-        <div className="mt-8 flex flex-col items-center justify-center gap-3">
-          <Link
-            href="#oferta"
-            onClick={handleClick}
-            className="inline-flex min-h-[52px] w-full sm:w-auto items-center justify-center gap-2 rounded-[var(--radius-button)] bg-[var(--color-action-primary)] px-8 text-base font-bold text-white shadow-sm transition-all hover:bg-[var(--color-action-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-action-primary)] active:scale-98"
-          >
-            <span>Montar meu primeiro plano</span>
-            <ArrowRight className="size-4" aria-hidden="true" />
-          </Link>
-          <p className="text-xs text-[var(--color-ink-muted)]">
-            Apenas R$ 147 à vista ou 12x de R$ 15,19 · 12 meses de acesso
-          </p>
+      {/* Microcopy Guarantee Footer */}
+      <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs text-emerald-100/80 font-medium max-w-md mx-auto pt-2 border-t border-emerald-900/40">
+        <div className="flex items-center gap-1.5">
+          <Lock className="size-3.5 text-[#D4A373]" />
+          <span>Acesso completo</span>
+        </div>
+        <span className="text-emerald-700 select-none">•</span>
+        <div className="flex items-center gap-1.5">
+          <Calendar className="size-3.5 text-[#D4A373]" />
+          <span>12 meses</span>
+        </div>
+        <span className="text-emerald-700 select-none">•</span>
+        <div className="flex items-center gap-1.5">
+          <ShieldCheck className="size-3.5 text-[#D4A373]" />
+          <span>pagamento único</span>
         </div>
       </div>
     </section>

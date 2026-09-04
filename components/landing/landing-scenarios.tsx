@@ -1,71 +1,195 @@
-import { Clock3, Sparkles } from "lucide-react";
-import { SCENARIOS_DATA } from "./types";
+﻿"use client";
+
+import { useState } from "react";
+import {
+  Calendar,
+  Crown,
+  Home,
+  Menu,
+  MessageSquare,
+  Plus,
+  RefreshCw,
+  Sprout,
+  Target,
+  Users,
+  Wifi,
+} from "lucide-react";
+import { EditorialUnderline } from "./editorial-highlight";
+import { cn } from "@/lib/utils";
+
+const scenarios = [
+  {
+    id: "comecando",
+    icon: Sprout,
+    label: "Estou começando",
+    recommendation: "Criar sua oferta inicial e atrair suas 3 primeiras clientes-teste.",
+    highlight: "primeiras clientes-teste.",
+  },
+  {
+    id: "pouca-gente",
+    icon: Users,
+    label: "Pouca gente conhece meu trabalho",
+    recommendation: "Ativar um ciclo de indicações com as pessoas mais próximas.",
+    highlight: "ciclo de indicações.",
+  },
+  {
+    id: "perguntam-nao-marcam",
+    icon: MessageSquare,
+    label: "Perguntam, mas não marcam",
+    recommendation: "Ajustar o roteiro de resposta rápida para fechar na hora da dúvida.",
+    highlight: "fechar na hora da dúvida.",
+  },
+  {
+    id: "horarios-vazios",
+    icon: Calendar,
+    label: "Tenho horários vazios",
+    recommendation: "Abrir uma janela estratégica de encaixe com convite direto no WhatsApp.",
+    highlight: "convite direto no WhatsApp.",
+  },
+  {
+    id: "clientes-voltem",
+    icon: RefreshCw,
+    label: "Quero que minhas clientes voltem",
+    recommendation: "Construir sua primeira prova e ativar uma oportunidade próxima.",
+    highlight: "oportunidade próxima.",
+  },
+];
 
 export function LandingScenarios() {
+  const [selectedId, setSelectedId] = useState("clientes-voltem");
+  const selectedScenario = scenarios.find((s) => s.id === selectedId) ?? scenarios[4];
+
   return (
-    <section
-      aria-labelledby="scenarios-heading"
-      className="border-t border-[var(--color-border-subtle)] py-14 sm:py-20"
-    >
-      <div className="mx-auto max-w-3xl text-center">
-        <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-action-primary)]">
-          Exemplos Reais do Dia a Dia
+    <section className="relative pt-12 pb-16 overflow-hidden text-center">
+      {/* Badge: ✦ 4 • SITUAÇÕES REAIS */}
+      <div className="flex justify-center px-4 mb-3">
+        <span className="inline-flex items-center gap-1 rounded-full border border-[#0E3D36]/30 bg-white/60 px-4 py-1 text-xs font-bold text-[#0E3D36] tracking-wide">
+          <span>✦ 4 • SITUAÇÕES REAIS</span>
         </span>
-        <h2
-          id="scenarios-heading"
-          className="mt-3 text-2xl font-extrabold tracking-tight text-balance text-[var(--color-ink-solid)] sm:text-4xl"
-        >
-          Veja o que ele faria no seu caso.
-        </h2>
-        <p className="mt-4 text-base leading-relaxed text-[var(--color-ink-muted)] text-pretty sm:text-lg">
-          A promessa deixa de ser abstrata quando você enxerga a decisão sendo tomada para a sua situação real:
-        </p>
       </div>
 
-      <div className="mt-12 mx-auto max-w-5xl grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {SCENARIOS_DATA.map((item, index) => (
-          <div
-            key={item.id}
-            className={`rounded-[var(--radius-card)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-card)] p-5 sm:p-6 shadow-[var(--shadow-card-resting)] flex flex-col justify-between transition-all hover:border-[var(--color-action-primary)]/50 ${
-              index === 0 ? "sm:col-span-2 lg:col-span-1" : ""
-            }`}
-          >
-            <div>
-              <span className="inline-flex items-center rounded-[var(--radius-pill)] bg-[var(--color-surface-muted)] border border-[var(--color-border-subtle)] px-2.5 py-0.5 text-[11px] font-bold text-[var(--color-ink-muted)]">
-                {item.tag}
-              </span>
+      {/* Headline */}
+      <div className="px-4 mb-10 max-w-xl mx-auto">
+        <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-[-0.03em] text-[#0C2A26] leading-[1.18]">
+          Veja o que ele faria{" "}
+          <span className="text-[#4E7A6E]">
+            <EditorialUnderline color="coral">no seu caso.</EditorialUnderline>
+          </span>
+        </h2>
+      </div>
 
-              <h3 className="mt-3 text-base font-bold text-[var(--color-ink-solid)] leading-snug">
-                {item.title}
-              </h3>
-
-              <p className="mt-2 text-xs leading-relaxed text-[var(--color-ink-muted)]">
-                {item.description}
-              </p>
+      {/* iPhone Mockup with Interactive Selection */}
+      <div className="flex justify-center px-4">
+        <div className="w-full max-w-[340px] sm:max-w-[365px] rounded-[44px] bg-slate-900 p-2.5 sm:p-3 shadow-2xl ring-1 ring-slate-800">
+          <div className="rounded-[36px] bg-[#FAF8F5] overflow-hidden text-left border border-slate-200 flex flex-col">
+            {/* Status Bar */}
+            <div className="pt-2.5 pb-1 px-6 flex items-center justify-between text-[11px] font-bold text-slate-800">
+              <span>9:41</span>
+              <div className="w-20 h-4 bg-black rounded-full flex items-center justify-end px-1.5 gap-1">
+                <div className="size-1.5 rounded-full bg-slate-800" />
+                <div className="size-2 rounded-full bg-blue-950/40" />
+              </div>
+              <div className="flex items-center gap-1.5 text-slate-700">
+                <Wifi className="size-3" />
+                <div className="w-4 h-2 border border-slate-700 rounded-xs flex items-center p-0.5">
+                  <div className="w-2.5 h-1 bg-slate-700 rounded-2xs" />
+                </div>
+              </div>
             </div>
 
-            <div className="mt-5 border-t border-[var(--color-border-subtle)] pt-4">
-              <div className="flex items-center justify-between text-[11px] text-[var(--color-action-primary)] font-bold mb-1">
-                <span className="flex items-center gap-1">
-                  <Sparkles className="size-3" />
-                  {item.movementTitle}
-                </span>
-                <span className="inline-flex items-center gap-1 text-[var(--color-ink-muted)] font-normal">
-                  <Clock3 className="size-3" />
-                  {item.durationMinutes} min
-                </span>
+            {/* App Internal Header */}
+            <div className="px-4 py-2.5 flex items-center justify-between border-b border-slate-200/50">
+              <div className="flex items-center gap-1.5">
+                <div className="size-5 rounded-full border border-slate-700 flex items-center justify-center text-[10px] font-black">
+                  ∞
+                </div>
+                <span className="text-xs font-black tracking-wider text-[#0C2A26]">AGENDA 80/20</span>
               </div>
-              <p className="text-xs leading-relaxed text-[var(--color-ink-solid)] font-medium">
-                {item.movementRationale}
-              </p>
+              <Crown className="size-4 text-[#D4A373]" />
+            </div>
+
+            {/* App Content */}
+            <div className="p-4 space-y-3">
+              <div>
+                <h3 className="text-xs sm:text-sm font-bold text-slate-900">
+                  Em qual situação você está?
+                </h3>
+                <p className="text-[10px] sm:text-[11px] text-slate-500 leading-snug mt-0.5">
+                  Selecione abaixo e veja a recomendação ideal para o seu momento.
+                </p>
+              </div>
+
+              {/* 5 Selectable Options */}
+              <div className="space-y-1.5">
+                {scenarios.map((item) => {
+                  const Icon = item.icon;
+                  const isSelected = item.id === selectedId;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => setSelectedId(item.id)}
+                      className={cn(
+                        "w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl border text-left text-xs transition-all cursor-pointer",
+                        isSelected
+                          ? "bg-[#0E3D36] text-white border-[#0E3D36] shadow-sm font-bold"
+                          : "bg-white text-slate-700 border-slate-200 hover:border-slate-300 font-medium"
+                      )}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <Icon className={cn("size-4 shrink-0", isSelected ? "text-emerald-300" : "text-[#0E3D36]")} />
+                        <span>{item.label}</span>
+                      </div>
+                      {isSelected ? (
+                        <span className="size-4 rounded-full bg-white text-[#0E3D36] flex items-center justify-center text-[10px] font-black">
+                          ✓
+                        </span>
+                      ) : null}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Dynamic Recommendation Card */}
+              <div className="rounded-2xl bg-[#EAF3EF] p-3.5 border border-emerald-900/10 text-center space-y-1 mt-3">
+                <div className="size-8 rounded-full bg-[#0E3D36] text-white flex items-center justify-center mx-auto shadow-xs">
+                  <Target className="size-4 text-[#E07A5F]" />
+                </div>
+                <p className="text-[9px] font-bold uppercase tracking-wider text-[#0E3D36]">
+                  Recomendação para você
+                </p>
+                <p className="text-xs font-bold text-slate-800 leading-snug">
+                  {selectedScenario.recommendation.replace(selectedScenario.highlight, "")}
+                  <span className="text-[#E07A5F]">{selectedScenario.highlight}</span>
+                </p>
+              </div>
+            </div>
+
+            {/* Bottom Tab Bar */}
+            <div className="border-t border-slate-200/60 px-4 py-2 flex items-center justify-between text-[9px] text-slate-500 font-medium bg-white">
+              <div className="flex flex-col items-center gap-0.5 text-[#0E3D36]">
+                <Home className="size-3.5" />
+                <span>Início</span>
+              </div>
+              <div className="flex flex-col items-center gap-0.5">
+                <Users className="size-3.5" />
+                <span>Clientes</span>
+              </div>
+              <div className="size-7 rounded-full bg-[#0E3D36] text-white flex items-center justify-center -mt-2 shadow-xs">
+                <Plus className="size-4" />
+              </div>
+              <div className="flex flex-col items-center gap-0.5">
+                <Calendar className="size-3.5" />
+                <span>Agenda</span>
+              </div>
+              <div className="flex flex-col items-center gap-0.5">
+                <Menu className="size-3.5" />
+                <span>Mais</span>
+              </div>
             </div>
           </div>
-        ))}
+        </div>
       </div>
-
-      <p className="mt-8 text-center text-xs text-[var(--color-ink-muted)] max-w-xl mx-auto">
-        *Estes são exemplos ilustrativos do raciocínio prático do sistema. As recomendações reais são calibradas com base nas respostas e canais que você informar no seu perfil.
-      </p>
     </section>
   );
 }

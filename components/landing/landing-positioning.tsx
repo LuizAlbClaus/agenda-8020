@@ -1,63 +1,109 @@
-import { Clock, ShieldCheck, Smartphone } from "lucide-react";
+﻿"use client";
+
+import Image from "next/image";
+import {
+  CheckSquare,
+  LineChart,
+  Smartphone,
+  Sparkles,
+} from "lucide-react";
 
 export function LandingPositioning() {
   return (
-    <section
-      aria-labelledby="positioning-heading"
-      className="border-t border-[var(--color-border-subtle)] py-14 sm:py-20"
-    >
-      <div className="mx-auto max-w-4xl rounded-[var(--radius-card)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-card)] p-6 sm:p-10 shadow-[var(--shadow-card-resting)]">
-        <div className="text-center max-w-2xl mx-auto">
-          <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-action-primary)]">
-            Baixa Carga Cognitiva · Alto Impacto
-          </span>
-          <h2
-            id="positioning-heading"
-            className="mt-3 text-2xl font-extrabold tracking-tight text-balance text-[var(--color-ink-solid)] sm:text-3xl lg:text-4xl"
-          >
-            Você não precisa virar especialista em marketing para agir como dona do seu negócio.
-          </h2>
-          <p className="mt-3 text-sm sm:text-base leading-relaxed text-[var(--color-ink-muted)] text-pretty">
-            O Agenda 80/20 não foi feito para exigir horas estudando funis, métricas complexas de tráfego, planilhas ou teorias infinitas.
+    <section className="relative pt-12 pb-16 overflow-hidden">
+      {/* Badge: Seção 8 — FEITO PARA A VIDA REAL */}
+      <div className="px-4 mb-2">
+        <span className="text-xs sm:text-sm font-bold text-[#0E3D36] tracking-wide">
+          Seção 8 — FEITO PARA A VIDA REAL
+        </span>
+        <div className="w-20 h-1 bg-gradient-to-r from-[#E07A5F] to-[#D4A373] rounded-full mt-1.5 mb-4" />
+      </div>
+
+      {/* Headline */}
+      <div className="px-4 mb-10 max-w-xl">
+        <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-[-0.03em] text-[#0C2A26] leading-[1.18]">
+          Você não precisa virar especialista em marketing{" "}
+          <span className="text-[#7FA898] block">para movimentar seu negócio.</span>
+        </h2>
+      </div>
+
+      {/* Composition: 3 Connected Steps (Left) + Woman in Salon (Right) */}
+      <div className="max-w-4xl mx-auto px-4 grid gap-8 md:grid-cols-[1fr_1.1fr] md:items-center">
+        {/* Left: 3 Numbered Steps */}
+        <div className="relative space-y-5 max-w-xs">
+          {/* Step 1 */}
+          <div className="relative flex items-center gap-3">
+            <div className="size-8 rounded-full bg-[#7FA898] text-white font-bold text-sm flex items-center justify-center shrink-0">
+              1
+            </div>
+            <div className="flex-1 rounded-2xl bg-white p-3.5 border border-slate-200 shadow-xs flex items-center gap-3">
+              <div className="size-9 rounded-xl border border-slate-300 flex items-center justify-center text-[11px] font-black text-[#0E3D36] shrink-0">
+                80/20
+              </div>
+              <p className="text-xs sm:text-sm font-bold text-[#0C2A26]">Você abre</p>
+            </div>
+          </div>
+
+          {/* Dotted connector */}
+          <div className="w-0.5 h-3 border-l-2 border-dotted border-slate-300 ml-4" />
+
+          {/* Step 2 */}
+          <div className="relative flex items-center gap-3">
+            <div className="size-8 rounded-full bg-[#7FA898] text-white font-bold text-sm flex items-center justify-center shrink-0">
+              2
+            </div>
+            <div className="flex-1 rounded-2xl bg-white p-3.5 border border-slate-200 shadow-xs flex items-center gap-3">
+              <div className="size-9 rounded-xl bg-emerald-50 text-[#0E3D36] flex items-center justify-center shrink-0">
+                <LineChart className="size-5 text-[#0E3D36]" />
+              </div>
+              <p className="text-xs sm:text-sm font-bold text-[#0C2A26] leading-tight">
+                Entende o que merece atenção
+              </p>
+            </div>
+          </div>
+
+          {/* Dotted connector */}
+          <div className="w-0.5 h-3 border-l-2 border-dotted border-slate-300 ml-4" />
+
+          {/* Step 3 */}
+          <div className="relative flex items-center gap-3">
+            <div className="size-8 rounded-full bg-[#7FA898] text-white font-bold text-sm flex items-center justify-center shrink-0">
+              3
+            </div>
+            <div className="flex-1 rounded-2xl bg-white p-3.5 border border-slate-200 shadow-xs flex items-center gap-3">
+              <div className="size-9 rounded-xl bg-orange-50 text-[#E07A5F] flex items-center justify-center shrink-0">
+                <CheckSquare className="size-5 text-[#E07A5F]" />
+              </div>
+              <p className="text-xs sm:text-sm font-bold text-[#0C2A26] leading-tight">
+                Executa e segue seu dia
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Right: Clean Editorial Photography of the Specialist in Salon */}
+        <div className="relative flex justify-center">
+          <div className="w-full max-w-[380px] rounded-3xl overflow-hidden shadow-xl border border-slate-200/80">
+            <Image
+              src="/media/agenda8020/woman-salon-perfect.png"
+              alt="Profissional utilizando o Agenda 80/20 no ambiente real de salão"
+              width={621}
+              height={1220}
+              className="w-full h-auto object-cover"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Dark Banner */}
+      <div className="max-w-4xl mx-auto px-4 mt-8">
+        <div className="rounded-2xl bg-[#082420] text-white p-4 sm:p-5 flex items-center gap-4 shadow-xl">
+          <Sparkles className="size-6 text-[#D4A373] shrink-0" />
+          <p className="text-xs sm:text-sm text-white leading-relaxed">
+            O Agenda 80/20 traduz dados em{" "}
+            <span className="text-[#7FA898] font-bold">decisões simples</span> para você
+            crescer sem complicação.
           </p>
-        </div>
-
-        {/* 4 Simple Daily Steps */}
-        <div className="mt-10 grid gap-4 sm:grid-cols-4">
-          <div className="rounded-[var(--radius-sm)] bg-[var(--color-surface-muted)] p-4 text-center border border-[var(--color-border-subtle)]">
-            <span className="text-xs font-extrabold text-[var(--color-action-primary)] uppercase">1. Você abre</span>
-            <p className="mt-1 text-xs text-[var(--color-ink-muted)]">No intervalo de 2 a 5 minutos no celular.</p>
-          </div>
-
-          <div className="rounded-[var(--radius-sm)] bg-[var(--color-surface-muted)] p-4 text-center border border-[var(--color-border-subtle)]">
-            <span className="text-xs font-extrabold text-[var(--color-action-primary)] uppercase">2. Entende o foco</span>
-            <p className="mt-1 text-xs text-[var(--color-ink-muted)]">Vê apenas a ação que merece sua atenção hoje.</p>
-          </div>
-
-          <div className="rounded-[var(--radius-sm)] bg-[var(--color-surface-muted)] p-4 text-center border border-[var(--color-border-subtle)]">
-            <span className="text-xs font-extrabold text-[var(--color-action-primary)] uppercase">3. Executa</span>
-            <p className="mt-1 text-xs text-[var(--color-ink-muted)]">Copia o roteiro em áudio ou texto e manda no WhatsApp.</p>
-          </div>
-
-          <div className="rounded-[var(--radius-sm)] bg-[var(--color-revenue-subtle)] p-4 text-center border border-[var(--color-revenue-primary)]/20">
-            <span className="text-xs font-extrabold text-[var(--color-revenue-primary)] uppercase">4. Segue seu dia</span>
-            <p className="mt-1 text-xs text-[var(--color-revenue-primary)] font-medium">Volta a atender suas clientes com tranquilidade.</p>
-          </div>
-        </div>
-
-        <div className="mt-8 pt-6 border-t border-[var(--color-border-subtle)] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[var(--color-ink-muted)]">
-          <span className="flex items-center gap-1.5 font-medium">
-            <Smartphone className="size-4 text-[var(--color-action-primary)]" />
-            Operado 100% com 1 polegar no celular
-          </span>
-          <span className="flex items-center gap-1.5 font-medium">
-            <Clock className="size-4 text-[var(--color-revenue-primary)]" />
-            Ações desenhadas para menos de 10 minutos
-          </span>
-          <span className="flex items-center gap-1.5 font-medium">
-            <ShieldCheck className="size-4 text-[var(--color-ink-solid)]" />
-            Zero teoria inútil ou jargões corporativos
-          </span>
         </div>
       </div>
     </section>

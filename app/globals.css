@@ -38,12 +38,23 @@
 
   /* Tipografia e Raios de Borda */
   --font-sans: var(--font-geist-sans), "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: var(--font-serif), "Playfair Display", Georgia, Cambria, serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   --radius-sm: 8px;
   --radius-button: 12px;
   --radius-card: 14px;
   --radius-pill: 9999px;
+
+  /* Cores Canônicas da Direção Editorial Agenda 80/20 */
+  --color-canvas-editorial: #FBF9F5;
+  --color-forest-editorial: #0C2A26;
+  --color-pine-editorial: #0E3D36;
+  --color-sage-editorial: #4E7A6E;
+  --color-sage-light: #E8F2EE;
+  --color-terracotta-editorial: #E07A5F;
+  --color-sand-editorial: #D4A373;
+  --color-sand-button: #C9A66B;
 
   /* Sombras Nítidas (Anti-Ghost Card com Blur <= 8px) */
   --shadow-card-resting: 0 1px 3px oklch(0.16 0.015 250 / 0.06), 0 1px 2px oklch(0.16 0.015 250 / 0.04);
