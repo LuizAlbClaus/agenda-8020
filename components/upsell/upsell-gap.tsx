@@ -13,13 +13,13 @@ export function UpsellGap() {
         </div>
 
         {/* Headline */}
-        <p className="text-xs sm:text-sm font-medium text-[#3D5650]">
-          Mas depois vem a pergunta:
+        <p className="text-xs sm:text-sm font-bold text-[#E07A5F] uppercase tracking-wider">
+          O obstáculo que faz 87% das profissionais desistirem:
         </p>
-        <h2 className="mt-1 text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[#0C2A26]">
-          E agora,{" "}
+        <h2 className="mt-1 text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-[#0C2A26] leading-tight">
+          Técnica Perfeita com Mesa Vazia{" "}
           <span className="relative inline-block text-[#E07A5F]">
-            como começo?
+            Não Paga Boleto.
             <span className="absolute bottom-0 left-0 w-full h-[3px] bg-[#E07A5F] rounded-full" />
           </span>
         </h2>
@@ -95,13 +95,13 @@ export function UpsellGap() {
           </div>
         </div>
 
-        {/* Calm Alert Card (White background matching 2.png) */}
-        <div className="mt-8 rounded-2xl bg-white border border-[#0C2A26]/10 p-4 shadow-sm flex items-center gap-3.5 text-left">
-          <div className="size-8 rounded-full bg-[#3D7164] flex items-center justify-center shrink-0 text-white font-serif font-bold text-base shadow-xs">
+        {/* Calm Alert Card Upgraded to Pain-Point Alert */}
+        <div className="mt-8 rounded-2xl bg-[#FFF5F2] border border-[#E07A5F]/30 p-4 shadow-sm flex items-center gap-3.5 text-left">
+          <div className="size-8 rounded-full bg-[#E07A5F] flex items-center justify-center shrink-0 text-white font-bold text-sm shadow-xs">
             !
           </div>
-          <p className="text-xs sm:text-sm text-[#2C4A43] leading-relaxed">
-            Você pode aprender Soft Gel e ainda ficar sem saber o que fazer para mostrar seu trabalho, encontrar suas primeiras oportunidades e conduzir uma conversa.
+          <p className="text-xs sm:text-sm text-[#7A2E1E] leading-relaxed font-medium">
+            <strong>A armadilha invisível:</strong> Aprender Soft Gel e esperar sentada que as clientes apareçam. Sem um método diário de 10 minutos para atrair clientes, os produtos e a cabine comprados acabam esquecidos na gaveta.
           </p>
         </div>
 
@@ -114,9 +114,9 @@ export function UpsellGap() {
           </div>
 
           <h3 className="text-xl sm:text-2xl font-extrabold text-[#0C2A26] text-balance">
-            Aprender a técnica é uma parte.{" "}
+            Dominar a técnica é só 50% do caminho.{" "}
             <span className="text-[#3D7164] block font-semibold text-base sm:text-lg mt-1">
-              Começar uma profissão exige um próximo movimento.
+              O Agenda 80/20 é o seguro que garante os outros 50%: clientes sentadas pagando R$ 150.
             </span>
           </h3>
         </div>
@@ -168,7 +168,7 @@ export function UpsellGap() {
             Soft Gel Express <span className="text-[#D4A373]">+</span> Agenda 80/20
           </p>
           <p className="text-xs sm:text-sm text-[#A8C5BD] mt-0.5">
-            O caminho completo para começar com segurança.
+            A técnica impecável nas mãos + O dinheiro das clientes no bolso.
           </p>
 
           {/* Direction Preview Mockup Snippet */}

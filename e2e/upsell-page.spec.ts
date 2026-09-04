@@ -10,14 +10,14 @@ test.describe("Landing Page de Upsell Soft Gel Express -> Agenda 80/20", () => {
 
     // SEÇÃO 1: Hero de Interrupção
     await expect(page.getByText(/Sua compra do Soft Gel Express foi confirmada/i)).toBeVisible();
-    await expect(page.getByRole("heading", { name: /^PARE\.$/i })).toBeVisible();
-    await expect(page.getByRole("heading", { name: /Antes de começar o curso, prepare o que vem depois da técnica/i })).toBeVisible();
-    await expect(page.getByRole("link", { name: /SIM, QUERO ADICIONAR O AGENDA 80\/20/i }).first()).toBeVisible();
+    await expect(page.getByRole("heading", { name: /^ESPERE\.$/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Como Recuperar 100% do Investimento do Soft Gel Express/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: /SIM! ADICIONAR O AGENDA 80\/20 AO MEU PEDIDO/i }).first()).toBeVisible();
 
     // SEÇÃO 2: A Lacuna Entre Aprender e Começar
     await expect(page.getByText(/Aprender é o primeiro passo/i)).toBeVisible();
-    await expect(page.getByRole("heading", { name: /E agora, como começo\?/i })).toBeVisible();
-    await expect(page.getByText(/Aprender a técnica é uma parte/i)).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Técnica Perfeita com Mesa Vazia Não Paga Boleto/i })).toBeVisible();
+    await expect(page.getByText(/Dominar a técnica é só 50% do caminho/i)).toBeVisible();
     await expect(page.getByText(/Técnica/i).first()).toBeVisible();
     await expect(page.getByText(/Direção/i).first()).toBeVisible();
 
@@ -43,7 +43,7 @@ test.describe("Landing Page de Upsell Soft Gel Express -> Agenda 80/20", () => {
 
     // SEÇÃO 7: O Que Acontece Quando Novas Situações Aparecem
     await expect(page.getByRole("heading", { name: /VOCÊ NÃO PRECISA DESCOBRIR TUDO SOZINHA\./i })).toBeVisible();
-    await expect(page.getByText("SOS Copiloto")).toBeVisible();
+    await expect(page.getByText("SOS Copiloto").first()).toBeVisible();
     await expect(page.getByText("Retenção").first()).toBeVisible();
     await expect(page.getByText("Diagnóstico de Valor").first()).toBeVisible();
 
@@ -58,12 +58,12 @@ test.describe("Landing Page de Upsell Soft Gel Express -> Agenda 80/20", () => {
 
     // SEÇÃO 10: Oferta, Belevy, FAQ e Fechamento
     await expect(page.getByRole("heading", { name: /Agora pode começar a colocar essa nova habilidade em movimento\./i })).toBeVisible();
-    await expect(page.getByText("147")).toBeVisible();
+    await expect(page.getByText("147", { exact: true })).toBeVisible();
     await expect(page.getByText(/Belevy pode ser uma continuação opcional/i)).toBeVisible();
     await expect(page.getByRole("heading", { name: /Dúvidas comuns sobre o Agenda 80\/20/i })).toBeVisible();
     await expect(page.getByRole("heading", { name: /Não saia com mais 20 coisas para fazer\./i })).toBeVisible();
     await expect(page.getByRole("link", { name: /QUERO COMEÇAR OS DOIS JUNTOS/i })).toBeVisible();
-    await expect(page.getByRole("link", { name: /Não quero adicionar o Agenda 80\/20 agora/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: /Não, eu prefiro aprender a técnica/i }).first()).toBeVisible();
   });
 
   test("2. Demonstração Interativa (Seção 5): deve alternar dinamicamente as recomendações conforme a fase", async ({ page }) => {
@@ -115,9 +115,9 @@ test.describe("Landing Page de Upsell Soft Gel Express -> Agenda 80/20", () => {
     await page.goto("/?lp=soft-gel&utm_source=test_source&utm_campaign=sge_upsell");
 
     await expect(page.getByText(/Sua compra do Soft Gel Express foi confirmada/i)).toBeVisible();
-    await expect(page.getByRole("heading", { name: /^PARE\.$/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /^ESPERE\.$/i })).toBeVisible();
 
-    const ctaLink = page.getByRole("link", { name: /SIM, QUERO ADICIONAR O AGENDA 80\/20/i }).first();
+    const ctaLink = page.getByRole("link", { name: /SIM! ADICIONAR O AGENDA 80\/20 AO MEU PEDIDO/i }).first();
     const href = await ctaLink.getAttribute("href");
     expect(href).toBeDefined();
 
@@ -150,7 +150,7 @@ test.describe("Landing Page de Upsell Soft Gel Express -> Agenda 80/20", () => {
       expect(hasHorizontalScroll, `Overflow horizontal detectado na viewport ${vp.name}`).toBe(false);
 
       // Verificar que o CTA principal é visível e tem altura mínima ergonômica de 48px
-      const ctaBtn = page.getByRole("link", { name: /SIM, QUERO ADICIONAR O AGENDA 80\/20/i }).first();
+      const ctaBtn = page.getByRole("link", { name: /SIM! ADICIONAR O AGENDA 80\/20 AO MEU PEDIDO/i }).first();
       await expect(ctaBtn).toBeVisible();
       const box = await ctaBtn.boundingBox();
       expect(box).not.toBeNull();

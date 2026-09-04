@@ -59,8 +59,8 @@ export interface VariantHeroConfig {
 export const VARIANT_HERO_DATA: Record<LandingVariant, VariantHeroConfig> = {
   cold: {
     eyebrow: "1 ação de cada vez · feita para o seu momento",
-    headline: "Pare de tentar fazer tudo para movimentar seu serviço.",
-    supportingHeadline: "Descubra qual é a próxima ação que realmente faz sentido fazer agora.",
+    headline: "Pare de postar sem retorno e acabe com os buracos na sua agenda.",
+    supportingHeadline: "Descubra exatamente o que fazer hoje no WhatsApp para fechar horários em 10 minutos.",
     subheadline:
       "Conte ao Agenda 80/20 como está seu negócio, quanto tempo você tem e onde está travando. Ele entende seu momento, escolhe uma única próxima ação e mostra como colocar esse movimento em prática.",
     primaryCta: "Montar meu primeiro plano",

@@ -9,6 +9,7 @@ type FunnelEvent =
   | "landing_page_view"
   | "landing_variant_viewed"
   | "hero_cta_clicked"
+  | "sticky_cta_clicked"
   | "pricing_viewed"
   | "checkout_redirect_clicked"
   | "downsell_modal_opened"

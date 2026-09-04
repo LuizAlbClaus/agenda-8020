@@ -1,5 +1,7 @@
 import { getCheckoutUrl } from "@/lib/checkout";
 import { UpsellTracker } from "./upsell-tracker";
+import { UpsellProgressHeader } from "./upsell-progress-header";
+import { UpsellStickyCta } from "./upsell-sticky-cta";
 import { UpsellHero } from "./upsell-hero";
 import { UpsellGap } from "./upsell-gap";
 import { UpsellBridge } from "./upsell-bridge";
@@ -40,6 +42,9 @@ export function UpsellView({ searchParams }: UpsellViewProps) {
       <UpsellTracker source="soft-gel-post-purchase" variant="soft-gel" />
 
       <div className="mx-auto w-full max-w-lg md:max-w-2xl lg:max-w-3xl overflow-hidden shadow-2xl bg-[#FBF9F5]">
+        {/* BARRA DE PROGRESSO & TIMER OTO REGRESSIVO */}
+        <UpsellProgressHeader />
+
         {/* SEÇÃO 1 — HERO DE INTERRUPÇÃO PÓS-COMPRA (1.png) */}
         <UpsellHero checkoutUrl={checkoutUrl} />
 
@@ -75,6 +80,9 @@ export function UpsellView({ searchParams }: UpsellViewProps) {
           <LandingFooter />
         </div>
       </div>
+
+      {/* BARRA FLUTUANTE DE CHECKOUT MOBILE (STICKY BOTTOM) */}
+      <UpsellStickyCta checkoutUrl={checkoutUrl} />
     </main>
   );
 }

@@ -68,20 +68,46 @@ export function UpsellOfferClosing({ checkoutUrl, declineUrl = "/checkout/sucess
             <span>📅 12 meses de acesso</span>
           </div>
 
-          {/* Price Block */}
-          <div className="mt-6 mb-2">
+          {/* Value Stack Breakdown */}
+          <div className="mt-4 rounded-2xl bg-[#09221F] border border-white/10 p-3.5 text-xs text-left space-y-1.5">
+            <div className="flex justify-between text-[#A8C5BD]">
+              <span>✓ Acesso Anual ao Agenda 80/20</span>
+              <span className="line-through">R$ 297</span>
+            </div>
+            <div className="flex justify-between text-[#A8C5BD]">
+              <span>✓ SOS Copiloto de Conversas WhatsApp</span>
+              <span className="line-through">R$ 97</span>
+            </div>
+            <div className="flex justify-between text-[#A8C5BD]">
+              <span>✓ 30 Dias de Belevy Pro (Secretária WhatsApp)</span>
+              <span className="line-through">R$ 59</span>
+            </div>
+            <div className="pt-1.5 border-t border-white/10 flex justify-between font-bold text-white">
+              <span>Valor Total Real:</span>
+              <span className="line-through text-[#E07A5F]">R$ 453</span>
+            </div>
+          </div>
+
+          {/* Price Block with Exclusive Discount Badge */}
+          <div className="mt-5 mb-2">
+            <span className="inline-block px-3 py-1 rounded-full bg-[#E07A5F] text-white text-[10px] font-black uppercase tracking-wider mb-2">
+              Economia Imediata de R$ 306 nesta tela
+            </span>
             <div className="flex items-baseline justify-center gap-1.5">
               <span className="text-2xl font-bold text-[#A8C5BD]">R$</span>
               <span className="text-6xl sm:text-7xl font-black text-white tracking-tight leading-none">
                 147
               </span>
             </div>
-            <p className="text-xs text-[#A8C5BD] uppercase tracking-wider mt-1">
-              pagamento único · ou 12x de R$ 15,19
+            <p className="text-xs text-[#A8C5BD] uppercase tracking-wider mt-1 font-semibold">
+              pagamento único · ou 12x de R$ 15,19 no cartão
+            </p>
+            <p className="text-[11px] text-[#D4A373] font-bold mt-1">
+              (Apenas R$ 0,50 por dia · 1 único atendimento de R$ 150 paga o ano inteiro)
             </p>
           </div>
 
-          <div className="w-16 h-0.5 bg-[#D4A373]/50 rounded-full mx-auto my-6" />
+          <div className="w-16 h-0.5 bg-[#D4A373]/50 rounded-full mx-auto my-5" />
 
           {/* Key Value Items with Icons */}
           <div className="space-y-4 text-left max-w-md mx-auto">
@@ -90,8 +116,8 @@ export function UpsellOfferClosing({ checkoutUrl, declineUrl = "/checkout/sucess
                 <Target className="size-5 text-[#D4A373]" />
               </div>
               <div>
-                <p className="text-sm font-bold text-white">Saiba o que priorizar</p>
-                <p className="text-xs text-[#A8C5BD]">Uma próxima ação adequada ao seu momento.</p>
+                <p className="text-sm font-bold text-white">Saiba o que priorizar hoje</p>
+                <p className="text-xs text-[#A8C5BD]">1 micro-ação em até 10 minutos para atrair clientes reais.</p>
               </div>
             </div>
 
@@ -100,8 +126,8 @@ export function UpsellOfferClosing({ checkoutUrl, declineUrl = "/checkout/sucess
                 <Footprints className="size-5 text-[#D4A373]" />
               </div>
               <div>
-                <p className="text-sm font-bold text-white">Saiba como começar</p>
-                <p className="text-xs text-[#A8C5BD]">Passos curtos e orientações práticas.</p>
+                <p className="text-sm font-bold text-white">Roteiros prontos para WhatsApp</p>
+                <p className="text-xs text-[#A8C5BD]">Mensagens consultivas para convidar modelos e clientes sem ser chata.</p>
               </div>
             </div>
 
@@ -110,8 +136,8 @@ export function UpsellOfferClosing({ checkoutUrl, declineUrl = "/checkout/sucess
                 <MessageCircle className="size-5 text-[#D4A373]" />
               </div>
               <div>
-                <p className="text-sm font-bold text-white">Tenha o que dizer</p>
-                <p className="text-xs text-[#A8C5BD]">Mensagens prontas para algumas conversas.</p>
+                <p className="text-sm font-bold text-white">Blindagem contra "achei caro"</p>
+                <p className="text-xs text-[#A8C5BD]">O que responder quando a cliente pede preço e some.</p>
               </div>
             </div>
           </div>
@@ -128,7 +154,7 @@ export function UpsellOfferClosing({ checkoutUrl, declineUrl = "/checkout/sucess
               </span>
             </div>
             <p className="text-[11px] text-[#A8C5BD] leading-snug">
-              Sua recepção automática: agendamentos pelo link na bio e lembretes anti-falta no WhatsApp para todas as suas clientes.
+              Sua secretária virtual: agendamentos pelo link na bio e lembretes automáticos anti-falta no WhatsApp para você nunca tomar bolo.
             </p>
           </div>
 
@@ -137,9 +163,9 @@ export function UpsellOfferClosing({ checkoutUrl, declineUrl = "/checkout/sucess
             <a
               href={checkoutUrl}
               onClick={() => handleCtaClick("offer_card")}
-              className="w-full min-h-[54px] rounded-2xl bg-[#E07A5F] hover:bg-[#D36A4F] active:scale-[0.98] text-white font-extrabold text-sm sm:text-base px-6 py-4 flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer"
+              className="w-full min-h-[56px] rounded-2xl bg-[#E07A5F] hover:bg-[#D36A4F] active:scale-[0.98] text-white font-black text-sm sm:text-base px-6 py-4 flex items-center justify-center gap-2 shadow-xl transition-all cursor-pointer uppercase tracking-wider"
             >
-              <span>SIM, QUERO ADICIONAR O AGENDA 80/20</span>
+              <span>SIM, QUERO ADICIONAR O AGENDA 80/20 (12x R$ 15,19)</span>
               <ArrowRight className="size-4.5 stroke-[2.5]" />
             </a>
           </div>
@@ -147,6 +173,17 @@ export function UpsellOfferClosing({ checkoutUrl, declineUrl = "/checkout/sucess
           <p className="mt-3 text-[11px] text-[#A8C5BD]">
             Acesso por 12 meses · Pagamento único · Garantia incondicional de 7 dias
           </p>
+
+          {/* Mid-card conscious decline option */}
+          <div className="mt-4 pt-3 border-t border-white/10">
+            <Link
+              href={declineUrl}
+              onClick={handleDeclineClick}
+              className="inline-block text-[11px] text-[#A8C5BD]/80 hover:text-white underline underline-offset-2 transition-colors cursor-pointer"
+            >
+              Não quero o desconto de R$ 150 e prefiro tentar conseguir clientes sozinha sem plano
+            </Link>
+          </div>
         </div>
 
         {/* VIP Included Benefit: Belevy Pro */}
@@ -254,14 +291,14 @@ export function UpsellOfferClosing({ checkoutUrl, declineUrl = "/checkout/sucess
             </a>
           </div>
 
-          {/* Secondary Decline Link */}
-          <div className="mt-5">
+          {/* Secondary Decline Link with Negative Choice */}
+          <div className="mt-5 max-w-sm mx-auto">
             <Link
               href={declineUrl}
               onClick={handleDeclineClick}
-              className="inline-block py-2.5 px-4 text-xs text-[#A8C5BD] hover:text-white underline underline-offset-4 transition-colors font-medium cursor-pointer"
+              className="inline-block py-2 px-3 text-[11px] text-[#A8C5BD] hover:text-white underline underline-offset-4 transition-colors font-medium cursor-pointer leading-relaxed"
             >
-              Não quero adicionar o Agenda 80/20 agora
+              Não, eu prefiro aprender a técnica e assumir o risco de ficar com a bancada vazia sem saber como atrair clientes (e abro mão do desconto de R$ 150)
             </Link>
           </div>
 

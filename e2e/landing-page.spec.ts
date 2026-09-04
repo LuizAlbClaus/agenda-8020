@@ -13,10 +13,10 @@ test.describe("Landing Page Modular do Agenda 80/20", () => {
     // 1. Hero checks
     await expect(page.getByText("1 ação de cada vez · feita para o seu momento")).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: /Pare de tentar fazer tudo para movimentar seu serviço/i })
+      page.getByRole("heading", { name: /Pare de postar sem retorno e acabe com os buracos na sua agenda/i })
     ).toBeVisible();
     await expect(
-      page.getByText("Descubra qual é a próxima ação que realmente faz sentido fazer agora")
+      page.getByText("Descubra exatamente o que fazer hoje no WhatsApp para fechar horários em 10 minutos")
     ).toBeVisible();
 
     // 2. Hero Mockup: Growth Coach protagonista
@@ -95,7 +95,7 @@ test.describe("Landing Page Modular do Agenda 80/20", () => {
     await expect(page.getByText("O que o Agenda 80/20 não promete")).toBeVisible();
 
     // 10. Oferta Principal e Downsell
-    await expect(page.getByText("12x de R$ 15,19", { exact: true })).toBeVisible();
+    await expect(page.getByText("12x de R$ 15,19").first()).toBeVisible();
     await expect(page.getByText(/R\$ 147 em pagamento único/i)).toBeVisible();
 
     // Testar modal de downsell
@@ -132,8 +132,8 @@ test.describe("Landing Page Modular do Agenda 80/20", () => {
 
     // Eyebrow e Headline de interrupção e continuidade pós-curso
     await expect(page.getByText(/Sua compra do Soft Gel Express foi confirmada/i)).toBeVisible();
-    await expect(page.getByRole("heading", { name: /^PARE\.$/i })).toBeVisible();
-    await expect(page.getByRole("link", { name: /SIM, QUERO ADICIONAR O AGENDA 80\/20/i }).first()).toBeVisible();
+    await expect(page.getByRole("heading", { name: /^ESPERE\.$/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: /SIM! ADICIONAR O AGENDA 80\/20 AO MEU PEDIDO/i }).first()).toBeVisible();
 
     // A versão soft-gel NÃO deve exibir o bloco longo do problema
     await expect(page.getByText("20 opções competindo pela sua atenção")).not.toBeVisible();

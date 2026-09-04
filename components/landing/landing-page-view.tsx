@@ -16,6 +16,7 @@ import { LandingBelevy } from "./landing-belevy";
 import { LandingFaq } from "./landing-faq";
 import { LandingClosing } from "./landing-closing";
 import { LandingFooter } from "./landing-footer";
+import { LandingStickyCta } from "./landing-sticky-cta";
 import { UpsellView } from "@/components/upsell/upsell-view";
 import { trackFunnelEvent } from "@/lib/client-analytics";
 
@@ -96,6 +97,9 @@ export function LandingPageView({ variant, searchParams }: LandingPageViewProps)
           <LandingFooter />
         </div>
       </div>
+
+      {/* Barra flutuante de conversão mobile */}
+      <LandingStickyCta />
     </main>
   );
 }

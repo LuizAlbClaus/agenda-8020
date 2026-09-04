@@ -87,9 +87,9 @@ export function LandingHero({ variant = "cold" }: LandingHeroProps) {
       <div className="mt-7 sm:mt-8 flex justify-center px-4">
         <Link
           href="#oferta"
-          className="inline-flex items-center justify-center gap-2.5 bg-[#0E3D36] hover:bg-[#0A2E29] text-white font-bold text-sm sm:text-base px-7 py-3.5 rounded-2xl shadow-md transition-all active:scale-98"
+          className="inline-flex items-center justify-center gap-2.5 bg-[#E07A5F] hover:bg-[#D36A4F] text-white font-extrabold text-sm sm:text-base px-8 py-3.5 rounded-2xl shadow-lg transition-all active:scale-98 cursor-pointer"
         >
-          <CalendarDays className="size-5 text-[#E07A5F]" />
+          <CalendarDays className="size-5 text-white" />
           <span>{config.primaryCta}</span>
         </Link>
       </div>

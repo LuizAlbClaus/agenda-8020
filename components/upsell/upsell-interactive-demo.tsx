@@ -171,9 +171,9 @@ export function UpsellInteractiveDemo({ checkoutUrl = "#oferta" }: UpsellInterac
 
                 <a
                   href={checkoutUrl}
-                  className="mt-3 w-full bg-[#E07A5F] hover:bg-[#D36A4F] text-white text-[11px] font-bold py-2 rounded-xl flex items-center justify-center gap-1.5 shadow-xs transition-colors"
+                  className="mt-3 w-full bg-[#E07A5F] hover:bg-[#D36A4F] text-white text-[11px] font-black py-2.5 rounded-xl flex items-center justify-center gap-1.5 shadow-md transition-colors uppercase tracking-wider"
                 >
-                  <span>Fazer essa ação</span>
+                  <span>Destravar este roteiro no Agenda 80/20</span>
                   <ArrowRight className="size-3" />
                 </a>
               </div>
@@ -185,6 +185,11 @@ export function UpsellInteractiveDemo({ checkoutUrl = "#oferta" }: UpsellInterac
             </div>
           </div>
         </div>
+
+        {/* Footnote below simulator */}
+        <p className="mt-4 text-xs text-[#6B857E] font-medium max-w-sm mx-auto">
+          ✦ Esta é apenas <strong>1 das 30+ ações com mensagens prontas</strong> que você desbloqueia no Agenda 80/20.
+        </p>
       </div>
     </section>
   );
