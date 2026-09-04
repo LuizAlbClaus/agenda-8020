@@ -125,24 +125,15 @@ test.describe("Landing Page Modular do Agenda 80/20", () => {
     ).toBeVisible();
   });
 
-  test("2. Variante SOFT-GEL (Upsell): Deve carregar o Hero contextual e a jornada técnica", async ({
+  test("2. Variante SOFT-GEL (Upsell): Deve carregar o fluxo de upsell dedicado", async ({
     page,
   }) => {
     await page.goto("/?lp=soft-gel");
 
-    // Eyebrow e Headline de continuidade
-    await expect(page.getByText("Seu próximo passo depois do Soft Gel Express")).toBeVisible();
-    await expect(
-      page.getByRole("heading", { name: /Aprender a técnica resolve uma parte do problema/i })
-    ).toBeVisible();
-    await expect(
-      page.getByText("Você já sabe o que fazer na bancada. Agora precisa saber o que fazer para movimentar sua clientela.")
-    ).toBeVisible();
-
-    // Ponte de jornada
-    await expect(page.getByText("A evolução lógica da sua carreira após o Soft Gel Express")).toBeVisible();
-    await expect(page.getByText("Etapa 1 Concluída")).toBeVisible();
-    await expect(page.getByText("Soft Gel Express").first()).toBeVisible();
+    // Eyebrow e Headline de interrupção e continuidade pós-curso
+    await expect(page.getByText(/Sua compra do Soft Gel Express foi confirmada/i)).toBeVisible();
+    await expect(page.getByRole("heading", { name: /^PARE\.$/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: /SIM, QUERO ADICIONAR O AGENDA 80\/20/i }).first()).toBeVisible();
 
     // A versão soft-gel NÃO deve exibir o bloco longo do problema
     await expect(page.getByText("20 opções competindo pela sua atenção")).not.toBeVisible();

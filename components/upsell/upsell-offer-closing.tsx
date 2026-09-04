@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { CheckCircle2, ArrowRight, Target, Footprints, MessageCircle, Sprout, ChevronDown, Check, ShieldCheck } from "lucide-react";
+import { CheckCircle2, ArrowRight, Target, Footprints, MessageCircle, ChevronDown, Check, ShieldCheck, Gift, Sparkles } from "lucide-react";
 import { UPSELL_FAQS } from "./upsell-types";
 import { trackFunnelEvent } from "@/lib/client-analytics";
 
@@ -116,8 +116,24 @@ export function UpsellOfferClosing({ checkoutUrl, declineUrl = "/checkout/sucess
             </div>
           </div>
 
+          {/* Immediate Action Bonus Tag: Belevy Pro */}
+          <div className="mt-6 rounded-2xl bg-[#0E3D36] border border-[#D4A373]/30 p-3.5 text-left">
+            <div className="flex flex-wrap items-center gap-2 mb-1">
+              <span className="inline-flex items-center gap-1 rounded-full bg-[#D4A373] text-[#0C2A26] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider">
+                <Gift className="size-2.5" />
+                Bônus Imediato
+              </span>
+              <span className="text-xs font-bold text-[#D4A373]">
+                30 Dias de Belevy Pro Inclusos <span className="text-[11px] font-normal text-[#A8C5BD]">(Sem fidelidade)</span>
+              </span>
+            </div>
+            <p className="text-[11px] text-[#A8C5BD] leading-snug">
+              Sua recepção automática: agendamentos pelo link na bio e lembretes anti-falta no WhatsApp para todas as suas clientes.
+            </p>
+          </div>
+
           {/* Big Primary CTA */}
-          <div className="mt-8">
+          <div className="mt-6">
             <a
               href={checkoutUrl}
               onClick={() => handleCtaClick("offer_card")}
@@ -133,15 +149,20 @@ export function UpsellOfferClosing({ checkoutUrl, declineUrl = "/checkout/sucess
           </p>
         </div>
 
-        {/* Belevy Optional Callout */}
-        <div className="mt-8 rounded-2xl bg-white border border-[#0C2A26]/10 p-4 shadow-xs flex items-center gap-3.5 text-left">
-          <div className="size-10 rounded-2xl bg-[#E8F2EE] flex items-center justify-center text-[#3D7164] shrink-0">
-            <Sprout className="size-5" />
+        {/* VIP Included Benefit: Belevy Pro */}
+        <div className="mt-8 rounded-2xl bg-white border border-[#0C2A26]/10 p-4 shadow-xs flex items-start gap-3.5 text-left">
+          <div className="size-10 rounded-2xl bg-[#E8F2EE] flex items-center justify-center text-[#3D7164] shrink-0 mt-0.5">
+            <Sparkles className="size-5" />
           </div>
-          <div>
-            <p className="text-xs text-slate-700 leading-relaxed">
-              Quando sua operação pedir mais estrutura, o <strong>Belevy pode ser uma continuação opcional</strong>.{" "}
-              <span className="text-[#3D7164] font-semibold">(30 dias de cortesia inclusos para você experimentar).</span>
+          <div className="space-y-1">
+            <p className="text-xs font-bold text-[#0C2A26]">
+              🎁 Passe VIP Liberado: 1 Mês de Recepção Automática (Belevy Pro)
+            </p>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              O Belevy pode ser uma continuação opcional para a sua operação. Você ganha <strong>30 dias de presente</strong> para testar na prática. O Agenda 80/20 atrai e reativa suas clientes; o Belevy cuida dos agendamentos e dispara confirmações no WhatsApp para você nunca tomar bolo.
+            </p>
+            <p className="text-[11px] font-semibold text-[#3D7164] pt-0.5">
+              ✓ Ativação opcional em 1 clique · Sem fidelidade nem cartão de crédito preso
             </p>
           </div>
         </div>
@@ -167,6 +188,8 @@ export function UpsellOfferClosing({ checkoutUrl, declineUrl = "/checkout/sucess
                 >
                   <button
                     type="button"
+                    id={`faq-trigger-${index}`}
+                    aria-controls={`faq-panel-${index}`}
                     onClick={() => toggleFaq(index)}
                     aria-expanded={isOpen}
                     className="w-full min-h-[52px] p-4 text-left font-bold text-xs sm:text-sm text-[#0C2A26] flex items-center justify-between gap-3 cursor-pointer hover:bg-slate-50/80"
@@ -180,7 +203,12 @@ export function UpsellOfferClosing({ checkoutUrl, declineUrl = "/checkout/sucess
                   </button>
 
                   {isOpen && (
-                    <div className="px-4 pb-4 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+                    <div
+                      id={`faq-panel-${index}`}
+                      role="region"
+                      aria-labelledby={`faq-trigger-${index}`}
+                      className="px-4 pb-4 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100"
+                    >
                       {faq.answer}
                     </div>
                   )}
@@ -231,7 +259,7 @@ export function UpsellOfferClosing({ checkoutUrl, declineUrl = "/checkout/sucess
             <Link
               href={declineUrl}
               onClick={handleDeclineClick}
-              className="text-xs text-[#A8C5BD] hover:text-white underline underline-offset-4 transition-colors font-medium cursor-pointer"
+              className="inline-block py-2.5 px-4 text-xs text-[#A8C5BD] hover:text-white underline underline-offset-4 transition-colors font-medium cursor-pointer"
             >
               Não quero adicionar o Agenda 80/20 agora
             </Link>

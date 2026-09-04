@@ -69,7 +69,7 @@ export const DEMO_PHASES: DemoPhase[] = [
   {
     id: "irregular_schedule",
     label: "Minha agenda está irregular",
-    badge: "Fase 5 · Otimização e Estabilidade",
+    badge: "Fase 5 · Agenda Firme e Estabilidade",
     actionTitle: "Crie uma oportunidade direta para os horários vagos",
     durationMinutes: 15,
     whyNow: "Ficar esperando as pessoas lembrarem de marcar deixa buracos na semana. Uma comunicação proativa e orientada a benefício preenche esses espaços.",
@@ -119,9 +119,9 @@ export const UPSELL_FAQS: UpsellFaq[] = [
       "Não é apenas um calendário. O coração do Agenda 80/20 é o sistema de recomendação de Próximo Movimento: ele diz exatamente qual ação pequena e prática você deve fazer hoje para movimentar seu serviço.",
   },
   {
-    question: "Preciso usar o Belevy?",
+    question: "O que é o Belevy e o que acontece após os 30 dias grátis?",
     answer:
-      "Não. O Agenda 80/20 funciona de forma 100% autônoma. O Belevy é apenas uma extensão opcional recomendada para quando sua grade crescer e você quiser lembretes automáticos anti-falta. Você ganha 30 dias de cortesia para testar se desejar.",
+      "O Belevy é o sistema de agendamento online com confirmações e lembretes automáticos via WhatsApp (sua recepção automática anti-falta). Ao entrar no Agenda 80/20 hoje, você ganha 30 dias de presente para testar. Se gostar e sua rotina crescer, pode continuar assinando por um valor bem acessível. Se não quiser, não há cobrança surpresa nem cartão preso, e seu acesso anual de 12 meses ao Agenda 80/20 continua ativo normalmente.",
   },
   {
     question: "Existe mensalidade?",

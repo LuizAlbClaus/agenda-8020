@@ -105,7 +105,7 @@ export function UpsellInteractiveDemo({ checkoutUrl = "#oferta" }: UpsellInterac
                       key={phase.id}
                       type="button"
                       onClick={() => handleSelect(phase.id)}
-                      className={`w-full min-h-[44px] px-3 py-2 rounded-xl text-left font-bold text-[11px] sm:text-xs transition-all flex items-center justify-between cursor-pointer ${
+                      className={`w-full min-h-[48px] px-3 py-2.5 rounded-xl text-left font-bold text-[11px] sm:text-xs transition-all flex items-center justify-between cursor-pointer ${
                         isSelected
                           ? "bg-[#0C2A26] text-white border-2 border-[#E07A5F] shadow-sm scale-[1.01]"
                           : "bg-white text-[#0C2A26] border border-slate-200/80 hover:bg-slate-50"

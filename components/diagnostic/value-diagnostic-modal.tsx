@@ -4,13 +4,17 @@ import * as React from "react";
 import { useState, useTransition } from "react";
 import { X, Sparkles, ArrowRight, ArrowLeft, Check, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { DiagnosticQuestionUI, ValueDiagnosticTrigger } from "@/lib/value-diagnostic-types";
+import type {
+  ActiveValueDiagnosticUI,
+  DiagnosticQuestionUI,
+  ValueDiagnosticTrigger,
+} from "@/lib/value-diagnostic-types";
 import { submitValueDiagnosticAction } from "@/app/diagnostic/actions";
 
 interface ValueDiagnosticModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onDiagnosticComplete: (diagnosticData: any) => void;
+  onDiagnosticComplete: (diagnosticData: ActiveValueDiagnosticUI) => void;
   workspaceId: string;
   triggerSource?: ValueDiagnosticTrigger;
   questions: DiagnosticQuestionUI[];

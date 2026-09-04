@@ -1,294 +1,281 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import {
-  ArrowLeft,
-  Calendar,
+  ArrowRight,
   Check,
-  CheckCheck,
-  Clock,
+  Clock3,
   Copy,
-  HelpCircle,
-  Lock,
-  MessageSquare,
-  Sparkles,
-  Target,
-  Users,
-  Wifi,
+  Mic,
+  Zap,
 } from "lucide-react";
+import { DEMO_SITUATIONS, type DemoSituation } from "./types";
+import { trackFunnelEvent } from "@/lib/client-analytics";
 import { cn } from "@/lib/utils";
 
-const demoOptions = [
-  {
-    id: "reabrir",
-    icon: Users,
-    label: "Reabra uma conversa com duas clientes que já tiveram uma boa experiência",
-    duration: "10 minutos",
-    whyNow: "Clientes satisfeitas são suas melhores fontes de novos serviços, indicações e recorrência.",
-    steps: [
-      "Vamos identificar duas clientes que já tiveram uma boa experiência com seu trabalho.",
-      "Você vai enviar uma mensagem curta e personalizada usando o modelo sugerido.",
-      "Elas respondem, você retoma o relacionamento e abre espaço para um novo atendimento.",
-    ],
-    whatsappScript:
-      "Oi, [cliente]! Tudo bem? Lembrei de você e de como foi especial trabalhar juntas da última vez. ✨\n\nQuero te contar que estou com novidades e agenda aberta para [serviço que você oferece].\n\nPosso te mostrar?",
-  },
-  {
-    id: "preencher",
-    icon: Calendar,
-    label: "Preencha minha agenda com novos atendimentos",
-    duration: "15 minutos",
-    whyNow: "Antecipar a semana elimina o estresse do dia a dia e garante faturamento previsível.",
-    steps: [
-      "Identifique os horários que você mais quer preencher nesta semana.",
-      "Selecione 3 contatos de alto potencial para um convite direto.",
-      "Dispare a proposta e confirme as marcações na hora.",
-    ],
-    whatsappScript:
-      "Oi, [cliente]! Estou finalizando a escala da semana e separei duas opções de horários especiais. Quer aproveitar um deles?",
-  },
-  {
-    id: "orcamentos",
-    icon: MessageSquare,
-    label: "Transforme orçamentos em serviços contratados",
-    duration: "8 minutos",
-    whyNow: "Quem pediu orçamento tem interesse quente, mas esfria se não houver um retorno no momento certo.",
-    steps: [
-      "Localize os orçamentos enviados nos últimos 5 dias sem resposta.",
-      "Envie uma mensagem curta quebrando a objeção principal.",
-      "Conduza a conversa para a confirmação de data.",
-    ],
-    whatsappScript:
-      "Oi, [cliente]! Passando rapidinho para saber se ficou alguma dúvida sobre o orçamento que te passei. Posso te ajudar a encaixar um horário?",
-  },
-  {
-    id: "semana",
-    icon: Target,
-    label: "Organize minha semana com foco no que dá resultado",
-    duration: "12 minutos",
-    whyNow: "Ter clareza do objetivo da semana economiza horas de indecisão e evita esforço desperdiçado.",
-    steps: [
-      "Defina a sua única prioridade comercial da semana.",
-      "Bloqueie horários de atendimento e reserve 15 minutos para prospecção.",
-      "Execute as micro-tarefas sugeridas com tranquilidade.",
-    ],
-    whatsappScript:
-      "Olá! Minha agenda da semana está aberta com foco especial em novos atendimentos. Vamos agendar seu momento?",
-  },
-];
-
 export function LandingDemo() {
-  const [selectedId, setSelectedId] = useState("reabrir");
+  const [selectedId, setSelectedId] = useState<string>("first_clients");
+  const [scriptMode, setScriptMode] = useState<"text" | "audio">("text");
   const [copied, setCopied] = useState(false);
 
-  const active = demoOptions.find((o) => o.id === selectedId) ?? demoOptions[0];
+  const current: DemoSituation =
+    DEMO_SITUATIONS.find((s) => s.id === selectedId) ?? DEMO_SITUATIONS[0];
+
+  const handleSelectSituation = (id: string) => {
+    setSelectedId(id);
+    trackFunnelEvent("demo_situation_changed", { situation_id: id });
+  };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(active.whatsappScript);
+    const content = scriptMode === "text" ? current.textScript : current.audioScript;
+    navigator.clipboard.writeText(content);
     setCopied(true);
+    trackFunnelEvent("demo_script_copied", {
+      source: "interactive_demo",
+      situation_id: current.id,
+      mode: scriptMode,
+    });
     setTimeout(() => setCopied(false), 2500);
   };
 
   return (
-    <section className="relative pt-12 pb-16 overflow-hidden">
-      {/* Badge: SEÇÃO 5 — DEMONSTRAÇÃO */}
-      <div className="flex justify-center px-4 mb-3">
-        <span className="inline-flex items-center rounded-full border border-[#E07A5F]/40 bg-white/60 px-4 py-1 text-xs font-bold text-[#E07A5F] tracking-wide">
-          SEÇÃO 5 — DEMONSTRAÇÃO
+    <section
+      id="demonstracao"
+      aria-labelledby="demo-heading"
+      className="scroll-mt-12 border-t border-[var(--color-border-subtle)] py-14 sm:py-20"
+    >
+      <div className="mx-auto max-w-3xl text-center">
+        <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-action-primary)]">
+          Demonstração Interativa
         </span>
-      </div>
-
-      {/* Headline */}
-      <div className="text-center px-4 mb-10 max-w-xl mx-auto">
-        <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-[-0.03em] text-[#0C2A26] leading-[1.18]">
-          Veja como seriam seus primeiros minutos no{" "}
-          <span className="text-[#4E7A6E]">Agenda 80/20.</span>
+        <h2
+          id="demo-heading"
+          className="mt-3 text-2xl font-extrabold tracking-tight text-balance text-[var(--color-ink-solid)] sm:text-4xl"
+        >
+          Veja como seriam seus primeiros minutos no Agenda 80/20.
         </h2>
+        <p className="mt-4 text-base leading-relaxed text-[var(--color-ink-muted)] text-pretty sm:text-lg">
+          Selecione a sua situação atual e veja como o sistema reorganiza a prioridade, explica o motivo e entrega os passos práticos:
+        </p>
       </div>
 
-      {/* 2-Column Desktop / Stacked Mobile */}
-      <div className="max-w-4xl mx-auto px-4 grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
-        {/* Left Column: Selector & WhatsApp Message */}
-        <div className="space-y-6">
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <div className="size-6 rounded-full border border-slate-300 flex items-center justify-center text-slate-600">
-                <HelpCircle className="size-3.5" />
-              </div>
-              <p className="text-sm font-bold text-[#0C2A26]">
-                Qual dessas situações mais parece com você?
-              </p>
-            </div>
+      <div className="mt-12 mx-auto max-w-5xl grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+        {/* Left Column: Situation Selector */}
+        <div className="space-y-3">
+          <p className="text-xs font-bold uppercase tracking-wider text-[var(--color-ink-muted)] px-1">
+            Qual dessas situações mais parece com você hoje?
+          </p>
 
-            {/* 4 Cards Selector */}
-            <div className="space-y-2.5">
-              {demoOptions.map((item) => {
-                const Icon = item.icon;
-                const isSelected = item.id === selectedId;
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => setSelectedId(item.id)}
-                    className={cn(
-                      "w-full flex items-center gap-3 p-3.5 rounded-2xl border text-left transition-all cursor-pointer",
-                      isSelected
-                        ? "bg-[#0E3D36] text-white border-[#0E3D36] shadow-sm"
-                        : "bg-white text-slate-800 border-slate-200/80 hover:border-slate-300"
-                    )}
-                  >
-                    <div
+          <div className="space-y-2.5" role="radiogroup" aria-label="Situações do seu negócio">
+            {DEMO_SITUATIONS.map((situation) => {
+              const isSelected = situation.id === current.id;
+              return (
+                <button
+                  key={situation.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={isSelected}
+                  onClick={() => handleSelectSituation(situation.id)}
+                  className={cn(
+                    "w-full text-left p-4 rounded-[var(--radius-card)] border transition-all cursor-pointer flex items-center justify-between gap-3 min-h-[52px]",
+                    isSelected
+                      ? "border-2 border-[var(--color-action-primary)] bg-[var(--color-action-subtle)] shadow-xs"
+                      : "border-[var(--color-border-subtle)] bg-[var(--color-surface-card)] hover:border-[var(--color-border-strong)]"
+                  )}
+                >
+                  <div className="flex items-center gap-3">
+                    <span
                       className={cn(
-                        "size-9 rounded-full flex items-center justify-center shrink-0",
-                        isSelected ? "bg-emerald-800 text-white" : "bg-emerald-50 text-[#0E3D36]"
+                        "flex size-5 shrink-0 items-center justify-center rounded-full border text-xs font-bold",
+                        isSelected
+                          ? "border-[var(--color-action-primary)] bg-[var(--color-action-primary)] text-white"
+                          : "border-[var(--color-border-strong)] bg-white text-transparent"
                       )}
                     >
-                      <Icon className="size-4" />
-                    </div>
-                    <span className="text-xs sm:text-sm font-semibold leading-snug">
-                      {item.label}
+                      ✓
                     </span>
-                  </button>
-                );
-              })}
-            </div>
+                    <div>
+                      <p
+                        className={cn(
+                          "text-xs sm:text-sm font-bold",
+                          isSelected
+                            ? "text-[var(--color-action-primary)]"
+                            : "text-[var(--color-ink-solid)]"
+                        )}
+                      >
+                        {situation.label}
+                      </p>
+                      <span className="text-[10px] text-[var(--color-ink-muted)]">
+                        {situation.badge}
+                      </span>
+                    </div>
+                  </div>
+
+                  <ArrowRight
+                    className={cn(
+                      "size-4 shrink-0 transition-transform",
+                      isSelected
+                        ? "text-[var(--color-action-primary)] translate-x-1"
+                        : "text-[var(--color-ink-muted)] opacity-50"
+                    )}
+                  />
+                </button>
+              );
+            })}
           </div>
 
-          {/* WhatsApp Chat Bubble */}
-          <div className="relative pt-2">
-            <div className="relative rounded-2xl rounded-tl-xs bg-[#DCF7C5] p-4 text-slate-900 shadow-sm max-w-sm border border-emerald-300/40">
-              <p className="text-xs whitespace-pre-line leading-relaxed font-sans text-slate-800">
-                {active.whatsappScript}
-              </p>
-              <div className="mt-2 flex items-center justify-end gap-1 text-[10px] text-slate-500 font-medium">
-                <span>09:41</span>
-                <CheckCheck className="size-3.5 text-sky-600" />
-              </div>
-            </div>
-
-            {/* Handwritten Note Annotation */}
-            <div className="mt-2 text-center max-w-xs">
-              <span className="text-xs font-serif italic text-[#3B6F63]">
-                Mensagem pronta para enviar
-              </span>
-              <div className="w-16 h-0.5 border-b border-dashed border-[#3B6F63] mx-auto mt-0.5" />
-            </div>
+          <div className="rounded-[var(--radius-sm)] bg-[var(--color-surface-muted)] p-3.5 border border-[var(--color-border-subtle)] text-xs text-[var(--color-ink-muted)]">
+            💡 <strong>Sem adivinhação:</strong> Na vida real, o Agenda 80/20 aprende suas respostas no primeiro check-in rápido de 2 minutos.
           </div>
         </div>
 
-        {/* Right Column: Phone Mockup with Step by Step Execution */}
-        <div className="flex justify-center">
-          <div className="w-full max-w-[340px] sm:max-w-[365px] rounded-[44px] bg-slate-900 p-2.5 sm:p-3 shadow-2xl ring-1 ring-slate-800">
-            <div className="rounded-[36px] bg-[#0E3D36] overflow-hidden text-left text-white border border-slate-200/20 flex flex-col">
-              {/* Status Bar */}
-              <div className="pt-2.5 pb-1 px-6 flex items-center justify-between text-[11px] font-bold text-emerald-100">
-                <span>9:41</span>
-                <div className="w-20 h-4 bg-black rounded-full flex items-center justify-end px-1.5 gap-1">
-                  <div className="size-1.5 rounded-full bg-slate-800" />
-                  <div className="size-2 rounded-full bg-blue-950/40" />
-                </div>
-                <div className="flex items-center gap-1.5 text-emerald-200">
-                  <Wifi className="size-3" />
-                  <div className="w-4 h-2 border border-emerald-200 rounded-xs flex items-center p-0.5">
-                    <div className="w-2.5 h-1 bg-emerald-200 rounded-2xs" />
-                  </div>
-                </div>
+        {/* Right Column: Reactive Product Interface Showcase */}
+        <div className="overflow-hidden rounded-[var(--radius-card)] border-2 border-[var(--color-border-strong)] bg-[var(--color-surface-card)] shadow-[var(--shadow-card-elevated)]">
+          {/* Top Bar of the App Mockup */}
+          <div className="flex items-center justify-between border-b border-[var(--color-border-subtle)] bg-[var(--color-surface-muted)] px-4 py-3 sm:px-5">
+            <div className="flex items-center gap-2">
+              <span className="flex size-2 rounded-full bg-[var(--color-revenue-primary)]" />
+              <span className="text-xs font-bold text-[var(--color-ink-solid)]">
+                Painel Hoje · Simulação
+              </span>
+            </div>
+            <span className="inline-flex items-center rounded-[var(--radius-pill)] bg-white px-2.5 py-0.5 text-[11px] font-bold text-[var(--color-action-primary)] border border-[var(--color-border-subtle)] shadow-xs">
+              {current.serviceExample}
+            </span>
+          </div>
+
+          <div className="p-4 sm:p-6 space-y-4">
+            {/* Focus Card */}
+            <div className="rounded-[var(--radius-sm)] border border-[var(--color-action-primary)]/20 bg-[var(--color-action-subtle)] p-3 sm:p-4">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-action-primary)]">
+                Seu foco agora
+              </p>
+              <p className="mt-1 text-xs sm:text-sm font-semibold text-[var(--color-ink-solid)] leading-snug">
+                {current.currentFocus}
+              </p>
+            </div>
+
+            {/* Action Card */}
+            <div className="rounded-[var(--radius-card)] border border-[var(--color-border-subtle)] bg-white p-4 sm:p-5 shadow-xs">
+              <div className="flex items-center justify-between border-b border-[var(--color-border-subtle)] pb-2.5">
+                <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-[var(--color-action-primary)]">
+                  <Zap className="size-3" />
+                  Próxima ação recomendada
+                </span>
+                <span className="inline-flex items-center gap-1 rounded-[var(--radius-pill)] bg-[var(--color-surface-muted)] px-2.5 py-0.5 text-xs font-semibold text-[var(--color-ink-muted)]">
+                  <Clock3 className="size-3" />
+                  {current.durationMinutes} min
+                </span>
               </div>
 
-              {/* Screen Content */}
-              <div className="p-4 space-y-3.5">
-                {/* Top Nav inside phone */}
-                <div className="flex items-center justify-between">
-                  <ArrowLeft className="size-4 text-emerald-200" />
-                  <div className="size-7 rounded-full bg-emerald-700/50 flex items-center justify-center text-emerald-100">
-                    <Check className="size-4 stroke-[2.5]" />
+              <h3 className="mt-3 text-base sm:text-lg font-bold text-[var(--color-ink-solid)] leading-snug">
+                {current.actionTitle}
+              </h3>
+
+              {/* Por que agora */}
+              <div className="mt-3 rounded-[var(--radius-sm)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-muted)] p-3 text-xs leading-relaxed">
+                <p className="font-bold text-[10px] uppercase tracking-wider text-[var(--color-action-primary)]">
+                  Por que agora:
+                </p>
+                <p className="mt-0.5 text-[var(--color-ink-muted)]">
+                  {current.whyNow}
+                </p>
+              </div>
+
+              {/* 3 Passos */}
+              <div className="mt-3 space-y-2">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-[var(--color-ink-solid)]">
+                  Passo a passo recomendado:
+                </p>
+                <ol className="space-y-1.5 text-xs text-[var(--color-ink-solid)]">
+                  {current.steps.map((step, idx) => (
+                    <li key={idx} className="flex items-start gap-2">
+                      <span className="flex size-4 shrink-0 items-center justify-center rounded-full bg-[var(--color-action-primary)] text-[10px] font-bold text-white mt-0.5">
+                        {idx + 1}
+                      </span>
+                      <span className="leading-snug">{step}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+
+              {/* Roteiro com abas Texto / Áudio */}
+              <div className="mt-4 pt-3 border-t border-[var(--color-border-subtle)]">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-[var(--color-ink-muted)]">
+                    Sugestão de mensagem para WhatsApp:
+                  </p>
+                  <div className="inline-flex p-0.5 rounded-[var(--radius-pill)] bg-[var(--color-surface-muted)] border border-[var(--color-border-subtle)]">
+                    <button
+                      type="button"
+                      onClick={() => setScriptMode("text")}
+                      className={cn(
+                        "px-2.5 py-0.5 rounded-[var(--radius-pill)] text-[11px] font-bold transition-all cursor-pointer",
+                        scriptMode === "text"
+                          ? "bg-white text-[var(--color-action-primary)] shadow-xs"
+                          : "text-[var(--color-ink-muted)]"
+                      )}
+                    >
+                      Texto
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setScriptMode("audio")}
+                      className={cn(
+                        "px-2.5 py-0.5 rounded-[var(--radius-pill)] text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1",
+                        scriptMode === "audio"
+                          ? "bg-white text-[var(--color-action-primary)] shadow-xs"
+                          : "text-[var(--color-ink-muted)]"
+                      )}
+                    >
+                      <Mic className="size-2.5" />
+                      <span>Áudio</span>
+                    </button>
                   </div>
                 </div>
 
-                {/* Title */}
-                <h3 className="text-sm sm:text-base font-bold text-white leading-snug">
-                  {active.label}
-                </h3>
-
-                {/* Time Tag */}
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-800/80 px-2.5 py-1 text-[11px] font-semibold text-emerald-100">
-                  <Clock className="size-3" />
-                  <span>{active.duration}</span>
-                </span>
-
-                {/* Main Instruction Card (White) */}
-                <div className="rounded-2xl bg-white p-3.5 text-slate-800 space-y-3 shadow-sm">
-                  <div>
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-[#0E3D36] flex items-center gap-1">
-                      <Sparkles className="size-3 text-[#E07A5F]" />
-                      Por que agora?
+                <div className="rounded-[var(--radius-sm)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-muted)] p-3 text-xs leading-relaxed font-sans">
+                  {scriptMode === "text" ? (
+                    <p className="italic text-[var(--color-ink-solid)] select-all">
+                      “{current.textScript}”
                     </p>
-                    <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">
-                      {active.whyNow}
-                    </p>
-                  </div>
+                  ) : (
+                    <div>
+                      <p className="text-[10px] font-bold text-[var(--color-action-primary)] mb-1">
+                        🎙️ Roteiro de Áudio (~{current.audioSeconds}s) · Tom: {current.audioTone}
+                      </p>
+                      <p className="italic text-[var(--color-ink-solid)] select-all">
+                        “{current.audioScript}”
+                      </p>
+                    </div>
+                  )}
+                </div>
 
-                  <div className="h-px bg-slate-100" />
-
-                  {/* 3 Numbered Steps */}
-                  <div className="space-y-2">
-                    {active.steps.map((st, i) => (
-                      <div key={i} className="flex items-start gap-2.5 text-xs text-slate-700">
-                        <span className="size-4 rounded-full bg-[#0E3D36] text-white text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
-                          {i + 1}
-                        </span>
-                        <span className="leading-snug">{st}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Copy Button */}
+                <div className="mt-3 flex items-center justify-between gap-2">
+                  <span className="text-[11px] text-[var(--color-revenue-primary)] font-medium truncate">
+                    ✓ {current.outcomeNote}
+                  </span>
                   <button
                     type="button"
                     onClick={handleCopy}
-                    className="w-full flex items-center justify-center gap-2 bg-[#0E3D36] hover:bg-[#0A2E29] text-white text-xs font-bold py-2.5 rounded-xl transition-all shadow-xs cursor-pointer active:scale-98"
+                    className="inline-flex min-h-[38px] items-center justify-center gap-1.5 rounded-[var(--radius-button)] bg-[var(--color-action-primary)] px-4 text-xs font-bold text-white shadow-xs hover:bg-[var(--color-action-hover)] transition-all cursor-pointer shrink-0"
                   >
                     {copied ? (
                       <>
-                        <Check className="size-3.5 text-emerald-300" />
-                        <span>Mensagem copiada!</span>
+                        <Check className="size-3.5 text-white" />
+                        <span>Copiado!</span>
                       </>
                     ) : (
                       <>
                         <Copy className="size-3.5" />
-                        <span>Copiar mensagem</span>
+                        <span>Copiar Mensagem</span>
                       </>
                     )}
                   </button>
                 </div>
               </div>
-
-              {/* Bottom Home Indicator */}
-              <div className="pb-2 pt-1 flex justify-center">
-                <div className="w-28 h-1 bg-slate-600 rounded-full" />
-              </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Bottom Full-Width Banner */}
-      <div className="max-w-4xl mx-auto px-4 mt-8">
-        <div className="rounded-2xl bg-[#082420] text-white p-4 sm:p-5 flex items-center justify-between shadow-lg">
-          <div className="flex items-center gap-3">
-            <div className="size-10 rounded-full border border-[#D4A373]/60 bg-[#0E3D36] flex items-center justify-center text-[#D4A373] shrink-0">
-              <Lock className="size-4" />
-            </div>
-            <div>
-              <p className="text-xs sm:text-sm font-bold text-white">
-                Simples, rápido e estratégico.
-              </p>
-              <p className="text-[11px] sm:text-xs text-[#7FA898]">
-                Feito para quem vive da própria agenda.
-              </p>
-            </div>
-          </div>
-          <Sparkles className="size-5 text-[#D4A373] shrink-0" />
         </div>
       </div>
     </section>

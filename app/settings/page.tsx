@@ -6,6 +6,7 @@ import { canAccessAgenda } from "@/lib/supabase/access";
 import { createClient } from "@/lib/supabase/server";
 import SettingsForm from "./settings-form";
 import PrivacyRequests from "./privacy-requests";
+import { InstallAppCard } from "@/components/install-app-card";
 import type { NotificationPreferences, ReminderPeriod } from "./actions";
 
 type JsonRecord = Record<string, unknown>;
@@ -117,6 +118,9 @@ export default async function SettingsPage() {
             Gerencie seus lembretes operacionais, parcerias conectadas e solicitações de privacidade.
           </p>
         </div>
+
+        {/* Mobile App Installation Card (Android & iOS) */}
+        <InstallAppCard />
 
         {/* Partner Benefits Card Link */}
         <section aria-label="Gerenciar benefícios e parcerias" className="mt-6">

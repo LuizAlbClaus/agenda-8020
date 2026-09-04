@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import {
@@ -21,7 +21,7 @@ const scenarios = [
   {
     id: "comecando",
     icon: Sprout,
-    label: "Estou começando",
+    label: "Estou começando e ainda não tenho clientes",
     recommendation: "Criar sua oferta inicial e atrair suas 3 primeiras clientes-teste.",
     highlight: "primeiras clientes-teste.",
   },

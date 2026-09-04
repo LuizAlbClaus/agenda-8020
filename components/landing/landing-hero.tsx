@@ -1,19 +1,23 @@
-﻿"use client";
+"use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
   Bell,
   CalendarDays,
+  Check,
   Clock,
+  Copy,
   Lightbulb,
   Menu,
+  Mic,
   Sparkles,
   Wifi,
 } from "lucide-react";
 import { EditorialUnderline } from "./editorial-highlight";
-import type { LandingVariant } from "./types";
+import { VARIANT_HERO_DATA, type LandingVariant } from "./types";
 
 interface LandingHeroProps {
   variant?: LandingVariant;
@@ -21,6 +25,20 @@ interface LandingHeroProps {
 }
 
 export function LandingHero({ variant = "cold" }: LandingHeroProps) {
+  const config = VARIANT_HERO_DATA[variant] || VARIANT_HERO_DATA.cold;
+  const [scriptMode, setScriptMode] = useState<"text" | "audio">("text");
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyScript = async () => {
+    try {
+      await navigator.clipboard.writeText(config.heroMockupTextScript);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // ignore
+    }
+  };
+
   return (
     <section className="relative overflow-hidden pt-8 pb-14 sm:pt-12 sm:pb-20 text-center">
       {/* Background Subtle Organic Foliage (Bottom Left) */}
@@ -47,15 +65,22 @@ export function LandingHero({ variant = "cold" }: LandingHeroProps) {
         />
       </div>
 
+      {/* Eyebrow Badge */}
+      <div className="flex justify-center mb-4 px-4">
+        <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#0E3D36]/8 text-[#0E3D36] text-xs sm:text-sm font-semibold border border-[#0E3D36]/15">
+          <Sparkles className="size-3.5 text-[#E07A5F]" />
+          <span>{config.eyebrow}</span>
+        </span>
+      </div>
+
       {/* Headline */}
       <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-[-0.035em] text-[#0C2A26] leading-[1.18] max-w-xl mx-auto px-4 text-balance">
-        Pare de tentar fazer tudo para movimentar seu serviço.
+        {config.headline}
       </h1>
 
       {/* Subheadline */}
       <p className="mt-4 text-sm sm:text-base md:text-lg text-[#3D5650] max-w-md mx-auto px-4 leading-relaxed font-medium">
-        Descubra qual é a próxima ação que realmente faz sentido fazer{" "}
-        <EditorialUnderline color="coral">agora.</EditorialUnderline>
+        {config.supportingHeadline}
       </p>
 
       {/* Primary CTA Button */}
@@ -65,7 +90,7 @@ export function LandingHero({ variant = "cold" }: LandingHeroProps) {
           className="inline-flex items-center justify-center gap-2.5 bg-[#0E3D36] hover:bg-[#0A2E29] text-white font-bold text-sm sm:text-base px-7 py-3.5 rounded-2xl shadow-md transition-all active:scale-98"
         >
           <CalendarDays className="size-5 text-[#E07A5F]" />
-          <span>Montar meu primeiro plano</span>
+          <span>{config.primaryCta}</span>
         </Link>
       </div>
 
@@ -125,22 +150,31 @@ export function LandingHero({ variant = "cold" }: LandingHeroProps) {
                     Seu próximo movimento está pronto
                   </p>
                 </div>
-                <div className="w-8 h-0.5 bg-emerald-600/60 rounded-full mx-auto mb-3" />
+
+                {/* Box: Seu foco agora */}
+                <div className="rounded-xl bg-emerald-900/40 p-2.5 mb-2.5 border border-emerald-700/30 text-left">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-300">
+                    Seu foco agora
+                  </p>
+                  <p className="mt-0.5 text-xs text-emerald-100 font-medium">
+                    {config.heroMockupFocus}
+                  </p>
+                </div>
 
                 {/* Inner Action Card */}
-                <div className="rounded-xl bg-white p-3 text-slate-900 shadow-xs">
-                  <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">
-                    Ação sugerida
-                  </p>
-                  <p className="mt-1 text-xs font-bold text-[#0C2A26] leading-snug">
-                    Reative algumas clientes que já tiveram contato com seu serviço.
-                  </p>
-                  <div className="mt-2">
+                <div className="rounded-xl bg-white p-3 text-slate-900 shadow-xs text-left">
+                  <div className="flex items-center justify-between mb-1">
+                    <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">
+                      Ação sugerida
+                    </p>
                     <span className="inline-flex items-center gap-1 rounded-full bg-[#FEECE6] px-2 py-0.5 text-[10px] font-semibold text-[#D96B43]">
                       <Clock className="size-2.5" />
-                      <span>10 min</span>
+                      <span>{config.heroMockupDuration} min estimados</span>
                     </span>
                   </div>
+                  <p className="mt-1 text-xs font-bold text-[#0C2A26] leading-snug">
+                    {config.heroMockupTitle}
+                  </p>
                 </div>
 
                 {/* Card Action Button */}
@@ -151,10 +185,78 @@ export function LandingHero({ variant = "cold" }: LandingHeroProps) {
                   <span>Fazer essa ação</span>
                   <ArrowRight className="size-3.5" />
                 </Link>
+
+                {/* Roteiro de WhatsApp com abas Texto / Áudio */}
+                <div className="mt-3 pt-2.5 border-t border-emerald-700/40 text-left">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] font-bold text-emerald-200 uppercase tracking-wider">
+                      Roteiro de WhatsApp:
+                    </span>
+                    <div className="inline-flex p-0.5 rounded-full bg-emerald-900/60 border border-emerald-700/50">
+                      <button
+                        type="button"
+                        onClick={() => setScriptMode("text")}
+                        className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold transition-all cursor-pointer ${
+                          scriptMode === "text"
+                            ? "bg-white text-[#0E3D36] shadow-xs"
+                            : "text-emerald-200"
+                        }`}
+                      >
+                        Texto
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setScriptMode("audio")}
+                        className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                          scriptMode === "audio"
+                            ? "bg-white text-[#0E3D36] shadow-xs"
+                            : "text-emerald-200"
+                        }`}
+                      >
+                        <Mic className="size-2.5" />
+                        <span>Áudio</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="rounded-lg bg-emerald-950/50 p-2 text-[11px] text-emerald-100 leading-relaxed border border-emerald-800/40">
+                    {scriptMode === "text" ? (
+                      <p className="italic select-all">“{config.heroMockupTextScript}”</p>
+                    ) : (
+                      <div>
+                        <p className="text-[9px] font-bold text-[#E07A5F] mb-1">
+                          🎙️ Guia de Áudio (~20s) · Fale com voz calorosa e sem afobação:
+                        </p>
+                        <p className="italic select-all">“{config.heroMockupAudioScript}”</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Micro Action Buttons */}
+                  <div className="mt-2.5 flex items-center justify-end gap-2">
+                    <button
+                      type="button"
+                      onClick={handleCopyScript}
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 hover:bg-white/20 px-2.5 py-1 text-[10px] font-bold text-white transition-all cursor-pointer"
+                    >
+                      {copied ? (
+                        <>
+                          <Check className="size-3 text-emerald-400" />
+                          <span className="text-emerald-400">Copiado!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="size-3 text-emerald-200" />
+                          <span>Copiar Mensagem</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
               </div>
 
               {/* Secondary Card: Por que agora? */}
-              <div className="rounded-2xl bg-[#E8F2EE] p-3.5 text-slate-800 border border-emerald-900/10">
+              <div className="rounded-2xl bg-[#E8F2EE] p-3.5 text-slate-800 border border-emerald-900/10 text-left">
                 <div className="flex items-center gap-2 mb-1.5">
                   <div className="size-6 rounded-full bg-emerald-700/20 flex items-center justify-center">
                     <Lightbulb className="size-3 text-[#0E3D36]" />
@@ -162,7 +264,7 @@ export function LandingHero({ variant = "cold" }: LandingHeroProps) {
                   <h3 className="text-xs font-bold text-[#0E3D36]">Por que agora?</h3>
                 </div>
                 <p className="text-[11px] text-[#2C4A43] leading-relaxed">
-                  Essas clientes já demonstraram interesse no seu serviço antes. Um novo contato aumenta suas chances de fechar negócio com muito menos esforço.
+                  {config.heroMockupWhyNow}
                 </p>
                 <div className="mt-2">
                   <EditorialUnderline color="coral" className="text-[11px] font-bold text-[#0E3D36]">

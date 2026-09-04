@@ -1,84 +1,80 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { ChevronDown, HelpCircle } from "lucide-react";
+import { STRATEGIC_FAQS } from "./types";
+import { trackFunnelEvent } from "@/lib/client-analytics";
 import { cn } from "@/lib/utils";
 
-const faqItems = [
-  {
-    question: "Serve para quem ainda não tem clientes?",
-    answer:
-      "Sim. Se você está começando, o sistema identifica que sua prioridade não é retenção, e sim construir sua primeira prova social e atrair clientes iniciais sem complicação.",
-  },
-  {
-    question: "Preciso usar Instagram?",
-    answer:
-      "Não necessariamente. O Agenda 80/20 foca nos canais mais diretos e de maior conversão para o seu momento, como contatos anteriores, indicações ativas e conversas de WhatsApp.",
-  },
-  {
-    question: "Ele manda mensagens automaticamente?",
-    answer:
-      "Não, e isso é intencional. O sistema entrega mensagens prontas e personalizadas para você copiar e enviar pelo seu próprio WhatsApp, mantendo o toque humano que gera confiança.",
-  },
-  {
-    question: "Preciso usar o Belevy?",
-    answer:
-      "Não. O Agenda 80/20 funciona de forma 100% independente para você gerar caixa e organizar suas ações. O Belevy é apenas uma opção futura para quem quiser expandir gestão de agendamentos.",
-  },
-];
-
 export function LandingFaq() {
-  const [openIdx, setOpenIdx] = useState<number | null>(null);
+  const [openIndexes, setOpenIndexes] = useState<Record<number, boolean>>({ 0: true, 1: true });
 
-  const toggle = (idx: number) => {
-    setOpenIdx(openIdx === idx ? null : idx);
+  const toggleFaq = (index: number, question: string) => {
+    setOpenIndexes((prev) => {
+      const nextState = !prev[index];
+      if (nextState) {
+        trackFunnelEvent("faq_item_toggled", { question });
+      }
+      return { ...prev, [index]: nextState };
+    });
   };
 
   return (
-    <section className="relative pt-12 pb-16 overflow-hidden text-center">
-      {/* Editorial Serif Headline */}
-      <div className="px-4 mb-3 max-w-xl mx-auto">
-        <h2 className="text-2xl sm:text-4xl md:text-5xl font-serif font-bold tracking-tight text-[#0C2A26] leading-[1.18]">
-          Ainda ficou com alguma dúvida?
+    <section
+      id="faq"
+      aria-labelledby="faq-heading"
+      className="scroll-mt-12 border-t border-[var(--color-border-subtle)] py-16 sm:py-24"
+    >
+      <div className="mx-auto max-w-3xl text-center">
+        <span className="inline-flex items-center rounded-[var(--radius-pill)] bg-[var(--color-surface-muted)] px-3 py-1 text-xs font-bold text-[var(--color-ink-muted)] border border-[var(--color-border-subtle)]">
+          Dúvidas Comuns
+        </span>
+        <h2
+          id="faq-heading"
+          className="mt-3 text-2xl font-extrabold tracking-tight text-balance text-[var(--color-ink-solid)] sm:text-4xl"
+        >
+          Perguntas Frequentes
         </h2>
+        <p className="mt-3 text-sm sm:text-base text-[var(--color-ink-muted)] text-pretty">
+          Tudo o que você precisa saber antes de dar seu próximo passo:
+        </p>
       </div>
 
-      {/* Gold Horizontal Bar */}
-      <div className="w-16 h-1 bg-[#D4A373] rounded-full mx-auto mb-10" />
+      <div className="mt-12 mx-auto max-w-3xl space-y-3">
+        {STRATEGIC_FAQS.map((faq, index) => {
+          const isOpen = Boolean(openIndexes[index]);
 
-      {/* Accordion Container */}
-      <div className="max-w-md mx-auto px-4 space-y-3 text-left">
-        {faqItems.map((item, idx) => {
-          const isOpen = openIdx === idx;
           return (
             <div
-              key={idx}
-              className="rounded-2xl bg-white border border-slate-200/80 overflow-hidden shadow-xs transition-all"
+              key={index}
+              className="rounded-[var(--radius-card)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-card)] shadow-xs overflow-hidden transition-colors"
             >
               <button
                 type="button"
-                onClick={() => toggle(idx)}
-                className="w-full flex items-center justify-between p-4 sm:p-4.5 cursor-pointer text-left gap-3"
+                onClick={() => toggleFaq(index, faq.q)}
+                aria-expanded={isOpen}
+                className="w-full p-4 sm:p-5 text-left flex items-start justify-between gap-4 cursor-pointer hover:bg-[var(--color-surface-muted)]/50 transition-colors min-h-[52px]"
               >
-                <div className="flex items-center gap-3">
-                  <div className="size-8 rounded-full bg-[#082420] text-white flex items-center justify-center shrink-0 text-sm font-bold">
-                    ?
-                  </div>
-                  <span className="text-xs sm:text-sm font-bold text-[#0C2A26] leading-snug">
-                    {item.question}
+                <div className="flex items-start gap-3">
+                  <HelpCircle className="mt-0.5 size-4 shrink-0 text-[var(--color-action-primary)]" />
+                  <span className="text-sm sm:text-base font-bold text-[var(--color-ink-solid)] leading-snug">
+                    {faq.q}
                   </span>
                 </div>
                 <ChevronDown
                   className={cn(
-                    "size-4 text-slate-500 shrink-0 transition-transform duration-200",
-                    isOpen && "rotate-180"
+                    "size-4 shrink-0 text-[var(--color-ink-muted)] transition-transform duration-200 mt-1",
+                    isOpen && "rotate-180 text-[var(--color-action-primary)]"
                   )}
+                  aria-hidden="true"
                 />
               </button>
 
               {isOpen && (
-                <div className="px-4 pb-4 pt-1 text-xs text-slate-600 leading-relaxed border-t border-slate-100 pl-14">
-                  {item.answer}
+                <div className="px-4 pb-5 pt-1 sm:px-5 sm:pb-6 border-t border-[var(--color-border-subtle)] bg-[var(--color-surface-muted)]/30">
+                  <p className="text-xs sm:text-sm leading-relaxed text-[var(--color-ink-muted)] text-pretty">
+                    {faq.a}
+                  </p>
                 </div>
               )}
             </div>

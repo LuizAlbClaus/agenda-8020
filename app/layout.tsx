@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
@@ -20,9 +20,21 @@ const playfairDisplay = Playfair_Display({
   style: ["normal", "italic"],
 });
 
+export const viewport: Viewport = {
+  themeColor: "#0C2A26",
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 export const metadata: Metadata = {
   title: "Agenda 80/20",
   description: "Aquisição, relacionamento e agendamento para profissionais autônomos e prestadores de serviço.",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Agenda 80/20",
+  },
   icons: {
     icon: [
       { url: "/icon.svg", type: "image/svg+xml" },

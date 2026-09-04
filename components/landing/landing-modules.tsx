@@ -1,129 +1,93 @@
-﻿"use client";
-
 import {
-  Compass,
-  Diamond,
-  Flag,
-  GitFork,
-  HeartHandshake,
-  Radio,
-  Siren,
+  Calendar,
+  Clock3,
+  LineChart,
+  ShieldAlert,
+  Sparkles,
+  Target,
 } from "lucide-react";
-import { EditorialUnderline } from "./editorial-highlight";
+import { SUPPORT_MODULES } from "./types";
 
-const modulesList = [
-  {
-    icon: Siren,
-    title: "SOS Copiloto",
-    description: "Quando travar, peça clareza na hora.",
-  },
-  {
-    icon: HeartHandshake,
-    title: "Retenção",
-    description: "Fortaleça vínculos e aumente a recorrência.",
-  },
-  {
-    icon: Diamond,
-    title: "Diagnóstico de Valor",
-    description: "Descubra e comunique o valor que transforma.",
-  },
-  {
-    icon: Flag,
-    title: "Missões práticas",
-    description: "Ações guiadas para gerar resultado real.",
-  },
-  {
-    icon: GitFork,
-    title: "Caminho de agendamento",
-    description: "Estruture convites que viram compromissos.",
-  },
-];
+const moduleIcons: Record<string, typeof Sparkles> = {
+  "growth-coach": Sparkles,
+  copilot: ShieldAlert,
+  retention: Clock3,
+  diagnostic: Target,
+  booking: Calendar,
+  progress: LineChart,
+};
 
 export function LandingModules() {
   return (
-    <section className="relative pt-12 pb-16 overflow-hidden text-center">
-      {/* Badge: SEÇÃO 6 • MÓDULOS */}
-      <div className="flex justify-center px-4 mb-3">
-        <span className="inline-flex items-center rounded-full border border-[#4E7A6E]/30 bg-white/60 px-4 py-1 text-xs font-bold text-[#4E7A6E] tracking-wide">
-          SEÇÃO 6 • MÓDULOS
+    <section
+      aria-labelledby="modules-heading"
+      className="border-t border-[var(--color-border-subtle)] py-14 sm:py-20"
+    >
+      <div className="mx-auto max-w-3xl text-center">
+        <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-revenue-primary)]">
+          Ecossistema de Apoio Contínuo
         </span>
-      </div>
-
-      {/* Headline */}
-      <div className="px-4 mb-3 max-w-xl mx-auto">
-        <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-[-0.03em] text-[#0C2A26] leading-[1.18]">
-          E quando o problema muda, o{" "}
-          <span className="text-[#4E7A6E]">Agenda 80/20</span> continua com você.
+        <h2
+          id="modules-heading"
+          className="mt-3 text-2xl font-extrabold tracking-tight text-balance text-[var(--color-ink-solid)] sm:text-4xl"
+        >
+          E quando o problema muda, o Agenda 80/20 continua com você.
         </h2>
-      </div>
-
-      {/* Orange Accent Bar */}
-      <div className="w-16 h-1 bg-[#E07A5F] rounded-full mx-auto mb-10" />
-
-      {/* Flowchart Diagram */}
-      <div className="max-w-md sm:max-w-lg mx-auto px-4">
-        {/* Top Central Card */}
-        <div className="rounded-3xl bg-[#082420] text-white p-6 shadow-xl relative z-10 max-w-sm mx-auto">
-          <div className="size-11 rounded-full border-2 border-[#D4A373] bg-[#0E3D36] flex items-center justify-center text-[#D4A373] mx-auto mb-2.5">
-            <Compass className="size-5" />
-          </div>
-          <p className="text-[10px] font-extrabold uppercase tracking-widest text-[#D4A373]">
-            CENTRO DO SISTEMA
-          </p>
-          <h3 className="text-xl sm:text-2xl font-bold text-white mt-1">
-            Próximo Movimento
-          </h3>
-          <p className="text-xs text-emerald-100/70 mt-1 max-w-xs mx-auto leading-relaxed">
-            O sistema analisa e indica sua melhor próxima ação.
-          </p>
-          <div className="mt-4 flex justify-center">
-            <div className="size-8 rounded-full bg-[#D4A373] text-[#082420] flex items-center justify-center font-bold text-sm shadow-sm">
-              ↓
-            </div>
-          </div>
-        </div>
-
-        {/* Modular Cards List with Connector Lines */}
-        <div className="relative pt-6 space-y-3.5 max-w-md mx-auto">
-          {/* Vertical Trunk Line */}
-          <div className="absolute left-6 top-0 bottom-6 w-0.5 bg-[#0E3D36]/40" />
-
-          {modulesList.map((item, idx) => {
-            const Icon = item.icon;
-            return (
-              <div key={idx} className="relative flex items-center gap-3 pl-6">
-                {/* Horizontal Connector Branch */}
-                <div className="absolute left-6 top-1/2 w-4 h-0.5 bg-[#0E3D36]/40 -translate-y-1/2" />
-                <div className="absolute left-5 top-1/2 size-2.5 rounded-full bg-[#D4A373] -translate-y-1/2" />
-
-                {/* Module Card */}
-                <div className="flex-1 rounded-2xl bg-white p-3.5 sm:p-4 border border-slate-200/80 shadow-xs flex items-center gap-3.5 text-left">
-                  <div className="size-10 rounded-full bg-emerald-50 text-[#0E3D36] flex items-center justify-center shrink-0">
-                    <Icon className="size-5 text-[#0E3D36]" />
-                  </div>
-                  <div className="flex-1 grid grid-cols-[auto_1fr] items-center gap-3">
-                    <h4 className="text-xs sm:text-sm font-bold text-[#0C2A26] pr-3 border-r border-slate-200">
-                      {item.title}
-                    </h4>
-                    <p className="text-[11px] sm:text-xs text-slate-600 leading-snug">
-                      {item.description}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Bottom Summary Phrase */}
-      <div className="mt-10 px-4 max-w-md mx-auto">
-        <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
-          Módulos que se conectam ao que importa: sua próxima ação com{" "}
-          <EditorialUnderline color="sage" className="font-bold text-[#0C2A26]">
-            direção e foco.
-          </EditorialUnderline>
+        <p className="mt-4 text-base leading-relaxed text-[var(--color-ink-muted)] text-pretty sm:text-lg">
+          Seu negócio passa por fases diferentes ao longo dos meses. O Agenda 80/20 acompanha cada uma delas com ferramentas especializadas para o momento em que a necessidade surgir:
         </p>
+      </div>
+
+      <div className="mt-12 mx-auto max-w-5xl grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {SUPPORT_MODULES.map((mod) => {
+          const Icon = moduleIcons[mod.id] ?? Sparkles;
+          const isCore = mod.id === "growth-coach";
+
+          return (
+            <div
+              key={mod.id}
+              className={`rounded-[var(--radius-card)] p-5 sm:p-6 border flex flex-col justify-between transition-all ${
+                isCore
+                  ? "border-2 border-[var(--color-action-primary)] bg-[var(--color-action-subtle)]/40 shadow-xs"
+                  : "border-[var(--color-border-subtle)] bg-[var(--color-surface-card)] shadow-[var(--shadow-card-resting)]"
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <span
+                    className={`inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] px-2.5 py-0.5 text-[11px] font-bold ${
+                      isCore
+                        ? "bg-[var(--color-action-primary)] text-white shadow-xs"
+                        : "bg-[var(--color-surface-muted)] text-[var(--color-ink-muted)] border border-[var(--color-border-subtle)]"
+                    }`}
+                  >
+                    {mod.tag}
+                  </span>
+                  <Icon
+                    className={`size-4 ${
+                      isCore
+                        ? "text-[var(--color-action-primary)]"
+                        : "text-[var(--color-ink-muted)]"
+                    }`}
+                    aria-hidden="true"
+                  />
+                </div>
+
+                <h3 className="mt-4 text-base font-bold text-[var(--color-ink-solid)]">
+                  {mod.title}
+                </h3>
+
+                <p className="mt-2 text-xs leading-relaxed text-[var(--color-ink-muted)]">
+                  {mod.description}
+                </p>
+              </div>
+
+              <div className="mt-5 pt-3 border-t border-[var(--color-border-subtle)] text-[11px] font-semibold text-[var(--color-revenue-primary)]">
+                ✓ {mod.benefit}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </section>
   );

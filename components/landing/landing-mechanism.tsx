@@ -1,196 +1,137 @@
-﻿"use client";
+import { ArrowRight, CheckCircle2, Filter, Layers, Sparkles, Target, Timer } from "lucide-react";
 
-import {
-  Bell,
-  Clock,
-  Compass,
-  Gauge,
-  LineChart,
-  Menu,
-  Sparkles,
-  Target,
-  TrendingDown,
-  User,
-  Users,
-} from "lucide-react";
-
-const steps = [
+const mechanismSteps = [
   {
-    icon: User,
-    title: "Seu momento",
-    description: "Entendemos onde você está e o que mais importa agora.",
+    step: "1",
+    label: "Seu Momento",
+    icon: Layers,
+    desc: "Onde seu negócio está hoje (começando do zero, com poucos clientes ou agenda irregular).",
   },
   {
-    icon: Gauge,
-    title: "Seu gargalo",
-    description: "Identificamos o que está travando seus resultados.",
+    step: "2",
+    label: "Seu Gargalo",
+    icon: Filter,
+    desc: "Onde o fluxo está travando (sem clientes, baixa conversão, horários vazios ou falta de retorno).",
   },
   {
-    icon: Bell,
-    title: "Seus sinais",
-    description: "Capturamos mudanças, oportunidades e alertas do seu negócio.",
+    step: "3",
+    label: "Seus Sinais",
+    icon: Target,
+    desc: "Quais oportunidades reais existem (conversas pausadas, pedidos de preço, contatos locais).",
   },
   {
-    icon: Clock,
-    title: "Seu tempo disponível",
-    description: "Calculamos o tempo real que você tem para agir com impacto.",
+    step: "4",
+    label: "Seu Tempo",
+    icon: Timer,
+    desc: "Quanto tempo você realmente pode dedicar hoje (10, 15 ou 30 minutos no intervalo).",
+  },
+  {
+    step: "5",
+    label: "Próximo Movimento",
+    icon: Sparkles,
+    desc: "1 única ação elegível, com justificativa clara de 'por que agora' e roteiro pronto para executar.",
+    highlight: true,
   },
 ];
 
 export function LandingMechanism() {
   return (
-    <section className="relative pt-12 pb-16 overflow-hidden">
-      {/* Badge: 03 MECANISMO 80/20 */}
-      <div className="flex justify-start sm:justify-center px-4 mb-3">
-        <span className="inline-flex items-center rounded-full border border-[#0E3D36]/30 bg-white/60 px-4 py-1 text-xs font-bold text-[#0E3D36] tracking-wide">
-          03 MECANISMO 80/20
+    <section
+      aria-labelledby="mechanism-heading"
+      className="border-t border-[var(--color-border-subtle)] py-14 sm:py-20"
+    >
+      <div className="mx-auto max-w-3xl text-center">
+        <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-revenue-primary)]">
+          Como o Sistema Funciona
         </span>
-      </div>
-
-      {/* Headline */}
-      <div className="text-left sm:text-center px-4 mb-10 max-w-2xl mx-auto">
-        <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-[-0.03em] text-[#0C2A26] leading-[1.18]">
-          Seu negócio muda.
+        <h2
+          id="mechanism-heading"
+          className="mt-3 text-2xl font-extrabold tracking-tight text-balance text-[var(--color-ink-solid)] sm:text-4xl"
+        >
+          Seu negócio muda. Sua próxima ação também deveria mudar.
         </h2>
-        <p className="mt-1 text-2xl sm:text-4xl md:text-5xl font-serif italic text-[#4E7A6E] tracking-tight">
-          Sua próxima ação também deveria mudar.
+        <p className="mt-4 text-base leading-relaxed text-[var(--color-ink-muted)] text-pretty sm:text-lg">
+          O Agenda 80/20 não entrega uma lista aleatória de tarefas nem repete o mesmo conselho todo dia. Ele filtra sua realidade através de 5 dimensões práticas:
         </p>
       </div>
 
-      {/* Main Grid: Steps on Left + Mockup on Right */}
-      <div className="max-w-4xl mx-auto px-4 grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-start">
-        {/* Timeline Steps (Left) */}
-        <div className="relative pl-3 sm:pl-4 space-y-7 sm:space-y-8">
-          {/* Vertical Connecting Line */}
-          <div className="absolute left-[26px] sm:left-[30px] top-6 bottom-6 w-0.5 bg-[#4E7A6E]/30" />
+      {/* Visual Funnel / Flow: 5 Steps */}
+      <div className="mt-12 mx-auto max-w-5xl">
+        <div className="grid gap-3 sm:grid-cols-5">
+          {mechanismSteps.map((item, index) => {
+            const Icon = item.icon;
+            const isLast = index === mechanismSteps.length - 1;
 
-          {steps.map((step, idx) => {
-            const Icon = step.icon;
             return (
-              <div key={idx} className="relative flex items-start gap-4 z-10">
-                <div className="size-11 sm:size-12 rounded-full bg-[#0E3D36] text-white flex items-center justify-center shrink-0 shadow-sm">
-                  <Icon className="size-5" />
-                </div>
-                <div className="pt-1">
-                  <h3 className="text-base sm:text-lg font-bold text-[#0C2A26] leading-tight">
-                    {step.title}
+              <div
+                key={item.step}
+                className={`relative flex flex-col justify-between rounded-[var(--radius-card)] p-4 sm:p-5 border transition-all ${
+                  item.highlight
+                    ? "border-2 border-[var(--color-action-primary)] bg-[var(--color-action-subtle)] shadow-[var(--shadow-card-resting)]"
+                    : "border-[var(--color-border-subtle)] bg-[var(--color-surface-card)] shadow-xs"
+                }`}
+              >
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span
+                      className={`flex size-7 items-center justify-center rounded-full text-xs font-extrabold ${
+                        item.highlight
+                          ? "bg-[var(--color-action-primary)] text-white shadow-xs"
+                          : "bg-[var(--color-surface-muted)] text-[var(--color-ink-solid)]"
+                      }`}
+                    >
+                      {item.step}
+                    </span>
+                    <Icon
+                      className={`size-4 ${
+                        item.highlight
+                          ? "text-[var(--color-action-primary)]"
+                          : "text-[var(--color-ink-muted)]"
+                      }`}
+                      aria-hidden="true"
+                    />
+                  </div>
+
+                  <h3
+                    className={`mt-3 text-sm font-bold ${
+                      item.highlight
+                        ? "text-[var(--color-action-primary)]"
+                        : "text-[var(--color-ink-solid)]"
+                    }`}
+                  >
+                    {item.label}
                   </h3>
-                  <p className="mt-1 text-xs sm:text-sm text-[#4A605A] leading-relaxed max-w-xs">
-                    {step.description}
+
+                  <p className="mt-1.5 text-xs leading-relaxed text-[var(--color-ink-muted)]">
+                    {item.desc}
                   </p>
                 </div>
+
+                {/* Arrow indicator between steps */}
+                {!isLast && (
+                  <div className="hidden sm:flex absolute -right-2.5 top-1/2 -translate-y-1/2 z-10 size-5 items-center justify-center rounded-full bg-[var(--color-surface-card)] border border-[var(--color-border-subtle)] text-[var(--color-ink-muted)] shadow-xs">
+                    <ArrowRight className="size-3" aria-hidden="true" />
+                  </div>
+                )}
               </div>
             );
           })}
         </div>
+      </div>
 
-        {/* Right Phone Simulation + Overlapping Action Card */}
-        <div className="relative pt-2">
-          {/* Phone Frame */}
-          <div className="w-full max-w-[340px] sm:max-w-[360px] mx-auto rounded-[38px] bg-slate-900 p-2.5 shadow-xl ring-1 ring-slate-800">
-            <div className="rounded-[30px] bg-white overflow-hidden p-3.5 space-y-3 text-slate-800">
-              {/* Phone Header */}
-              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                <span className="text-xs font-bold text-[#0C2A26]">Agenda 80/20</span>
-                <Menu className="size-4 text-slate-600" />
-              </div>
-
-              {/* Visão do Momento Header */}
-              <div className="flex items-center justify-between">
-                <p className="text-xs font-bold text-slate-700">Visão do momento</p>
-                <span className="rounded-full bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
-                  Ao vivo
-                </span>
-              </div>
-
-              {/* Foco Atual */}
-              <div className="rounded-xl bg-[#FBF9F5] p-2.5 border border-slate-200/60 flex items-center gap-2.5">
-                <div className="size-7 rounded-full bg-emerald-700/15 flex items-center justify-center text-emerald-800 shrink-0">
-                  <Target className="size-3.5" />
-                </div>
-                <div>
-                  <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">
-                    Foco atual
-                  </p>
-                  <p className="text-xs font-bold text-[#0C2A26] leading-snug">
-                    Lançamento da nova oferta e expansão comercial
-                  </p>
-                </div>
-              </div>
-
-              {/* Sinais Recentes */}
-              <div className="rounded-xl border border-slate-200/60 p-2.5 space-y-2">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                  Sinais recentes
-                </p>
-                <div className="space-y-1.5 text-[11px]">
-                  <div className="flex items-center gap-2 text-rose-800">
-                    <TrendingDown className="size-3.5 text-rose-500 shrink-0" />
-                    <span>Queda de 18% nas conversões em campanhas</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-emerald-900">
-                    <Users className="size-3.5 text-emerald-600 shrink-0" />
-                    <span>3 leads estratégicos aguardando retorno</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-amber-800">
-                    <span className="size-3.5 flex items-center justify-center font-bold text-amber-600 text-xs shrink-0">$</span>
-                    <span>Desvio de 12% no orçamento de anúncios</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Tempo Disponível Hoje */}
-              <div className="space-y-1.5 pt-1">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-500 font-medium">Tempo disponível hoje</span>
-                  <span className="font-extrabold text-[#0E3D36]">2h 15m</span>
-                </div>
-                <div className="h-2 rounded-full bg-slate-100 overflow-hidden flex">
-                  <div className="w-[56%] bg-[#0E3D36] rounded-full" />
-                </div>
-                <div className="flex justify-between text-[9px] text-slate-400 font-semibold px-0.5">
-                  <span>0h</span>
-                  <span>2h</span>
-                  <span>4h</span>
-                </div>
-              </div>
-            </div>
+      {/* Explanatory Narrative Box */}
+      <div className="mt-10 mx-auto max-w-3xl rounded-[var(--radius-card)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-card)] p-6 sm:p-8 shadow-[var(--shadow-card-resting)]">
+        <div className="flex items-start gap-4">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-revenue-subtle)] text-[var(--color-revenue-primary)] font-bold">
+            <CheckCircle2 className="size-5" />
           </div>
-
-          {/* Overlapping Floating "Próximo Movimento" Dark Card */}
-          <div className="relative -mt-10 sm:-mt-14 max-w-[340px] sm:max-w-[360px] mx-auto rounded-2xl bg-[#082420] text-white p-4 shadow-2xl border border-emerald-900/40 z-20">
-            <div className="flex items-start justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <div className="size-8 rounded-full border-2 border-[#D4A373] bg-[#0E3D36] flex items-center justify-center text-[#D4A373]">
-                  <Compass className="size-4" />
-                </div>
-                <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#D4A373]">
-                  PRÓXIMO MOVIMENTO
-                </span>
-              </div>
-              <Sparkles className="size-4 text-[#D4A373]" />
-            </div>
-
-            <p className="text-sm sm:text-base font-bold leading-snug text-white">
-              Focar na oferta principal e reativar 3 leads quentes.
+          <div>
+            <h4 className="text-base font-bold text-[var(--color-ink-solid)]">
+              Uma decisão clara antes da execução
+            </h4>
+            <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-[var(--color-ink-muted)] text-pretty">
+              Em vez de acordar se perguntando <em>“o que eu posto hoje?”</em> ou <em>“como consigo clientes?”</em>, você abre o aplicativo, vê exatamente o movimento que faz sentido para aquele dia, confere o passo a passo com roteiro pronto, executa e segue sua rotina de atendimentos.
             </p>
-
-            <div className="my-2.5 h-px bg-emerald-800/40" />
-
-            <p className="text-[11px] text-emerald-100/70 leading-relaxed">
-              Essa ação tem o maior potencial de impacto agora, com o tempo que você tem disponível.
-            </p>
-
-            <div className="mt-3 flex items-center gap-2">
-              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-900/60 border border-emerald-700/50 px-2.5 py-1 text-[10px] font-semibold text-emerald-200">
-                <LineChart className="size-3" />
-                <span>Impacto alto</span>
-              </span>
-              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-900/60 border border-emerald-700/50 px-2.5 py-1 text-[10px] font-semibold text-emerald-200">
-                <Clock className="size-3" />
-                <span>Viável em 2h</span>
-              </span>
-            </div>
           </div>
         </div>
       </div>

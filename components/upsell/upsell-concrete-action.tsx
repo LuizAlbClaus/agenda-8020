@@ -107,7 +107,7 @@ export function UpsellConcreteAction() {
                 <button
                   type="button"
                   onClick={handleCopy}
-                  className="w-full min-h-[44px] rounded-xl bg-[#0C2A26] hover:bg-[#071916] text-white text-xs font-bold py-2.5 px-3 flex items-center justify-center gap-2 border border-white/20 shadow-sm transition-all active:scale-[0.98] cursor-pointer"
+                  className="w-full min-h-[48px] rounded-xl bg-[#0C2A26] hover:bg-[#071916] text-white text-xs font-bold py-3 px-4 flex items-center justify-center gap-2 border border-white/20 shadow-sm transition-all active:scale-[0.98] cursor-pointer"
                 >
                   {copied ? (
                     <>

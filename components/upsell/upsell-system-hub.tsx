@@ -142,8 +142,8 @@ export function UpsellSystemHub() {
                     <div className="flex items-center gap-2">
                       <Flag className="size-3 text-[#E07A5F]" />
                       <div>
-                        <p className="font-bold text-[#0C2A26] leading-tight">Criar missão prática</p>
-                        <p className="text-[8px] text-slate-500">Ação rápida para gerar resultado</p>
+                        <p className="font-bold text-[#0C2A26] leading-tight">Missões de Valor (48h)</p>
+                        <p className="text-[8px] text-slate-500">Ação rápida para destravar faturamento</p>
                       </div>
                     </div>
                     <ChevronRight className="size-3 text-slate-400" />

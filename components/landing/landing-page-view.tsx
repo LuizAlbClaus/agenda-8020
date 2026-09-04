@@ -86,6 +86,7 @@ export function LandingPageView({ variant, searchParams }: LandingPageViewProps)
             <LandingModules />
             <LandingPositioning />
             <LandingOffer searchParams={searchParams} />
+            <LandingBelevy />
             <LandingFaq />
             <LandingClosing variant="organic" />
           </>

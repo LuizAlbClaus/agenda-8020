@@ -27,7 +27,10 @@ export function SalesCopilotDrawer({
   initialCategory = "price_too_high",
 }: SalesCopilotDrawerProps) {
   const [selectedCategory, setSelectedCategory] = React.useState<string>(initialCategory);
-  const [activeTemplate, setActiveTemplate] = React.useState<CopilotTemplate | null>(null);
+  const [selectedTemplateId, setSelectedTemplateId] = React.useState<string | null>(() => {
+    const initial = templates.find((t) => t.objection_category === initialCategory);
+    return initial ? initial.id : null;
+  });
   const [mode, setMode] = React.useState<ScriptMode>("text");
   const [copied, setCopied] = React.useState(false);
 
@@ -36,13 +39,13 @@ export function SalesCopilotDrawer({
     return templates.filter((t) => t.objection_category === selectedCategory);
   }, [templates, selectedCategory]);
 
-  React.useEffect(() => {
-    if (filteredTemplates.length > 0) {
-      setActiveTemplate(filteredTemplates[0]);
-    } else {
-      setActiveTemplate(null);
+  const activeTemplate = React.useMemo(() => {
+    if (selectedTemplateId) {
+      const found = filteredTemplates.find((t) => t.id === selectedTemplateId);
+      if (found) return found;
     }
-  }, [filteredTemplates]);
+    return filteredTemplates[0] || null;
+  }, [filteredTemplates, selectedTemplateId]);
 
   React.useEffect(() => {
     if (!isOpen) return;
@@ -132,7 +135,7 @@ export function SalesCopilotDrawer({
               onClick={() => {
                 setSelectedCategory(cat.id);
                 const next = templates.find((t) => t.objection_category === cat.id);
-                setActiveTemplate(next ?? null);
+                setSelectedTemplateId(next ? next.id : null);
               }}
               className={cn(
                 "min-h-[44px] px-4 py-2 rounded-[var(--radius-pill)] text-xs font-bold whitespace-nowrap transition-colors border cursor-pointer focus-visible:outline-2 focus-visible:outline-[var(--color-action-primary)]",

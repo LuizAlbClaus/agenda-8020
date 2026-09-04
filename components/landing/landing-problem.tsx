@@ -168,11 +168,14 @@ export function LandingProblem() {
 
         {/* Conclusion Punchline */}
         <div className="max-w-md mx-auto space-y-2 text-center">
-          <p className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-tight">
-            O problema não é falta de estratégia.
+          <p className="text-xs uppercase tracking-wider text-emerald-300 font-bold">
+            De 20 opções competindo pela sua atenção para
           </p>
-          <p className="text-xl sm:text-2xl font-bold tracking-tight text-[#7FA898] leading-tight">
-            É não saber qual merece sua atenção{" "}
+          <p className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-tight">
+            Apenas 1 ação que faz sentido agora.
+          </p>
+          <p className="text-sm text-[#7FA898] leading-relaxed pt-1">
+            O problema não é falta de estratégia. É não saber qual merece sua atenção{" "}
             <EditorialUnderline color="gold" className="text-[#E28A52]">
               agora.
             </EditorialUnderline>

@@ -75,7 +75,7 @@ export function UpsellHero({ checkoutUrl }: UpsellHeroProps) {
           onClick={handleCtaClick}
           className="inline-flex min-h-[52px] items-center justify-center gap-2 bg-[#E07A5F] hover:bg-[#D36A4F] active:scale-[0.98] text-white font-bold text-sm sm:text-base px-8 py-3.5 rounded-2xl shadow-md transition-all cursor-pointer"
         >
-          <span>SIM, QUERO ADICIONAR O AGENDA 80/20</span>
+          <span>SIM, QUERO COMEÇAR COM UM PLANO</span>
           <ArrowRight className="size-4.5 stroke-[2.5]" />
         </a>
       </div>
@@ -216,18 +216,6 @@ export function UpsellHero({ checkoutUrl }: UpsellHeroProps) {
             </span>
           </div>
         </div>
-      </div>
-
-      {/* Seamless Decorative Wave into dark green Section 2 */}
-      <div className="mt-10 w-full overflow-hidden leading-none">
-        <svg
-          className="relative block w-full h-10 sm:h-16 text-[#0C2A26]"
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-          fill="currentColor"
-        >
-          <path d="M0,0 C150,90 350,-40 500,60 C650,160 900,10 1200,40 L1200,120 L0,120 Z" />
-        </svg>
       </div>
     </section>
   );
