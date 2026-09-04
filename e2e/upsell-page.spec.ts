@@ -125,4 +125,39 @@ test.describe("Landing Page de Upsell Soft Gel Express -> Agenda 80/20", () => {
     await page.goto("/upsell");
     await expect(page.getByText(/Sua compra do Soft Gel Express foi confirmada/i)).toBeVisible();
   });
+
+  test("6. Responsividade em todas as viewports obrigatórias (320px, 375px, 390px, 430px, tablet, notebook, desktop)", async ({
+    page,
+  }) => {
+    const viewports = [
+      { name: "320px (Mobile pequeno)", width: 320, height: 640 },
+      { name: "375px (iPhone SE)", width: 375, height: 667 },
+      { name: "390px (iPhone 14)", width: 390, height: 844 },
+      { name: "430px (iPhone Pro Max)", width: 430, height: 932 },
+      { name: "Tablet (iPad)", width: 768, height: 1024 },
+      { name: "Notebook", width: 1024, height: 768 },
+      { name: "Desktop largo", width: 1440, height: 900 },
+    ];
+
+    for (const vp of viewports) {
+      await page.setViewportSize({ width: vp.width, height: vp.height });
+      await page.goto("/upsell/soft-gel");
+
+      // Verificar ausência de overflow horizontal
+      const hasHorizontalScroll = await page.evaluate(() => {
+        return document.documentElement.scrollWidth > window.innerWidth;
+      });
+      expect(hasHorizontalScroll, `Overflow horizontal detectado na viewport ${vp.name}`).toBe(false);
+
+      // Verificar que o CTA principal é visível e tem altura mínima ergonômica de 48px
+      const ctaBtn = page.getByRole("link", { name: /SIM, QUERO ADICIONAR O AGENDA 80\/20/i }).first();
+      await expect(ctaBtn).toBeVisible();
+      const box = await ctaBtn.boundingBox();
+      expect(box).not.toBeNull();
+      if (box) {
+        expect(box.height).toBeGreaterThanOrEqual(48);
+      }
+    }
+  });
 });
+

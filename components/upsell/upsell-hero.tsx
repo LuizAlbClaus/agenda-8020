@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Check, ArrowRight, Clock, Target, CheckCircle2, GraduationCap, Link2, Sparkles } from "lucide-react";
+import { Check, ArrowRight, Clock, Target, CheckCircle2, GraduationCap, Link2, Sparkles, Home, Users, Plus, Calendar, Menu } from "lucide-react";
 import { trackFunnelEvent } from "@/lib/client-analytics";
 
 interface UpsellHeroProps {
@@ -180,9 +180,32 @@ export function UpsellHero({ checkoutUrl }: UpsellHeroProps) {
               </div>
             </div>
 
+            {/* Bottom Tab Bar (matching 1.png) */}
+            <div className="pt-2 pb-1.5 px-2.5 flex items-center justify-between bg-white border-t border-slate-100 text-[8px] text-slate-500 font-medium">
+              <div className="flex flex-col items-center gap-0.5 text-[#0C2A26] font-bold">
+                <Home className="size-3 text-[#0C2A26]" />
+                <span>Início</span>
+              </div>
+              <div className="flex flex-col items-center gap-0.5">
+                <Users className="size-3" />
+                <span>Clientes</span>
+              </div>
+              <div className="size-5 rounded-full bg-[#0C2A26] text-white flex items-center justify-center -mt-1 shadow-xs">
+                <Plus className="size-3 stroke-[3]" />
+              </div>
+              <div className="flex flex-col items-center gap-0.5">
+                <Calendar className="size-3" />
+                <span>Agenda</span>
+              </div>
+              <div className="flex flex-col items-center gap-0.5">
+                <Menu className="size-3" />
+                <span>Mais</span>
+              </div>
+            </div>
+
             {/* Bottom Bar Indicator */}
-            <div className="py-1 flex justify-center bg-white border-t border-slate-100">
-              <div className="w-16 h-1 bg-slate-400 rounded-full" />
+            <div className="py-1 flex justify-center bg-white">
+              <div className="w-16 h-1 bg-slate-300 rounded-full" />
             </div>
           </div>
 
