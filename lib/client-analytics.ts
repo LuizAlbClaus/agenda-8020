@@ -17,7 +17,13 @@ type FunnelEvent =
   | "demo_script_copied"
   | "mechanism_viewed"
   | "faq_item_toggled"
-  | "closing_cta_clicked";
+  | "closing_cta_clicked"
+  | "upsell_view"
+  | "upsell_cta_click"
+  | "upsell_demo_interaction"
+  | "upsell_faq_open"
+  | "upsell_checkout_redirect"
+  | "upsell_decline_click";
 
 export function trackFunnelEvent(event: FunnelEvent, params?: Record<string, unknown>) {
   if (typeof window === "undefined") return;

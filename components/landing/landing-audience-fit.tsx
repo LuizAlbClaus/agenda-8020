@@ -1,26 +1,37 @@
 ﻿"use client";
 
 import Image from "next/image";
-import { ShieldCheck, Sparkles } from "lucide-react";
+import {
+  Calendar,
+  MessageSquare,
+  RefreshCw,
+  ShieldCheck,
+  Sparkles,
+  Sprout,
+} from "lucide-react";
 
 const audienceCards = [
   {
-    image: "/media/agenda8020/audience-card-1.png",
+    image: "/media/agenda8020/persona-starting.png",
+    icon: Sprout,
     title: "Profissional começando",
     description: "Está construindo sua carteira e precisa de organização para crescer com consistência.",
   },
   {
-    image: "/media/agenda8020/audience-card-2.png",
+    image: "/media/agenda8020/persona-irregular.png",
+    icon: Calendar,
     title: "Agenda irregular",
     description: "Tem dias cheios e dias vazios e quer mais equilíbrio e previsibilidade.",
   },
   {
-    image: "/media/agenda8020/audience-card-3.png",
+    image: "/media/agenda8020/persona-conversations.png",
+    icon: MessageSquare,
     title: "Conversas que não viram marcação",
     description: "Recebe interesse, responde, mas não consegue converter em agendamentos.",
   },
   {
-    image: "/media/agenda8020/audience-card-4.png",
+    image: "/media/agenda8020/persona-retention.png",
+    icon: RefreshCw,
     title: "Clientes que precisam retornar",
     description: "Sabe da importância do retorno, mas tem dificuldade de manter os clientes voltando.",
   },
@@ -50,38 +61,45 @@ export function LandingAudienceFit() {
       </div>
 
       {/* 2x2 Cards Grid */}
-      <div className="max-w-4xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-        {audienceCards.map((card, idx) => (
-          <div
-            key={idx}
-            className="rounded-3xl bg-white border border-slate-200/80 overflow-hidden shadow-xs text-left flex flex-col justify-between"
-          >
-            {/* Top Photo */}
-            <div className="relative w-full aspect-[375/230] overflow-hidden">
-              <Image
-                src={card.image}
-                alt={card.title}
-                fill
-                className="object-cover"
-                sizes="(max-width: 640px) 100vw, 50vw"
-              />
-            </div>
+      <div className="max-w-4xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
+        {audienceCards.map((card, idx) => {
+          const Icon = card.icon;
+          return (
+            <div
+              key={idx}
+              className="rounded-3xl bg-white border border-slate-200/80 overflow-hidden shadow-sm text-left flex flex-col justify-between"
+            >
+              {/* Top Photo with Floating Circular Badge */}
+              <div className="relative w-full aspect-[4/3] overflow-hidden">
+                <Image
+                  src={card.image}
+                  alt={card.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 100vw, 50vw"
+                />
+                {/* Clean Floating Circular Icon Badge at bottom-left */}
+                <div className="absolute left-4 -bottom-3 z-10 size-10 rounded-full bg-[#7FA898] text-white flex items-center justify-center shadow-md border-2 border-white">
+                  <Icon className="size-5" />
+                </div>
+              </div>
 
-            {/* Card Text */}
-            <div className="p-4 sm:p-5">
-              <h3 className="text-sm sm:text-base font-bold text-[#0C2A26] leading-snug">
-                {card.title}
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
-                {card.description}
-              </p>
+              {/* Card Text */}
+              <div className="pt-6 pb-5 px-5">
+                <h3 className="text-base font-bold text-[#0C2A26] leading-snug">
+                  {card.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
+                  {card.description}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Bottom Dark Banner with Botanical Leaves */}
-      <div className="max-w-4xl mx-auto px-4 mt-8">
+      <div className="max-w-4xl mx-auto px-4 mt-10">
         <div className="relative rounded-3xl bg-[#082420] text-white p-6 sm:p-8 overflow-hidden shadow-xl text-center">
           {/* Botanical Leaves Overlay on Bottom Right */}
           <div className="absolute right-0 bottom-0 w-36 sm:w-44 pointer-events-none opacity-40 select-none">

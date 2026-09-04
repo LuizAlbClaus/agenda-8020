@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect } from "react";
 import type { LandingVariant } from "./types";
@@ -7,7 +7,6 @@ import { LandingProblem } from "./landing-problem";
 import { LandingMechanism } from "./landing-mechanism";
 import { LandingScenarios } from "./landing-scenarios";
 import { LandingDemo } from "./landing-demo";
-import { LandingSoftGelBridge } from "./landing-softgel-bridge";
 import { LandingModules } from "./landing-modules";
 import { LandingJourney } from "./landing-journey";
 import { LandingPositioning } from "./landing-positioning";
@@ -17,6 +16,7 @@ import { LandingBelevy } from "./landing-belevy";
 import { LandingFaq } from "./landing-faq";
 import { LandingClosing } from "./landing-closing";
 import { LandingFooter } from "./landing-footer";
+import { UpsellView } from "@/components/upsell/upsell-view";
 import { trackFunnelEvent } from "@/lib/client-analytics";
 
 interface LandingPageViewProps {
@@ -29,6 +29,10 @@ export function LandingPageView({ variant, searchParams }: LandingPageViewProps)
     trackFunnelEvent("landing_page_view", { variant });
     trackFunnelEvent("landing_variant_viewed", { variant });
   }, [variant]);
+
+  if (variant === "soft-gel") {
+    return <UpsellView searchParams={searchParams} />;
+  }
 
   return (
     <main className="min-h-screen bg-[#FBF9F5] text-slate-900 selection:bg-[#FEECE6] selection:text-[#0C2A26]">
@@ -73,20 +77,7 @@ export function LandingPageView({ variant, searchParams }: LandingPageViewProps)
           </>
         )}
 
-        {/* 2. Variante SOFT-GEL (Upsell Soft Gel Express) */}
-        {variant === "soft-gel" && (
-          <>
-            <LandingSoftGelBridge />
-            <LandingMechanism />
-            <LandingDemo />
-            <LandingModules />
-            <LandingOffer searchParams={searchParams} />
-            <LandingFaq />
-            <LandingClosing variant="soft-gel" />
-          </>
-        )}
-
-        {/* 3. Variante ORGANIC (Audiência Aquecida) */}
+        {/* 2. Variante ORGANIC (Audiência Aquecida) */}
         {variant === "organic" && (
           <>
             <LandingMechanism />
