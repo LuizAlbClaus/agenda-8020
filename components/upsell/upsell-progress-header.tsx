@@ -25,7 +25,7 @@ export function UpsellProgressHeader() {
           href="#acesso-curso"
           onClick={() => trackFunnelEvent("upsell_skip_to_access")}
           className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 rounded-full bg-[#0E3D36] hover:bg-[#134e45] border border-[#D4A373]/40 text-[#D4A373] text-[9.5px] sm:text-[11px] font-bold shrink-0 tracking-wide uppercase transition-colors"
-          title="Ver orientações de acesso ao curso no rodapé da página"
+          title="Ver orientações de acesso ao curso e grupo VIP no WhatsApp no final da página"
         >
           <span>Acesso ao curso</span>
           <ArrowDown className="size-2.5 stroke-[2.5]" />

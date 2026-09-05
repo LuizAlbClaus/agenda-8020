@@ -140,12 +140,14 @@ test.describe("Landing Page Modular do Agenda 80/20", () => {
   }) => {
     await page.goto("/?lp=soft-gel");
 
-    // Eyebrow e Headline de interrupção e continuidade pós-curso
-    await expect(page.getByText(/Sua compra do Soft Gel Express foi confirmada/i)).toBeVisible();
-    await expect(page.getByRole("heading", { name: /^ESPERE\.$/i })).toBeVisible();
-    await expect(page.getByRole("link", { name: /SIM! ADICIONAR O AGENDA 80\/20 AO MEU PEDIDO/i }).first()).toBeVisible();
+    // Confirmação e Headline do Upsell Refatorado
+    await expect(page.getByText(/Compra confirmada: Soft Gel Express/i)).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /Não espere terminar o curso para descobrir como transformar o que você vai aprender em clientes\./i })
+    ).toBeVisible();
+    await expect(page.getByRole("link", { name: /SIM, QUERO ADICIONAR O AGENDA 80\/20/i }).first()).toBeVisible();
 
-    // A versão soft-gel NÃO deve exibir o bloco longo do problema
+    // A versão soft-gel NÃO deve exibir o bloco longo do problema da LP fria
     await expect(page.getByText("20 opções competindo pela sua atenção")).not.toBeVisible();
   });
 

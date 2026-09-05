@@ -96,17 +96,17 @@ export function UpsellClosing({
 
           {/* Clean, respectful decline link */}
           <div className="mt-5">
-            <Link
+            <a
               href={declineUrl}
               onClick={handleDeclineClick}
               className="inline-block py-2 px-3 text-xs text-[#A8C5BD]/80 hover:text-white underline underline-offset-4 transition-colors font-medium cursor-pointer"
             >
               Não, obrigado. Quero continuar apenas com o Soft Gel Express.
-            </Link>
+            </a>
           </div>
         </div>
 
-        {/* Bloco de Confirmação & Acesso Direto ao Soft Gel Express */}
+        {/* Bloco de Confirmação & Acesso Direto ao Soft Gel Express + Grupo VIP */}
         <div
           id="acesso-curso"
           className="mt-10 pt-6 border-t border-white/15 scroll-mt-20 text-left rounded-2xl bg-[#0E3D36] p-5 border border-[#3D7164]/40 shadow-lg"
@@ -116,21 +116,21 @@ export function UpsellClosing({
               <Check className="size-3 stroke-[3]" />
             </div>
             <h3 className="text-sm sm:text-base font-bold text-white">
-              Orientações de Acesso: Soft Gel Express
+              Orientações de Acesso: Soft Gel Express & Grupo VIP
             </h3>
           </div>
           <p className="text-xs text-[#E8F2EE] leading-relaxed">
-            Sua matrícula já está confirmada! O link de acesso à área de membros foi enviado para o seu e-mail cadastrado na Cakto. Você pode acessar suas aulas a qualquer momento.
+            Sua matrícula no <strong>Soft Gel Express</strong> está confirmada! O link de acesso às aulas e o <strong>convite exclusivo para o Grupo VIP da Comunidade no WhatsApp</strong> só são liberados na página de obrigado oficial da Flávia Claus.
           </p>
           <div className="mt-3.5">
-            <Link
+            <a
               href={declineUrl}
               onClick={handleDeclineClick}
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-white hover:bg-[#E8F2EE] text-[#0C2A26] font-bold text-xs transition-colors shadow-xs"
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-white hover:bg-[#E8F2EE] text-[#0C2A26] font-bold text-xs transition-colors shadow-xs cursor-pointer"
             >
-              <span>Ir para a confirmação de acesso do curso</span>
+              <span>Ir para a página de obrigado (Acesso & Grupo VIP no WhatsApp)</span>
               <ArrowRight className="size-3.5 stroke-[2.5]" />
-            </Link>
+            </a>
           </div>
         </div>
 

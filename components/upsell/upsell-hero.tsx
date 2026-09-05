@@ -33,9 +33,11 @@ export function UpsellHero({ checkoutUrl }: UpsellHeroProps) {
           </span>
         </div>
 
-        {/* Micro-aviso de transparência: onde está o acesso do curso */}
+        {/* Micro-aviso de transparência: onde está o acesso do curso e grupo VIP */}
         <p className="text-[11px] sm:text-xs text-[#3D5650] max-w-md mx-auto leading-tight text-balance">
-          O link foi enviado para seu e-mail e o acesso direto{" "}
+          O acesso ao curso e o convite exclusivo do{" "}
+          <strong className="text-[#0C2A26]">Grupo VIP da Comunidade no WhatsApp</strong>{" "}
+          só são liberados na página de obrigado que{" "}
           <a
             href="#acesso-curso"
             className="text-[#0C2A26] font-bold underline decoration-[#D4A373] underline-offset-2 hover:text-[#3D7164] transition-colors"

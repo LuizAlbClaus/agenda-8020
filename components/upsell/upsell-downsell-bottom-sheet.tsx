@@ -159,13 +159,18 @@ export function UpsellDownsellBottomSheet({
           </a>
 
           {/* Saída Limpa e Respeitosa (Zero confirmshaming / Zero armadilha) */}
-          <a
-            href={finalAccessUrl}
-            onClick={handleDecline}
-            className="w-full py-2.5 text-center text-xs text-slate-500 hover:text-slate-800 underline underline-offset-4 transition-colors font-medium cursor-pointer"
-          >
-            Não, obrigado. Quero ir direto para o curso Soft Gel Express.
-          </a>
+          <div className="text-center pt-1">
+            <p className="text-[11px] text-[#527068] mb-1 font-medium">
+              Seu acesso às aulas e o convite do grupo VIP no WhatsApp esperam por você na página seguinte:
+            </p>
+            <a
+              href={finalAccessUrl}
+              onClick={handleDecline}
+              className="inline-block py-2 text-xs text-slate-500 hover:text-slate-800 underline underline-offset-4 transition-colors font-medium cursor-pointer"
+            >
+              Não, obrigado. Quero ir direto para o curso Soft Gel Express.
+            </a>
+          </div>
         </div>
 
         {/* Footnote de Segurança */}

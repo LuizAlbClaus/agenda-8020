@@ -24,20 +24,28 @@ export function UpsellView({ searchParams }: UpsellViewProps) {
   const checkoutUrl = getCheckoutUrl("annual", searchParams);
   const semiannualCheckoutUrl = getCheckoutUrl("semiannual", searchParams);
 
-  // Build decline URL preserving query strings and signaling origin as soft-gel
+  // Build decline URL preserving query strings pointing to Flavia Claus official thank you page
+  const BASE_THANK_YOU_URL =
+    process.env.NEXT_PUBLIC_SOFT_GEL_THANK_YOU_URL ||
+    "https://flaviaclaus.com.br/obrigado-soft-gel";
+
   const declineParams = new URLSearchParams();
-  declineParams.set("origem", "soft-gel");
   if (searchParams && Object.keys(searchParams).length > 0) {
     for (const [key, val] of Object.entries(searchParams)) {
-      if (key === "origem") continue;
-      if (typeof val === "string") {
-        declineParams.set(key, val);
-      } else if (Array.isArray(val) && typeof val[0] === "string") {
-        declineParams.set(key, val[0]);
+      if (typeof val === "string" && val.trim().length > 0) {
+        declineParams.set(key, val.trim());
+      } else if (
+        Array.isArray(val) &&
+        val.length > 0 &&
+        typeof val[0] === "string" &&
+        val[0].trim().length > 0
+      ) {
+        declineParams.set(key, val[0].trim());
       }
     }
   }
-  const declineUrl = `/checkout/sucesso?${declineParams.toString()}`;
+  const queryString = declineParams.toString();
+  const declineUrl = queryString ? `${BASE_THANK_YOU_URL}?${queryString}` : BASE_THANK_YOU_URL;
 
   const [isDownsellOpen, setIsDownsellOpen] = useState(false);
 

@@ -109,7 +109,7 @@ test.describe("Landing Page de Upsell Soft Gel Express -> Agenda 80/20 (Refatora
     await expect(page.getByText(/Compra confirmada: Soft Gel Express/i)).toBeVisible();
   });
 
-  test("4. Link de Recusa e Bottom Sheet de Downsell: deve abrir proposta de R$ 97 e apontar para /checkout/sucesso com origem=soft-gel", async ({ page }) => {
+  test("4. Link de Recusa e Bottom Sheet de Downsell: deve abrir proposta de R$ 97 e apontar para https://flaviaclaus.com.br/obrigado-soft-gel preservando UTMs", async ({ page }) => {
     await page.goto("/upsell/soft-gel?utm_source=instagram");
 
     const declineLink = page.getByRole("link", {
@@ -117,8 +117,7 @@ test.describe("Landing Page de Upsell Soft Gel Express -> Agenda 80/20 (Refatora
     });
     await declineLink.scrollIntoViewIfNeeded();
     const href = await declineLink.getAttribute("href");
-    expect(href).toContain("/checkout/sucesso");
-    expect(href).toContain("origem=soft-gel");
+    expect(href).toContain("https://flaviaclaus.com.br/obrigado-soft-gel");
     expect(href).toContain("utm_source=instagram");
 
     // Ao clicar no link de recusa pela primeira vez, deve abrir o Bottom Sheet de Downsell
@@ -135,14 +134,14 @@ test.describe("Landing Page de Upsell Soft Gel Express -> Agenda 80/20 (Refatora
       path: "output/upsell-refactor/downsell-bottom-sheet-mobile-390.png",
     });
 
-    // Link de recusa final dentro do bottom sheet
+    // Link de recusa final dentro do bottom sheet deve direcionar para a página oficial de obrigado
     const finalDeclineLink = page.getByRole("link", {
       name: /Não, obrigado\. Quero ir direto para o curso Soft Gel Express\./i,
     });
     await expect(finalDeclineLink).toBeVisible();
     const finalHref = await finalDeclineLink.getAttribute("href");
-    expect(finalHref).toContain("/checkout/sucesso");
-    expect(finalHref).toContain("origem=soft-gel");
+    expect(finalHref).toContain("https://flaviaclaus.com.br/obrigado-soft-gel");
+    expect(finalHref).toContain("utm_source=instagram");
   });
 
   test("5. Responsividade em todas as viewports obrigatórias e captura de screenshots", async ({
