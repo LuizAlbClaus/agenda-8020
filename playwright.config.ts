@@ -14,7 +14,7 @@ export default defineConfig({
     ["html", { open: "never", outputFolder: "output/playwright/html-report" }],
   ],
   use: {
-    baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || "http://localhost:3005",
+    baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || "http://localhost:3019",
     trace: "retain-on-failure",
     screenshot: "on",
     permissions: ["clipboard-read", "clipboard-write"],
@@ -26,9 +26,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "npm.cmd run start -- -p 3005",
-    url: "http://localhost:3005",
-    reuseExistingServer: true,
+    command: "npm.cmd run start -- -p 3019",
+    url: "http://localhost:3019",
+    reuseExistingServer: false,
     timeout: 120 * 1000,
   },
 });

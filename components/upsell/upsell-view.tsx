@@ -4,14 +4,11 @@ import { UpsellProgressHeader } from "./upsell-progress-header";
 import { UpsellStickyCta } from "./upsell-sticky-cta";
 import { UpsellHero } from "./upsell-hero";
 import { UpsellGap } from "./upsell-gap";
-import { UpsellBridge } from "./upsell-bridge";
-import { UpsellPhases } from "./upsell-phases";
-import { UpsellInteractiveDemo } from "./upsell-interactive-demo";
-import { UpsellConcreteAction } from "./upsell-concrete-action";
-import { UpsellSystemHub } from "./upsell-system-hub";
-import { UpsellRealLife } from "./upsell-real-life";
-import { UpsellJourneyBooking } from "./upsell-journey-booking";
-import { UpsellOfferClosing } from "./upsell-offer-closing";
+import { UpsellMechanismDemo } from "./upsell-mechanism-demo";
+import { UpsellPsychologyPlan } from "./upsell-psychology-plan";
+import { UpsellOffer } from "./upsell-offer";
+import { UpsellFaq } from "./upsell-faq";
+import { UpsellClosing } from "./upsell-closing";
 import { LandingFooter } from "@/components/landing/landing-footer";
 
 interface UpsellViewProps {
@@ -36,52 +33,52 @@ export function UpsellView({ searchParams }: UpsellViewProps) {
     declineUrl = `/checkout/sucesso?${params.toString()}`;
   }
 
+  // Extract buyer's first name if available to personalize experience
+  const rawName =
+    typeof searchParams?.name === "string"
+      ? searchParams.name
+      : Array.isArray(searchParams?.name) && typeof searchParams.name[0] === "string"
+      ? searchParams.name[0]
+      : undefined;
+  const userName = rawName ? rawName.trim().split(" ")[0] : undefined;
+
   return (
     <main className="min-h-screen bg-[#FBF9F5] text-slate-900 selection:bg-[#FEECE6] selection:text-[#0C2A26]">
       {/* Telemetry on mount */}
       <UpsellTracker source="soft-gel-post-purchase" variant="soft-gel" />
 
       <div className="mx-auto w-full max-w-lg md:max-w-2xl lg:max-w-3xl overflow-hidden shadow-2xl bg-[#FBF9F5]">
-        {/* BARRA DE PROGRESSO & TIMER OTO REGRESSIVO */}
+        {/* PROGRESS HEADER — STATUS DO PEDIDO CONFIRMADO & ETAPA PÓS-COMPRA */}
         <UpsellProgressHeader />
 
-        {/* SEÇÃO 1 — HERO DE INTERRUPÇÃO PÓS-COMPRA (1.png) */}
+        {/* SEÇÃO 1 — HERO DE INTERRUPÇÃO PÓS-COMPRA & CTA PRIMÁRIO */}
         <UpsellHero checkoutUrl={checkoutUrl} />
 
-        {/* SEÇÃO 2 — A LACUNA ENTRE APRENDER E COMEÇAR (2.png) */}
+        {/* SEÇÃO 2 — O GAP: TÉCNICA (SGE) + DIREÇÃO (AGENDA 80/20) */}
         <UpsellGap />
 
-        {/* SEÇÃO 3 — A PONTE ENTRE OS DOIS PRODUTOS (3.png) */}
-        <UpsellBridge />
+        {/* SEÇÃO 3 — DEMONSTRAÇÃO DO MECANISMO: 1 MOCKUP GRANDE DA EXPERIÊNCIA */}
+        <UpsellMechanismDemo userName={userName} />
 
-        {/* SEÇÃO 4 — O AGENDA ACOMPANHA A FASE DA PROFISSIONAL (4.png) */}
-        <UpsellPhases />
+        {/* SEÇÃO 4 — DO 'DEPOIS EU VEJO' PARA UM PLANO: PSICOLOGIA DA DECISÃO */}
+        <UpsellPsychologyPlan />
 
-        {/* SEÇÃO 5 — DEMONSTRAÇÃO INTERATIVA DO ONBOARDING (5.png) */}
-        <UpsellInteractiveDemo checkoutUrl={checkoutUrl} />
+        {/* SEÇÃO 5 — OFERTA: CARD ÚNICO CONCENTRADO, PREÇO REAL E 7 DIAS DE GARANTIA */}
+        <UpsellOffer checkoutUrl={checkoutUrl} />
 
-        {/* SEÇÃO 6 — UMA PRIMEIRA AÇÃO CONCRETA (6.png) */}
-        <UpsellConcreteAction />
+        {/* SEÇÃO 6 — AS 4 OBJEÇÕES ESSENCIAIS */}
+        <UpsellFaq />
 
-        {/* SEÇÃO 7 — O QUE ACONTECE QUANDO NOVAS SITUAÇÕES APARECEM (7.png) */}
-        <UpsellSystemHub />
+        {/* SEÇÃO 7 — FECHAMENTO DA JORNADA, CTA FINAL E LINK DE RECUSA LIMPO */}
+        <UpsellClosing checkoutUrl={checkoutUrl} declineUrl={declineUrl} />
 
-        {/* SEÇÃO 8 — USO NA VIDA REAL (8.png) */}
-        <UpsellRealLife />
-
-        {/* SEÇÃO 9 — DA TÉCNICA À PRIMEIRA OPORTUNIDADE (9.png) */}
-        <UpsellJourneyBooking />
-
-        {/* SEÇÃO 10 — OFERTA, BELEVY, FAQ E FECHAMENTO (10.png) */}
-        <UpsellOfferClosing checkoutUrl={checkoutUrl} declineUrl={declineUrl} />
-
-        {/* Legal & Brand Footer */}
-        <div className="bg-[#0C2A26] px-4 pb-12 pt-2 border-t border-white/10 text-white">
+        {/* Rodapé Institucional */}
+        <div className="bg-[#0C2A26] px-4 pb-16 pt-2 border-t border-white/10 text-white">
           <LandingFooter />
         </div>
       </div>
 
-      {/* BARRA FLUTUANTE DE CHECKOUT MOBILE (STICKY BOTTOM) */}
+      {/* BARRA FLUTUANTE DE CHECKOUT MOBILE (STICKY BOTTOM ERGONÔMICA) */}
       <UpsellStickyCta checkoutUrl={checkoutUrl} />
     </main>
   );
