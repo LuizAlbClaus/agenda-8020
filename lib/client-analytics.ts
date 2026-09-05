@@ -19,6 +19,8 @@ type FunnelEvent =
   | "mechanism_viewed"
   | "faq_item_toggled"
   | "closing_cta_clicked"
+  | "hero_cta_click"
+  | "offer_view"
   | "upsell_view"
   | "upsell_cta_click"
   | "upsell_primary_cta_click"

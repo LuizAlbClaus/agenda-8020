@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { Check, ArrowRight, ShieldCheck, Sparkles, CheckCircle2, Gift } from "lucide-react";
 import { trackFunnelEvent } from "@/lib/client-analytics";
 
@@ -8,6 +9,27 @@ interface UpsellOfferProps {
 }
 
 export function UpsellOffer({ checkoutUrl }: UpsellOfferProps) {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          trackFunnelEvent("offer_view", { location: "offer_section" });
+          trackFunnelEvent("upsell_offer_view", { location: "offer_section" });
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   const handleCtaClick = () => {
     trackFunnelEvent("upsell_primary_cta_click", { location: "offer_section" });
     trackFunnelEvent("upsell_accept", { location: "offer_section" });
@@ -16,7 +38,7 @@ export function UpsellOffer({ checkoutUrl }: UpsellOfferProps) {
   };
 
   return (
-    <section id="oferta" className="bg-[#FBF9F5] py-14 px-4 border-t border-[#0C2A26]/5">
+    <section ref={sectionRef} id="oferta" className="bg-[#FBF9F5] py-14 px-4 border-t border-[#0C2A26]/5">
       <div className="max-w-xl mx-auto text-center">
         {/* Eyebrow */}
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#4E7A6E]/40 bg-[#E8F2EE] text-[#0C2A26] text-[11px] font-bold uppercase tracking-wider mb-3">
@@ -44,7 +66,7 @@ export function UpsellOffer({ checkoutUrl }: UpsellOfferProps) {
               </span>
             </div>
             <p className="text-xs text-[#D4A373] font-semibold">
-              Seu próximo passo após o Soft Gel Express · 12 meses de acesso
+              O complemento prático enquanto você aprende Soft Gel Express · 12 meses de acesso
             </p>
           </div>
 
@@ -89,7 +111,7 @@ export function UpsellOffer({ checkoutUrl }: UpsellOfferProps) {
                 <Check className="size-3 stroke-[3]" />
               </div>
               <span className="leading-snug">
-                <strong>Ações adaptadas ao seu momento:</strong> passos de preparação e posicionamento agora; de agendamento depois.
+                <strong>Ações adaptadas ao seu momento:</strong> passos de preparação e posicionamento enquanto aprende; de agendamento quando estiver pronta.
               </span>
             </div>
 
@@ -129,9 +151,14 @@ export function UpsellOffer({ checkoutUrl }: UpsellOfferProps) {
           </div>
 
           {/* Microcopy */}
-          <div className="mt-3 flex items-center justify-center gap-1.5 text-center text-[11px] text-[#A8C5BD]">
-            <ShieldCheck className="size-3.5 text-[#3D7164]" />
-            <span>Adicionar à minha compra · Pagamento único · Garantia incondicional de 7 dias</span>
+          <div className="mt-3 flex flex-col items-center justify-center gap-1 text-center text-xs text-[#A8C5BD]">
+            <p className="font-semibold text-white">
+              Seu Soft Gel Express já está comprado e garantido. Esta oferta adiciona apenas o Agenda 80/20.
+            </p>
+            <div className="flex items-center gap-1.5 text-[11px] text-[#A8C5BD]/80">
+              <ShieldCheck className="size-3.5 text-[#3D7164]" />
+              <span>Adicionar à minha compra · Pagamento único anual · Garantia incondicional de 7 dias</span>
+            </div>
           </div>
         </div>
       </div>

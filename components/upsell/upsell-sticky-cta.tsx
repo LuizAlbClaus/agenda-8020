@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { trackFunnelEvent } from "@/lib/client-analytics";
 
@@ -8,6 +9,18 @@ interface UpsellStickyCtaProps {
 }
 
 export function UpsellStickyCta({ checkoutUrl }: UpsellStickyCtaProps) {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Exibe a barra flutuante apenas quando o usuário rolar além do primeiro viewport do Hero
+      setIsVisible(window.scrollY > 360);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const handleClick = () => {
     trackFunnelEvent("upsell_primary_cta_click", { location: "sticky_mobile_bottom" });
     trackFunnelEvent("upsell_accept", { location: "sticky_mobile_bottom" });
@@ -15,10 +28,12 @@ export function UpsellStickyCta({ checkoutUrl }: UpsellStickyCtaProps) {
     trackFunnelEvent("upsell_checkout_redirect", { location: "sticky_mobile_bottom" });
   };
 
+  if (!isVisible) return null;
+
   return (
     <aside
       aria-label="Ação rápida de adicionar ao pedido"
-      className="fixed bottom-0 left-0 right-0 z-50 p-2.5 sm:p-3 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] md:hidden"
+      className="fixed bottom-0 left-0 right-0 z-50 p-2.5 sm:p-3 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] md:hidden transition-all animate-in fade-in slide-in-from-bottom duration-300"
     >
       <div className="flex items-center justify-between gap-3 max-w-md mx-auto">
         <div className="flex flex-col text-left shrink-0">

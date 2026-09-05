@@ -11,10 +11,11 @@ test.describe("Landing Page de Upsell Soft Gel Express -> Agenda 80/20 (Refatora
     await expect(page.getByText(/Etapa 2 de 2/i)).toBeVisible();
 
     // SEÇÃO 1: Hero de Interrupção Pós-Compra & CTA Primário
-    await expect(page.getByText(/Sua inscrição no Soft Gel Express foi confirmada!/i)).toBeVisible();
-    await expect(page.getByText(/^ESPERE\.$/i)).toBeVisible();
+    await expect(page.getByText(/Compra confirmada/i).first()).toBeVisible();
+    await expect(page.getByText(/Seu Soft Gel Express já está garantido\./i)).toBeVisible();
+    await expect(page.getByText(/ESPERE — ANTES DE ACESSAR SEU CURSO/i)).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: /Você acabou de dar o primeiro passo para aprender Soft Gel\./i })
+      page.getByRole("heading", { name: /Não espere terminar o curso para descobrir como transformar o que você vai aprender em clientes\./i })
     ).toBeVisible();
     await expect(page.getByText(/Conheça o Agenda 80\/20/i)).toBeVisible();
     await expect(
@@ -23,7 +24,7 @@ test.describe("Landing Page de Upsell Soft Gel Express -> Agenda 80/20 (Refatora
 
     // SEÇÃO 2: O Gap (Técnica vs Direção)
     await expect(
-      page.getByRole("heading", { name: /Aprender a técnica é o primeiro passo\. Saber o que fazer depois é outro\./i })
+      page.getByRole("heading", { name: /Aprender a técnica resolve uma parte\. Saber o que fazer com ela resolve a próxima\./i })
     ).toBeVisible();
     await expect(page.getByText(/O que fazer nas unhas/i)).toBeVisible();
     await expect(page.getByText(/O que fazer pelo seu negócio/i)).toBeVisible();
@@ -94,7 +95,7 @@ test.describe("Landing Page de Upsell Soft Gel Express -> Agenda 80/20 (Refatora
 
     await expect(page.getByText(/Compra confirmada: Soft Gel Express/i)).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: /Você acabou de dar o primeiro passo para aprender Soft Gel\./i })
+      page.getByRole("heading", { name: /Não espere terminar o curso para descobrir como transformar o que você vai aprender em clientes\./i })
     ).toBeVisible();
 
     const ctaLink = page.getByRole("link", { name: /SIM, QUERO ADICIONAR O AGENDA 80\/20/i }).first();

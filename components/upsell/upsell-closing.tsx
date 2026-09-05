@@ -71,7 +71,10 @@ export function UpsellClosing({ checkoutUrl, declineUrl }: UpsellClosingProps) {
             <ArrowRight className="size-4.5 stroke-[2.5]" />
           </a>
 
-          <p className="mt-2 text-[11px] text-[#A8C5BD]">
+          <p className="mt-2.5 text-xs text-white/90 font-medium">
+            Seu Soft Gel Express já está comprado e garantido. Esta oferta adiciona apenas o Agenda 80/20.
+          </p>
+          <p className="mt-1 text-[11px] text-[#A8C5BD]">
             12x de R$ 15,19 ou R$ 147 à vista · Pagamento único · Garantia de 7 dias
           </p>
 

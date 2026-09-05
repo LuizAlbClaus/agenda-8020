@@ -12,15 +12,15 @@ export function UpsellGap() {
 
         {/* Headline */}
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-[#0C2A26] leading-tight text-balance">
-          Aprender a técnica é o primeiro passo.{" "}
+          Aprender a técnica resolve uma parte.{" "}
           <span className="text-[#3D7164] block sm:inline">
-            Saber o que fazer depois é outro.
+            Saber o que fazer com ela resolve a próxima.
           </span>
         </h2>
 
         {/* Explanatory text */}
-        <p className="mt-3 text-xs sm:text-sm text-[#3D5650] max-w-md mx-auto leading-relaxed">
-          Você já resolveu o que vai aprender. Agora pode também ter um plano simples para não terminar o curso perguntando: <em>&ldquo;e agora, por onde começo a divulgar?&rdquo;</em>
+        <p className="mt-3 text-xs sm:text-sm text-[#3D5650] max-w-md mx-auto leading-relaxed text-balance">
+          Você já garantiu o aprendizado da técnica no Soft Gel Express. Agora pode também ter um plano simples para não terminar o curso se perguntando: <em>&ldquo;e agora, por onde começo a buscar clientes?&rdquo;</em>
         </p>
 
         {/* Two Step Cards */}
@@ -39,7 +39,7 @@ export function UpsellGap() {
                 Soft Gel Express
               </h3>
               <p className="text-xs text-slate-500 mt-0.5 mb-4">
-                Ensina você a dominar a aplicação perfeita:
+                Vai te ensinar a técnica do zero:
               </p>
 
               <ul className="space-y-2.5 text-xs text-[#0C2A26]">
@@ -53,13 +53,13 @@ export function UpsellGap() {
                   <div className="size-4 rounded-full bg-[#E8F2EE] flex items-center justify-center text-[#3D7164] shrink-0 mt-0.5">
                     <Check className="size-2.5 stroke-[3]" />
                   </div>
-                  <span>Praticar com segurança e acabamento limpo</span>
+                  <span>Praticar com segurança e acabamento profissional</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="size-4 rounded-full bg-[#E8F2EE] flex items-center justify-center text-[#3D7164] shrink-0 mt-0.5">
                     <Check className="size-2.5 stroke-[3]" />
                   </div>
-                  <span>Ficar pronta para oferecer o serviço</span>
+                  <span>Ficar preparada para oferecer o serviço</span>
                 </li>
               </ul>
             </div>
@@ -83,7 +83,7 @@ export function UpsellGap() {
                 Agenda 80/20
               </h3>
               <p className="text-xs text-[#A8C5BD] mt-0.5 mb-4">
-                Mostra quais ações começar a construir hoje:
+                Mostra quais ações preparar enquanto aprende:
               </p>
 
               <ul className="space-y-2.5 text-xs text-[#E8F2EE]">
@@ -103,7 +103,7 @@ export function UpsellGap() {
                   <div className="size-4 rounded-full bg-[#0E3D36] border border-[#D4A373]/40 flex items-center justify-center text-[#D4A373] shrink-0 mt-0.5">
                     <Check className="size-2.5 stroke-[3]" />
                   </div>
-                  <span>Ter pessoas esperando quando sua agenda abrir</span>
+                  <span>Ter pessoas interessadas esperando quando você estiver pronta</span>
                 </li>
               </ul>
             </div>
@@ -116,7 +116,7 @@ export function UpsellGap() {
 
         {/* Integration Callout */}
         <div className="mt-6 rounded-2xl bg-[#E8F2EE] border border-[#3D7164]/20 p-3.5 text-xs text-[#0C2A26] font-medium leading-relaxed max-w-md mx-auto">
-          <strong>O Agenda 80/20 não substitui o curso e não ensina Soft Gel.</strong> Ele é o complemento que organiza seus passos para você não deixar sua captação de clientes para ser descoberta do zero depois.
+          <strong>O Agenda 80/20 não substitui o curso e não ensina Soft Gel.</strong> Ele é o complemento que organiza seus passos para você não precisar começar a buscar clientes do zero depois.
         </div>
       </div>
     </section>
