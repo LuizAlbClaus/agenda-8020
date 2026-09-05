@@ -40,7 +40,7 @@ export function LandingHero({ variant = "cold" }: LandingHeroProps) {
   };
 
   return (
-    <section className="relative overflow-hidden pt-8 pb-14 sm:pt-12 sm:pb-20 text-center">
+    <section className="relative overflow-hidden pt-4 pb-14 sm:pt-6 sm:pb-20 text-center">
       {/* Background Subtle Organic Foliage (Bottom Left) */}
       <div className="absolute left-0 bottom-10 w-48 sm:w-64 pointer-events-none opacity-40 select-none -z-10">
         <Image
@@ -49,18 +49,6 @@ export function LandingHero({ variant = "cold" }: LandingHeroProps) {
           width={220}
           height={500}
           className="w-full h-auto object-contain"
-          priority
-        />
-      </div>
-
-      {/* Top Logo */}
-      <div className="flex justify-center mb-6 sm:mb-8">
-        <Image
-          src="/media/agenda8020/brand-logo.png"
-          alt="agenda 80/20"
-          width={220}
-          height={42}
-          className="h-8 sm:h-10 w-auto object-contain"
           priority
         />
       </div>

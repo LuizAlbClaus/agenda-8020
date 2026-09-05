@@ -17,8 +17,8 @@ export function UpsellHero({ checkoutUrl }: UpsellHeroProps) {
 
   return (
     <section className="relative pt-5 pb-8 sm:pt-8 sm:pb-12 text-center bg-[#FBF9F5] px-4 sm:px-6">
-      {/* 01 • Confirmação da Compra (Pequeno bloco visual de confiança) */}
-      <div className="flex items-center justify-center">
+      {/* 01 • Confirmação da Compra (Pequeno bloco visual de confiança com ancoragem) */}
+      <div className="flex flex-col items-center justify-center gap-1.5 max-w-lg mx-auto">
         <div className="inline-flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 px-3.5 py-1.5 rounded-2xl sm:rounded-full bg-[#E8F2EE] border border-[#3D7164]/25 text-[11px] sm:text-xs text-[#0C2A26] shadow-xs text-center">
           <div className="inline-flex items-center gap-1.5">
             <div className="size-3.5 rounded-full bg-[#3D7164] flex items-center justify-center text-white shrink-0">
@@ -32,12 +32,24 @@ export function UpsellHero({ checkoutUrl }: UpsellHeroProps) {
             Seu Soft Gel Express já está garantido.
           </span>
         </div>
+
+        {/* Micro-aviso de transparência: onde está o acesso do curso */}
+        <p className="text-[11px] sm:text-xs text-[#3D5650] max-w-md mx-auto leading-tight text-balance">
+          O link foi enviado para seu e-mail e o acesso direto{" "}
+          <a
+            href="#acesso-curso"
+            className="text-[#0C2A26] font-bold underline decoration-[#D4A373] underline-offset-2 hover:text-[#3D7164] transition-colors"
+          >
+            está no final desta página
+          </a>.
+        </p>
       </div>
 
-      {/* 02 • Pattern Interrupt (Secundário e elegante) */}
+      {/* 02 • Pattern Interrupt & Recomendação Exclusiva */}
       <div className="mt-3 sm:mt-3.5">
-        <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-black uppercase tracking-wider text-[#E07A5F] px-3 py-1 rounded-full bg-[#FEECE6] border border-[#E07A5F]/20">
-          ESPERE — ANTES DE ACESSAR SEU CURSO
+        <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-black uppercase tracking-wider text-[#E07A5F] px-3.5 py-1 rounded-full bg-[#FEECE6] border border-[#E07A5F]/20">
+          <Sparkles className="size-3 text-[#E07A5F]" />
+          <span>RECOMENDAÇÃO EXCLUSIVA DE BOAS-VINDAS DA FLÁVIA CLAUS</span>
         </span>
       </div>
 

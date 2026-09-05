@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { getCheckoutUrl } from "@/lib/checkout";
 import { UpsellTracker } from "./upsell-tracker";
 import { UpsellProgressHeader } from "./upsell-progress-header";
@@ -9,6 +12,7 @@ import { UpsellPsychologyPlan } from "./upsell-psychology-plan";
 import { UpsellOffer } from "./upsell-offer";
 import { UpsellFaq } from "./upsell-faq";
 import { UpsellClosing } from "./upsell-closing";
+import { UpsellDownsellBottomSheet } from "./upsell-downsell-bottom-sheet";
 import { LandingFooter } from "@/components/landing/landing-footer";
 
 interface UpsellViewProps {
@@ -16,22 +20,26 @@ interface UpsellViewProps {
 }
 
 export function UpsellView({ searchParams }: UpsellViewProps) {
-  // Resolve Cakto annual checkout URL with UTM preservation
+  // Resolve Cakto annual checkout URL (Upsell) and semiannual checkout URL (Downsell) with UTMs
   const checkoutUrl = getCheckoutUrl("annual", searchParams);
+  const semiannualCheckoutUrl = getCheckoutUrl("semiannual", searchParams);
 
-  // Build decline URL preserving query strings
-  let declineUrl = "/checkout/sucesso";
+  // Build decline URL preserving query strings and signaling origin as soft-gel
+  const declineParams = new URLSearchParams();
+  declineParams.set("origem", "soft-gel");
   if (searchParams && Object.keys(searchParams).length > 0) {
-    const params = new URLSearchParams();
     for (const [key, val] of Object.entries(searchParams)) {
+      if (key === "origem") continue;
       if (typeof val === "string") {
-        params.set(key, val);
+        declineParams.set(key, val);
       } else if (Array.isArray(val) && typeof val[0] === "string") {
-        params.set(key, val[0]);
+        declineParams.set(key, val[0]);
       }
     }
-    declineUrl = `/checkout/sucesso?${params.toString()}`;
   }
+  const declineUrl = `/checkout/sucesso?${declineParams.toString()}`;
+
+  const [isDownsellOpen, setIsDownsellOpen] = useState(false);
 
   // Extract buyer's first name if available to personalize experience
   const rawName =
@@ -69,8 +77,12 @@ export function UpsellView({ searchParams }: UpsellViewProps) {
         {/* SEÇÃO 6 — AS 4 OBJEÇÕES ESSENCIAIS */}
         <UpsellFaq />
 
-        {/* SEÇÃO 7 — FECHAMENTO DA JORNADA, CTA FINAL E LINK DE RECUSA LIMPO */}
-        <UpsellClosing checkoutUrl={checkoutUrl} declineUrl={declineUrl} />
+        {/* SEÇÃO 7 — FECHAMENTO DA JORNADA, CTA FINAL E LINK DE RECUSA COM DOWNSELL */}
+        <UpsellClosing
+          checkoutUrl={checkoutUrl}
+          declineUrl={declineUrl}
+          onOpenDownsell={() => setIsDownsellOpen(true)}
+        />
 
         {/* Rodapé Institucional */}
         <div className="bg-[#0C2A26] px-4 pb-16 pt-2 border-t border-white/10 text-white">
@@ -79,7 +91,15 @@ export function UpsellView({ searchParams }: UpsellViewProps) {
       </div>
 
       {/* BARRA FLUTUANTE DE CHECKOUT MOBILE (STICKY BOTTOM ERGONÔMICA) */}
-      <UpsellStickyCta checkoutUrl={checkoutUrl} />
+      <UpsellStickyCta checkoutUrl={checkoutUrl} isHidden={isDownsellOpen} />
+
+      {/* BOTTOM SHEET MOBILE DE DOWNSELL (R$ 97 / 6 MESES) */}
+      <UpsellDownsellBottomSheet
+        isOpen={isDownsellOpen}
+        onClose={() => setIsDownsellOpen(false)}
+        checkoutUrl={semiannualCheckoutUrl}
+        finalAccessUrl={declineUrl}
+      />
     </main>
   );
 }

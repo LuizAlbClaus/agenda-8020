@@ -30,7 +30,11 @@ type FunnelEvent =
   | "upsell_demo_interaction"
   | "upsell_faq_open"
   | "upsell_checkout_redirect"
-  | "upsell_decline_click";
+  | "upsell_decline_click"
+  | "upsell_downsell_opened"
+  | "upsell_downsell_accepted"
+  | "upsell_downsell_declined"
+  | "upsell_skip_to_access";
 
 export function trackFunnelEvent(event: FunnelEvent, params?: Record<string, unknown>) {
   if (typeof window === "undefined") return;

@@ -81,15 +81,15 @@ export function UpsellPsychologyPlan() {
 
               <ul className="space-y-2.5 text-xs text-[#E8F2EE]">
                 <li className="flex items-start gap-2">
-                  <span className="text-[#D4A373] font-bold">↓</span>
+                  <Check className="size-3.5 text-[#D4A373] shrink-0 mt-0.5 stroke-[2.5]" />
                   <span>Preparação profissional sem ansiedade</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-[#D4A373] font-bold">↓</span>
+                  <Check className="size-3.5 text-[#D4A373] shrink-0 mt-0.5 stroke-[2.5]" />
                   <span>Ações práticas e rápidas de 10 minutos</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-[#D4A373] font-bold">↓</span>
+                  <Check className="size-3.5 text-[#D4A373] shrink-0 mt-0.5 stroke-[2.5]" />
                   <span>Quando estiver pronta para atender, seu caminho já está construído</span>
                 </li>
               </ul>

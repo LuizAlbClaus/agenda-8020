@@ -2,7 +2,20 @@ import Link from "next/link";
 import { ArrowRight, Mail, Sparkles, ShieldCheck } from "lucide-react";
 import { BrandIcon, BrandMark } from "@/components/ui/brand-mark";
 
-export default function CheckoutSuccessPage() {
+export default async function CheckoutSuccessPage(props: {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const searchParams = props.searchParams ? await props.searchParams : undefined;
+  const rawOrigem = searchParams?.origem;
+  const origem =
+    typeof rawOrigem === "string"
+      ? rawOrigem
+      : Array.isArray(rawOrigem) && typeof rawOrigem[0] === "string"
+      ? rawOrigem[0]
+      : undefined;
+
+  const isSoftGel = origem === "soft-gel";
+
   return (
     <main className="flex min-h-screen flex-col justify-between bg-[var(--color-canvas)] px-4 py-6 text-[var(--color-ink-solid)] sm:px-8 sm:py-10">
       {/* Top Brand Header */}
@@ -31,34 +44,46 @@ export default function CheckoutSuccessPage() {
           <div className="mt-5">
             <span className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[var(--color-revenue-primary)]">
               <Sparkles className="size-3.5" aria-hidden="true" />
-              Compra confirmada com sucesso
+              {isSoftGel ? "Matrícula confirmada com sucesso" : "Compra confirmada com sucesso"}
             </span>
             <h1 className="mt-2 text-2xl font-bold leading-tight tracking-[-0.03em] text-balance text-[var(--color-ink-solid)] sm:text-3xl">
-              Seu acesso ao Agenda 80/20 está pronto!
+              {isSoftGel
+                ? "Sua matrícula no Soft Gel Express está confirmada!"
+                : "Seu acesso ao Agenda 80/20 está pronto!"}
             </h1>
             <p className="mt-3 text-sm leading-relaxed text-[var(--color-ink-muted)] text-pretty sm:text-base">
-              Acabamos de enviar seu <strong>link mágico de acesso</strong> para o e-mail que você informou no momento do pagamento na Cakto.
+              {isSoftGel
+                ? "Acabamos de enviar as instruções de acesso e login da sua área de membros para o e-mail informado no momento do pagamento na Cakto."
+                : "Acabamos de enviar seu link mágico de acesso para o e-mail que você informou no momento do pagamento na Cakto."}
             </p>
           </div>
 
           {/* Step by step guide */}
           <div className="mt-6 rounded-[var(--radius-sm)] border border-[var(--color-border-subtle)] bg-[var(--color-surface-muted)] p-4 sm:p-5">
             <h2 className="text-xs font-bold uppercase tracking-wider text-[var(--color-ink-solid)]">
-              Como acessar seu aplicativo agora:
+              {isSoftGel ? "Como acessar seu curso agora:" : "Como acessar seu aplicativo agora:"}
             </h2>
             <ol className="mt-3 space-y-3 text-sm text-[var(--color-ink-solid)]">
               <li className="flex items-start gap-2.5">
                 <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-[var(--color-action-primary)] text-xs font-bold text-white">
                   1
                 </span>
-                <span>Abra a caixa de entrada do seu e-mail cadastrado.</span>
+                <span>Abra a caixa de entrada do seu e-mail cadastrado na compra.</span>
               </li>
               <li className="flex items-start gap-2.5">
                 <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-[var(--color-action-primary)] text-xs font-bold text-white">
                   2
                 </span>
                 <span>
-                  Procure pela mensagem com o assunto <em>“Seu acesso ao Agenda 80/20 está pronto”</em> enviada por <strong>Flávia Claus</strong>.
+                  {isSoftGel ? (
+                    <>
+                      Procure pela mensagem com as <strong>instruções de acesso ao Soft Gel Express</strong> enviada por <strong>Flávia Claus</strong>.
+                    </>
+                  ) : (
+                    <>
+                      Procure pela mensagem com o assunto <em>“Seu acesso ao Agenda 80/20 está pronto”</em> enviada por <strong>Flávia Claus</strong>.
+                    </>
+                  )}
                 </span>
               </li>
               <li className="flex items-start gap-2.5">
@@ -66,7 +91,9 @@ export default function CheckoutSuccessPage() {
                   3
                 </span>
                 <span>
-                  Clique no botão do e-mail para entrar direto, sem precisar criar senha.
+                  {isSoftGel
+                    ? "Clique no link enviado para definir sua senha e começar a assistir às aulas."
+                    : "Clique no botão do e-mail para entrar direto, sem precisar criar senha."}
                 </span>
               </li>
             </ol>
@@ -83,10 +110,10 @@ export default function CheckoutSuccessPage() {
           {/* Actions */}
           <div className="mt-8 flex flex-col gap-3">
             <Link
-              href="/login"
+              href={isSoftGel ? "/" : "/login"}
               className="inline-flex min-h-[48px] items-center justify-center rounded-[var(--radius-button)] bg-[var(--color-action-primary)] px-5 text-sm font-bold text-white shadow-sm transition-colors hover:bg-[var(--color-action-hover)] focus-visible:outline-none"
             >
-              <span>Já conferi meu e-mail e quero entrar</span>
+              <span>{isSoftGel ? "Já conferi meu e-mail para acessar as aulas" : "Já conferi meu e-mail e quero entrar"}</span>
               <ArrowRight className="ml-2 size-4" aria-hidden="true" />
             </Link>
 

@@ -12,6 +12,12 @@ export function LandingFooter() {
       </div>
       <div className="flex items-center gap-5 shrink-0">
         <Link
+          href="/login"
+          className="font-medium text-[var(--color-ink-solid)] underline underline-offset-4 transition-colors hover:text-[var(--color-action-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-action-primary)]"
+        >
+          Entrar na conta
+        </Link>
+        <Link
           href="/privacy"
           className="underline underline-offset-4 transition-colors hover:text-[var(--color-ink-solid)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-action-primary)]"
         >

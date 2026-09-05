@@ -10,6 +10,11 @@ test.describe("Landing Page Modular do Agenda 80/20", () => {
   }) => {
     await page.goto("/?lp=cold");
 
+    // 0. Header checks
+    const loginHeaderLink = page.getByRole("link", { name: /^Entrar$/i });
+    await expect(loginHeaderLink).toBeVisible();
+    await expect(loginHeaderLink).toHaveAttribute("href", "/login");
+
     // 1. Hero checks
     await expect(page.getByText("1 ação de cada vez · feita para o seu momento")).toBeVisible();
     await expect(
@@ -123,6 +128,11 @@ test.describe("Landing Page Modular do Agenda 80/20", () => {
     await expect(
       page.getByRole("heading", { name: /Precisa sair sabendo qual é a próxima/i })
     ).toBeVisible();
+
+    // 14. Rodapé
+    const loginFooterLink = page.getByRole("link", { name: /Entrar na conta/i });
+    await expect(loginFooterLink).toBeVisible();
+    await expect(loginFooterLink).toHaveAttribute("href", "/login");
   });
 
   test("2. Variante SOFT-GEL (Upsell): Deve carregar o fluxo de upsell dedicado", async ({

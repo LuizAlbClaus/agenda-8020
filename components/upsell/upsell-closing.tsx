@@ -1,15 +1,22 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, Check, Sparkles } from "lucide-react";
+import { ArrowRight, ShieldCheck, Check } from "lucide-react";
 import { trackFunnelEvent } from "@/lib/client-analytics";
-
 interface UpsellClosingProps {
   checkoutUrl: string;
   declineUrl: string;
+  onOpenDownsell: () => void;
 }
 
-export function UpsellClosing({ checkoutUrl, declineUrl }: UpsellClosingProps) {
+export function UpsellClosing({
+  checkoutUrl,
+  declineUrl,
+  onOpenDownsell,
+}: UpsellClosingProps) {
+  const [hasSeenDownsell, setHasSeenDownsell] = useState(false);
+
   const handleCtaClick = () => {
     trackFunnelEvent("upsell_primary_cta_click", { location: "closing" });
     trackFunnelEvent("upsell_accept", { location: "closing" });
@@ -17,9 +24,18 @@ export function UpsellClosing({ checkoutUrl, declineUrl }: UpsellClosingProps) {
     trackFunnelEvent("upsell_checkout_redirect", { location: "closing" });
   };
 
-  const handleDeclineClick = () => {
-    trackFunnelEvent("upsell_decline", { location: "closing" });
-    trackFunnelEvent("upsell_decline_click", { location: "closing" });
+  const handleDeclineClick = (e: React.MouseEvent) => {
+    if (!hasSeenDownsell) {
+      e.preventDefault();
+      trackFunnelEvent("upsell_decline", { location: "closing" });
+      trackFunnelEvent("upsell_decline_click", { location: "closing" });
+      trackFunnelEvent("upsell_downsell_opened", { location: "closing" });
+      setHasSeenDownsell(true);
+      onOpenDownsell();
+    } else {
+      trackFunnelEvent("upsell_decline", { location: "closing" });
+      trackFunnelEvent("upsell_decline_click", { location: "closing" });
+    }
   };
 
   return (
@@ -78,7 +94,7 @@ export function UpsellClosing({ checkoutUrl, declineUrl }: UpsellClosingProps) {
             12x de R$ 15,19 ou R$ 147 à vista · Pagamento único · Garantia de 7 dias
           </p>
 
-          {/* Clean, respectful decline link (zero confirmshaming / zero dark pattern) */}
+          {/* Clean, respectful decline link */}
           <div className="mt-5">
             <Link
               href={declineUrl}
@@ -86,6 +102,34 @@ export function UpsellClosing({ checkoutUrl, declineUrl }: UpsellClosingProps) {
               className="inline-block py-2 px-3 text-xs text-[#A8C5BD]/80 hover:text-white underline underline-offset-4 transition-colors font-medium cursor-pointer"
             >
               Não, obrigado. Quero continuar apenas com o Soft Gel Express.
+            </Link>
+          </div>
+        </div>
+
+        {/* Bloco de Confirmação & Acesso Direto ao Soft Gel Express */}
+        <div
+          id="acesso-curso"
+          className="mt-10 pt-6 border-t border-white/15 scroll-mt-20 text-left rounded-2xl bg-[#0E3D36] p-5 border border-[#3D7164]/40 shadow-lg"
+        >
+          <div className="flex items-center gap-2 mb-1.5">
+            <div className="size-5 rounded-full bg-[#3D7164] flex items-center justify-center text-white shrink-0">
+              <Check className="size-3 stroke-[3]" />
+            </div>
+            <h3 className="text-sm sm:text-base font-bold text-white">
+              Orientações de Acesso: Soft Gel Express
+            </h3>
+          </div>
+          <p className="text-xs text-[#E8F2EE] leading-relaxed">
+            Sua matrícula já está confirmada! O link de acesso à área de membros foi enviado para o seu e-mail cadastrado na Cakto. Você pode acessar suas aulas a qualquer momento.
+          </p>
+          <div className="mt-3.5">
+            <Link
+              href={declineUrl}
+              onClick={handleDeclineClick}
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-white hover:bg-[#E8F2EE] text-[#0C2A26] font-bold text-xs transition-colors shadow-xs"
+            >
+              <span>Ir para a confirmação de acesso do curso</span>
+              <ArrowRight className="size-3.5 stroke-[2.5]" />
             </Link>
           </div>
         </div>

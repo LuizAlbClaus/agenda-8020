@@ -6,9 +6,10 @@ import { trackFunnelEvent } from "@/lib/client-analytics";
 
 interface UpsellStickyCtaProps {
   checkoutUrl: string;
+  isHidden?: boolean;
 }
 
-export function UpsellStickyCta({ checkoutUrl }: UpsellStickyCtaProps) {
+export function UpsellStickyCta({ checkoutUrl, isHidden = false }: UpsellStickyCtaProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -28,7 +29,7 @@ export function UpsellStickyCta({ checkoutUrl }: UpsellStickyCtaProps) {
     trackFunnelEvent("upsell_checkout_redirect", { location: "sticky_mobile_bottom" });
   };
 
-  if (!isVisible) return null;
+  if (!isVisible || isHidden) return null;
 
   return (
     <aside

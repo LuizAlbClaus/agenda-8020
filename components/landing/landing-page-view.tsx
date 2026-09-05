@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import type { LandingVariant } from "./types";
+import { LandingHeader } from "./landing-header";
 import { LandingHero } from "./landing-hero";
 import { LandingProblem } from "./landing-problem";
 import { LandingMechanism } from "./landing-mechanism";
@@ -38,6 +39,9 @@ export function LandingPageView({ variant, searchParams }: LandingPageViewProps)
   return (
     <main className="min-h-screen bg-[#FBF9F5] text-slate-900 selection:bg-[#FEECE6] selection:text-[#0C2A26]">
       <div className="mx-auto w-full max-w-lg md:max-w-2xl lg:max-w-4xl">
+        {/* Top Navigation Bar with Logo & Login */}
+        <LandingHeader />
+
         {/* 01 • Hero Section (1.png) */}
         <LandingHero variant={variant} searchParams={searchParams} />
 

@@ -6,14 +6,15 @@ test.describe("Landing Page de Upsell Soft Gel Express -> Agenda 80/20 (Refatora
   }) => {
     await page.goto("/upsell/soft-gel");
 
-    // HEADER: Confirmação do pedido e indicador sóbrio de etapa
+    // HEADER: Confirmação do pedido e indicador de acesso ao curso
     await expect(page.getByText(/Compra confirmada: Soft Gel Express/i)).toBeVisible();
-    await expect(page.getByText(/Etapa 2 de 2/i)).toBeVisible();
+    await expect(page.getByRole("link", { name: /Acesso ao curso/i })).toBeVisible();
 
-    // SEÇÃO 1: Hero de Interrupção Pós-Compra & CTA Primário
+    // SEÇÃO 1: Hero de Interrupção Pós-Compra & CTA Primário com Ancoragem de Acesso
     await expect(page.getByText(/Compra confirmada/i).first()).toBeVisible();
     await expect(page.getByText(/Seu Soft Gel Express já está garantido\./i)).toBeVisible();
-    await expect(page.getByText(/ESPERE — ANTES DE ACESSAR SEU CURSO/i)).toBeVisible();
+    await expect(page.getByText(/está no final desta página/i)).toBeVisible();
+    await expect(page.getByText(/RECOMENDAÇÃO EXCLUSIVA DE BOAS-VINDAS DA FLÁVIA CLAUS/i)).toBeVisible();
     await expect(
       page.getByRole("heading", { name: /Não espere terminar o curso para descobrir como transformar o que você vai aprender em clientes\./i })
     ).toBeVisible();
@@ -63,10 +64,11 @@ test.describe("Landing Page de Upsell Soft Gel Express -> Agenda 80/20 (Refatora
     await expect(page.getByText(/Eu não sei nada de marketing ou vendas\./i)).toBeVisible();
     await expect(page.getByText(/Vou ter mais um curso longo para assistir\?/i)).toBeVisible();
 
-    // SEÇÃO 7: Fechamento e Link de Recusa sem Dark Patterns
+    // SEÇÃO 7: Fechamento, Bloco de Acesso do Curso e Link de Recusa
     await expect(
       page.getByRole("heading", { name: /começar do zero ou já ter um caminho\./i })
     ).toBeVisible();
+    await expect(page.getByText(/Orientações de Acesso: Soft Gel Express/i)).toBeVisible();
     await expect(
       page.getByRole("link", { name: /Não, obrigado\. Quero continuar apenas com o Soft Gel Express\./i })
     ).toBeVisible();
@@ -107,7 +109,7 @@ test.describe("Landing Page de Upsell Soft Gel Express -> Agenda 80/20 (Refatora
     await expect(page.getByText(/Compra confirmada: Soft Gel Express/i)).toBeVisible();
   });
 
-  test("4. Link de Recusa (Decline): deve apontar para /checkout/sucesso", async ({ page }) => {
+  test("4. Link de Recusa e Bottom Sheet de Downsell: deve abrir proposta de R$ 97 e apontar para /checkout/sucesso com origem=soft-gel", async ({ page }) => {
     await page.goto("/upsell/soft-gel?utm_source=instagram");
 
     const declineLink = page.getByRole("link", {
@@ -116,7 +118,31 @@ test.describe("Landing Page de Upsell Soft Gel Express -> Agenda 80/20 (Refatora
     await declineLink.scrollIntoViewIfNeeded();
     const href = await declineLink.getAttribute("href");
     expect(href).toContain("/checkout/sucesso");
+    expect(href).toContain("origem=soft-gel");
     expect(href).toContain("utm_source=instagram");
+
+    // Ao clicar no link de recusa pela primeira vez, deve abrir o Bottom Sheet de Downsell
+    await declineLink.click();
+
+    // Verifica que o Bottom Sheet abriu com a oferta de 6 meses por R$ 97
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await expect(page.getByText(/Prefere validar durante seus 6 meses de curso\?/i)).toBeVisible();
+    await expect(page.getByText("R$ 97", { exact: true })).toBeVisible();
+    await expect(page.getByRole("link", { name: /SIM, QUERO O PLANO DE 6 MESES/i })).toBeVisible();
+
+    // Captura screenshot do Bottom Sheet aberto no mobile (390px)
+    await page.screenshot({
+      path: "output/upsell-refactor/downsell-bottom-sheet-mobile-390.png",
+    });
+
+    // Link de recusa final dentro do bottom sheet
+    const finalDeclineLink = page.getByRole("link", {
+      name: /Não, obrigado\. Quero ir direto para o curso Soft Gel Express\./i,
+    });
+    await expect(finalDeclineLink).toBeVisible();
+    const finalHref = await finalDeclineLink.getAttribute("href");
+    expect(finalHref).toContain("/checkout/sucesso");
+    expect(finalHref).toContain("origem=soft-gel");
   });
 
   test("5. Responsividade em todas as viewports obrigatórias e captura de screenshots", async ({
